@@ -1,0 +1,107 @@
+commit 3de36b261f51236a3f6eb7d46865ac6f219a1ada
+Author: Kalle Markkanen <markkanen.kalle@gmail.com>
+Date:   Wed Mar 14 17:29:32 2018 +0200
+
+    Poistettu file1 ja uudelleennimetty file2 nimeksi file22
+
+ tiedostoja/file1  | 0
+ tiedostoja/file2  | 0
+ tiedostoja/file22 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 837b1c1687f67869ea1695498164d5e79d9e239d
+Author: Kalle Markkanen <markkanen.kalle@gmail.com>
+Date:   Wed Mar 14 17:26:14 2018 +0200
+
+    Lisätty tiedostoja
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 8457776a18b1bb20ba798fa225e133ce3c680a83
+Author: Kalle Markkanen <markkanen.kalle@gmail.com>
+Date:   Wed Mar 14 17:21:16 2018 +0200
+
+    Tehtiin muutoksia ja lisäyksiä
+
+ eka.txt    | 3 ++-
+ kolmas.txt | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+commit 901c414d8d1312b30f3863e39e25e02b3fc99b85
+Author: Kalle Markkanen <markkanen.kalle@gmail.com>
+Date:   Wed Mar 14 17:18:54 2018 +0200
+
+    Muutettu tiedosto.txt nimeksi eka.txt
+
+ eka.txt      | 3 +++
+ tiedosto.txt | 3 ---
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+commit ff56702af0b44572b321fb088be359a462cd7577
+Author: Kalle Markkanen <markkanen.kalle@gmail.com>
+Date:   Wed Mar 14 17:17:54 2018 +0200
+
+    Poistettu toinen.txt
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit 3720699d0238f91ae8dad5cf0fc9cc2fe26544d8
+Author: Kalle Markkanen <markkanen.kalle@gmail.com>
+Date:   Wed Mar 14 17:14:25 2018 +0200
+
+    Lisätty tekstiä tiedosto.txt
+
+ tiedosto.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit c6a933af05dfd9c6b7a32c1168b40d7e37821dc0
+Author: Kalle Markkanen <markkanen.kalle@gmail.com>
+Date:   Wed Mar 14 17:06:14 2018 +0200
+
+    Tehtiin stuff-kansio ja sinne tiedosto
+
+ stuff/stuff.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit c2c16d98d883143041e53ccee70e74f612e15309
+Author: Kalle Markkanen <markkanen.kalle@gmail.com>
+Date:   Wed Mar 14 17:04:19 2018 +0200
+
+    Tehtiin muutoksia
+
+ kolmas.txt | 1 +
+ toinen.txt | 1 +
+ 2 files changed, 2 insertions(+)
+
+commit 395e93771d9321c53c2c532014ae6bab70035456
+Author: Kalle Markkanen <markkanen.kalle@gmail.com>
+Date:   Wed Mar 14 17:02:34 2018 +0200
+
+    lisätty kolmas.txt
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit db8ea7b470a377beca4f671b366a230d00786f6a
+Author: Kalle Markkanen <markkanen.kalle@gmail.com>
+Date:   Tue Mar 13 19:08:56 2018 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 2 ++
+ toinen.txt   | 0
+ 2 files changed, 2 insertions(+)
+
+commit 886e393776a208413d389b0f864d9a4a07db7c9d
+Author: Kalle Markkanen <markkanen.kalle@gmail.com>
+Date:   Tue Mar 13 19:06:48 2018 +0200
+
+    tiedosto.txt luoto
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
