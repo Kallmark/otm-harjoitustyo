@@ -1,9 +1,8 @@
 # <h1>OTM-harjoitustyö<h1>
 
 <h2>Tehtävät<h2>
+
 <h3>Viikko1<h3>
-
-
 
 _Hei, tämän tiedoston tarkoitus on toimia README-tiedostona._ **Hienoa, että päädyit lukemaan tätä tiedostoa**
 
