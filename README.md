@@ -6,6 +6,8 @@
 
 *Hei, tämän tiedoston tarkoitus on toimia README-tiedostona.* **Hienoa, että päädyit lukemaan tätä tiedostoa.** Ohessa ensimmäisen viikon tehtäviä.
 
+GitHubin käyttäminen on hauskaa!
+
 [komentorivi.txt](https://github.com/Kallmark/otm-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
 
 [gitlog.txt](https://github.com/Kallmark/otm-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
