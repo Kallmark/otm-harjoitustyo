@@ -5,8 +5,7 @@
 
 
 
-*Hei, tämän tiedoston tarkoitus on toimia README-tiedostona.* **Hienoa, että päädyit lukemaan tätä tiedostoa**
-
+_Hei, tämän tiedoston tarkoitus on toimia README-tiedostona._ **Hienoa, että päädyit lukemaan tätä tiedostoa**
 
 [komentorivi.txt](https://github.com/Kallmark/otm-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
 
