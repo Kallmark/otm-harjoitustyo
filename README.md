@@ -13,3 +13,5 @@ Mikä muu voisi olla hauskempaa?
 [komentorivi.txt](https://github.com/Kallmark/otm-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
 
 [gitlog.txt](https://github.com/Kallmark/otm-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
+
+[Vaatimusmäärittely](https://github.com/Kallmark/otm-harjoitustyo/blob/master/dokumentointi/vaatimusmaarittely.md)
