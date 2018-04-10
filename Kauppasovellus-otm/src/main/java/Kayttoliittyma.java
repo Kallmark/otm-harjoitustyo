@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 
 import Domain.Kayttaja;
 import Database.KayttajaDao;
+import javafx.scene.control.ComboBox;
 
 public class Kayttoliittyma extends Application {
 
@@ -31,7 +32,15 @@ public class Kayttoliittyma extends Application {
         Database database = new Database("jdbc:sqlite:kauppasovellus.db");
         KayttajaDao kayttajat = new KayttajaDao(database);
         
-        Combobox lista
+        ComboBox<Object> listakayttajista = new ComboBox<>();
+        try {
+            listakayttajista.getItems().addAll(kayttajat.findAll()
+                    
+            );
+        } catch (SQLException ex) {
+            Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
 
         Label nimiTeksti = new Label("Nimi: ");
         TextField nimiKentta = new TextField();
@@ -55,6 +64,7 @@ public class Kayttoliittyma extends Application {
         komponenttiryhma.add(saldoTeksti, 0, 1);
         komponenttiryhma.add(saldoKentta, 1, 1);
         komponenttiryhma.add(lisaaNappi, 1, 2);
+        komponenttiryhma.add(listakayttajista, 2, 2);
 
         komponenttiryhma.setHgap(10);
         komponenttiryhma.setVgap(10);
