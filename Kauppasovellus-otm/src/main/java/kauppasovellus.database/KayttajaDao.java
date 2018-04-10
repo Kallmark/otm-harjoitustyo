@@ -42,8 +42,24 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
 
     @Override
     public List<Kayttaja> findAll() throws SQLException {
-        // ei toteutettu
-        return null;
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Kayttaja");
+
+        ResultSet rs = stmt.executeQuery();
+        List<Kayttaja> kayttajat = new ArrayList<>();
+        while (rs.next()) {
+            Integer id = rs.getInt("id");
+            String nimi = rs.getString("nimi");
+            Double saldo = rs.getDouble("saldo");
+
+            kayttajat.add(new Kayttaja(id, nimi, saldo));
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return kayttajat;
     }
 
     @Override
