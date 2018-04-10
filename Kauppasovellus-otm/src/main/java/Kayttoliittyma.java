@@ -31,6 +31,7 @@ public class Kayttoliittyma extends Application {
         Database database = new Database("jdbc:sqlite:kauppasovellus.db");
         KayttajaDao kayttajat = new KayttajaDao(database);
         
+        Combobox lista
 
         Label nimiTeksti = new Label("Nimi: ");
         TextField nimiKentta = new TextField();
