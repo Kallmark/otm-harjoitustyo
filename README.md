@@ -1,19 +1,9 @@
-# <h1>OTM-harjoitustyö<h1>
+# <h1>Kauppasovellus<h1>
 
-<h2>Tehtävät<h2>
-
-<h3>Viikko1<h3>
-
-*Hei, tämän tiedoston tarkoitus on toimia README-tiedostona.* **Hienoa, että päädyit lukemaan tätä tiedostoa.** Ohessa ensimmäisen viikon tehtäviä.
-
-GitHubin käyttäminen on hauskaa!
-
-Mikä muu voisi olla hauskempaa?
-
-[komentorivi.txt](https://github.com/Kallmark/otm-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
-
-[gitlog.txt](https://github.com/Kallmark/otm-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
+<h2>Dokumentaatio<h2>
 
 [Vaatimusmäärittely](https://github.com/Kallmark/otm-harjoitustyo/blob/master/dokumentointi/vaatimusmaarittely.md)
 
 [Työaikakirjanpito](https://github.com/Kallmark/otm-harjoitustyo/blob/master/dokumentointi/tyoaikakirjanpito.md)
+
+<h2>Komentorivitoiminnot<h2>
