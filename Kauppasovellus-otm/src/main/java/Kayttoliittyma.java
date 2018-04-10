@@ -39,7 +39,8 @@ public class Kayttoliittyma extends Application {
 
         lisaaNappi.setOnAction((event) -> {
             try {
-                kayttajat.saveOrUpdate(new Kayttaja(-1, nimiTeksti.getText(), Double.parseDouble(saldoTeksti.getText())));
+                Kayttaja lisattava = new Kayttaja(-1, nimiTeksti.getText(), Double.parseDouble(saldoTeksti.getText()));
+                kayttajat.saveOrUpdate(lisattava);
             } catch (SQLException ex) {
                 Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
             }
