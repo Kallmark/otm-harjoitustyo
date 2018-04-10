@@ -1,5 +1,5 @@
 
-package kauppasovellus;
+package Domain;
 
 public class Kayttaja {
     

@@ -1,10 +1,11 @@
-package kauppasovellus;
+package Database;
 
 import Database.Dao;
 import Database.Database;
 import java.util.*;
 import java.sql.*;
-import kauppasovellus.Kayttaja;
+import Domain.Kayttaja;
+import Domain.Kayttaja;
 
 public class KayttajaDao implements Dao<Kayttaja, Integer> {
 

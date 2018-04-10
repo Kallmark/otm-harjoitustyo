@@ -1,7 +1,8 @@
 
+import Database.Database;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import Database.Database;
+
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,8 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import kauppasovellus.Kayttaja;
-import kauppasovellus.KayttajaDao;
+
+import Domain.Kayttaja;
+import Database.KayttajaDao;
 
 public class Kayttoliittyma extends Application {
 
