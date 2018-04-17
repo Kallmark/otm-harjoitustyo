@@ -41,7 +41,7 @@ public class Kayttaja {
     @Override
     
     public String toString(){
-        return this.nimi;
+        return this.nimi + " id: " + this.getId() + " saldo: " + this.getSaldo();
     }
 
 }
