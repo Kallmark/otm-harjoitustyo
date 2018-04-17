@@ -110,8 +110,8 @@
                 <version>0.8.0</version>
                 <configuration>
                     <excludes>
-                        <exlude>src/main/java/ui/*</exlude>
-                        <exlude>org/*</exlude>
+                        <exlude>ui/*</exlude>
+                        <exlude>**/org/**</exlude>
                     </excludes>
                 </configuration>
                 <executions>
