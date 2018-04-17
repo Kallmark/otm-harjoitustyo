@@ -1,1 +1,4 @@
-<img src= "htps://raw.github.com/Kallmark/otm-harjoitustyo/blob/master/misc/kuvat/pakkauskaavio.jpg" widht="400">
+<img src= "https://raw.githubusercontent.com/Kallmark/otm-harjoitustyo/master/misc/kuvat/pakkauskaavio.jpg" widht="400">
+
+
+
