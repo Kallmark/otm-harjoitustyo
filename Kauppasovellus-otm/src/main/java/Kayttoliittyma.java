@@ -24,6 +24,10 @@ public class Kayttoliittyma extends Application {
     public void init() throws ClassNotFoundException {
         
     }
+    
+    public static void start(String[] args) {
+        Application.launch(args);
+    }
 
     @Override
 
@@ -51,7 +55,7 @@ public class Kayttoliittyma extends Application {
 
         lisaaNappi.setOnAction((event) -> {
             try {
-                Kayttaja lisattava = new Kayttaja(-1, nimiTeksti.getText(), Double.parseDouble(saldoTeksti.getText()));
+                Kayttaja lisattava = new Kayttaja(-1, nimiKentta.getText(), Integer.parseInt(saldoKentta.getText()));
                 kayttajat.saveOrUpdate(lisattava);
             } catch (SQLException ex) {
                 Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);

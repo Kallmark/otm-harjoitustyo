@@ -4,11 +4,11 @@ package Domain;
 public class Kayttaja {
     
     public String nimi;
-    public Double saldo;
+    public Integer saldo;
     public Integer id;
     
     
-    public Kayttaja(Integer id, String nimi, Double saldo) {
+    public Kayttaja(Integer id, String nimi, Integer saldo) {
         this.saldo=saldo;
         this.id = id;
         this.nimi = nimi;
@@ -30,11 +30,11 @@ public class Kayttaja {
         this.nimi = nimi;
     }
     
-    public Double getSaldo(){
+    public Integer getSaldo(){
         return this.saldo;
     }
     
-    public void setSaldo(Double saldo){
+    public void setSaldo(Integer saldo){
         this.saldo=saldo;
     }
 

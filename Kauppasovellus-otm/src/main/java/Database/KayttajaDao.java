@@ -19,7 +19,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
     public Kayttaja findOne(Integer key) throws SQLException {
         
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Kayttaja WHERE kayttaja_id ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Kayttaja WHERE kayttaja_id = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -28,9 +28,9 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
             return null;
         }
 
-        Integer id = rs.getInt("id");
+        Integer id = rs.getInt("kayttaja_id");
         String nimi = rs.getString("nimi");
-        Double saldo = rs.getDouble("saldo");
+        Integer saldo = rs.getInt("saldo");
 
         Kayttaja o = new Kayttaja(id, nimi, saldo);
 
@@ -51,7 +51,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         while (rs.next()) {
             Integer id = rs.getInt("kayttaja_id");
             String nimi = rs.getString("nimi");
-            Double saldo = rs.getDouble("saldo");
+            Integer saldo = rs.getInt("saldo");
 
             kayttajat.add(new Kayttaja(id, nimi, saldo));
         }
@@ -70,18 +70,19 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         if (findOne == null) {
 
             try (Connection conn = database.getConnection()) {
-                PreparedStatement stmt = conn.prepareStatement("INSERT INTO Kayttaja (nimi, saldo) VALUES (?, ?)");
-                stmt.setString(1, object.getNimi());
-                stmt.setDouble(2, object.getSaldo());
+                PreparedStatement stmt = conn.prepareStatement("INSERT INTO Kayttaja (kayttaja_id, nimi, saldo) VALUES (?, ?, ?)");
+                stmt.setInt(1, object.getId());
+                stmt.setString(2, object.getNimi());
+                stmt.setInt(3, object.getSaldo());
                 stmt.executeUpdate();
             }
             return object;
         } else {
 
             try (Connection conn = database.getConnection()) {
-                PreparedStatement stmt = conn.prepareStatement("UPDATE Kayttaja SET nimi = ?, saldo = ? WHERE id = ?");
+                PreparedStatement stmt = conn.prepareStatement("UPDATE Kayttaja SET nimi = ?, saldo = ? WHERE kayttaja_id = ?");
                 stmt.setString(1, object.getNimi());
-                stmt.setDouble(2, object.getSaldo());
+                stmt.setInt(2, object.getSaldo());
                 stmt.setInt(3, object.getId());
                 stmt.executeUpdate();
             }
