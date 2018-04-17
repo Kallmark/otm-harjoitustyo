@@ -38,6 +38,7 @@ public class Kayttoliittyma extends Application {
         Database database = new Database("jdbc:sqlite:kauppasovellus.db");
         KayttajaDao kayttajat = new KayttajaDao(database);
         
+        Label listaKayttajista = new Label("Tarkastele asiakkaita");
         ComboBox<Object> listakayttajista = new ComboBox<>();
         try {
             listakayttajista.getItems().addAll(kayttajat.findAll()
@@ -59,6 +60,8 @@ public class Kayttoliittyma extends Application {
             try {
                 Kayttaja lisattava = new Kayttaja(null, nimiKentta.getText(), Integer.parseInt(saldoKentta.getText()));
                 kayttajat.saveOrUpdate(lisattava);
+                listakayttajista.getItems().clear();
+                listakayttajista.getItems().addAll(kayttajat.findAll());
             } catch (SQLException ex) {
                 Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -71,6 +74,7 @@ public class Kayttoliittyma extends Application {
         komponenttiryhma.add(saldoKentta, 1, 1);
         komponenttiryhma.add(lisaaNappi, 1, 2);
         komponenttiryhma.add(listakayttajista, 2, 2);
+        komponenttiryhma.add(listaKayttajista, 2, 1);
 
         komponenttiryhma.setHgap(10);
         komponenttiryhma.setVgap(10);
