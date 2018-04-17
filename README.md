@@ -8,4 +8,6 @@ Sovelluksen tarkoituksena on toimia kirjanpitovälineenä kaupalle, jolla varast
 
 [Työaikakirjanpito](https://github.com/Kallmark/otm-harjoitustyo/blob/master/dokumentointi/tyoaikakirjanpito.md)
 
+[Arkkitehtuuri](https://github.com/Kallmark/otm-harjoitustyo/blob/master/dokumentointi/arkkitehtuuri.md)
+
 <h2>Komentorivitoiminnot<h2>
