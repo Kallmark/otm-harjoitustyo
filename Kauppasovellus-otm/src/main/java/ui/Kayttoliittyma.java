@@ -1,6 +1,5 @@
 package ui;
 
-
 import Database.Database;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -19,14 +18,15 @@ import javafx.scene.layout.HBox;
 import Domain.Kayttaja;
 import Database.KayttajaDao;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.VBox;
 
 public class Kayttoliittyma extends Application {
 
     @Override
     public void init() throws ClassNotFoundException {
-        
+
     }
-    
+
     public static void start(String[] args) {
         Application.launch(args);
     }
@@ -34,20 +34,46 @@ public class Kayttoliittyma extends Application {
     @Override
 
     public void start(Stage ikkuna) throws ClassNotFoundException {
+
+        //Luodaan näkymät ja niihin liittyvät tavarat
+        GridPane aloitusNakyma = new GridPane();
+        Scene aloitus = new Scene(aloitusNakyma);
+        GridPane kayttajanLisaysNakyma = new GridPane();
+        Scene nakyma = new Scene(kayttajanLisaysNakyma);
         
+        //Aloitusnäkymä
+        Label label1 = new Label("Valitse toiminnallisuus");
+        Button button1 = new Button("Lisää käyttäjiä");
+        button1.setOnAction((event) -> {
+            ikkuna.setScene(nakyma);
+            ikkuna.show();
+        });
+        aloitusNakyma.add(label1, 0, 0);
+        aloitusNakyma.add(button1, 0, 1);
+        aloitusNakyma.setHgap(10);
+        aloitusNakyma.setVgap(10);
+        aloitusNakyma.setPadding(new Insets(10, 10, 10, 10));
+        
+
+        //Käyttäjienlisäysnäkymä
         Database database = new Database("jdbc:sqlite:kauppasovellus.db");
         KayttajaDao kayttajat = new KayttajaDao(database);
         
+        Label label2 = new Label("Valitse toiminnallisuus");
+        Button button2 = new Button("Palaa aloitusnäkymään");
+        button2.setOnAction((event) -> {
+            ikkuna.setScene(aloitus);
+            ikkuna.show();
+        });
+
         Label listaKayttajista = new Label("Tarkastele asiakkaita");
         ComboBox<Object> listakayttajista = new ComboBox<>();
         try {
             listakayttajista.getItems().addAll(kayttajat.findAll()
-                    
             );
         } catch (SQLException ex) {
             Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
         }
-                
 
         Label nimiTeksti = new Label("Nimi: ");
         TextField nimiKentta = new TextField();
@@ -67,22 +93,26 @@ public class Kayttoliittyma extends Application {
             }
         });
 
-        GridPane komponenttiryhma = new GridPane();
-        komponenttiryhma.add(nimiTeksti, 0, 0);
-        komponenttiryhma.add(nimiKentta, 1, 0);
-        komponenttiryhma.add(saldoTeksti, 0, 1);
-        komponenttiryhma.add(saldoKentta, 1, 1);
-        komponenttiryhma.add(lisaaNappi, 1, 2);
-        komponenttiryhma.add(listakayttajista, 2, 2);
-        komponenttiryhma.add(listaKayttajista, 2, 1);
+        
+        kayttajanLisaysNakyma.add(nimiTeksti, 0, 0);
+        kayttajanLisaysNakyma.add(nimiKentta, 1, 0);
+        kayttajanLisaysNakyma.add(saldoTeksti, 0, 1);
+        kayttajanLisaysNakyma.add(saldoKentta, 1, 1);
+        kayttajanLisaysNakyma.add(lisaaNappi, 1, 2);
+        kayttajanLisaysNakyma.add(listakayttajista, 2, 2);
+        kayttajanLisaysNakyma.add(listaKayttajista, 2, 1);
+        kayttajanLisaysNakyma.add(label2, 3, 0);
+        kayttajanLisaysNakyma.add(button2, 4, 0);
 
-        komponenttiryhma.setHgap(10);
-        komponenttiryhma.setVgap(10);
-        komponenttiryhma.setPadding(new Insets(10, 10, 10, 10));
+        kayttajanLisaysNakyma.setHgap(10);
+        kayttajanLisaysNakyma.setVgap(10);
+        kayttajanLisaysNakyma.setPadding(new Insets(10, 10, 10, 10));
 
-        Scene nakyma = new Scene(komponenttiryhma);
-
-        ikkuna.setScene(nakyma);
+        //Asetetaan aloitusnäkymä aluksi näytille
+        
+        ikkuna.setScene(aloitus);
         ikkuna.show();
+        
+        
     }
 }
