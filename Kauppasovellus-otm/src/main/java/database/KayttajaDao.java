@@ -1,11 +1,11 @@
-package Database;
+package database;
 
-import Database.Dao;
-import Database.Database;
+import database.Dao;
+import database.Database;
 import java.util.*;
 import java.sql.*;
-import Domain.Kayttaja;
-import Domain.Kayttaja;
+import domain.Kayttaja;
+import domain.Kayttaja;
 
 public class KayttajaDao implements Dao<Kayttaja, Integer> {
 

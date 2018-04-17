@@ -1,6 +1,6 @@
 package ui;
 
-import Database.Database;
+import database.Database;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -15,8 +15,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
-import Domain.Kayttaja;
-import Database.KayttajaDao;
+import domain.Kayttaja;
+import database.KayttajaDao;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 

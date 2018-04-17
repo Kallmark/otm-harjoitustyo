@@ -5,7 +5,7 @@
  */
 package DomainTests;
 
-import Domain.Kayttaja;
+import domain.Kayttaja;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

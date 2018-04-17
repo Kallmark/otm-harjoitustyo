@@ -1,10 +1,5 @@
 package ui;
 
-
-import ui.Kayttoliittyma;
-import javafx.stage.Stage;
-
-import javafx.application.Application;
 public class Paaohjelma {
     
     

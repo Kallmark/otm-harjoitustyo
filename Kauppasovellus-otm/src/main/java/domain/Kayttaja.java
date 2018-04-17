@@ -1,5 +1,5 @@
 
-package Domain;
+package domain;
 
 public class Kayttaja {
     
@@ -9,7 +9,7 @@ public class Kayttaja {
     
     
     public Kayttaja(Integer id, String nimi, Integer saldo) {
-        this.saldo=saldo;
+        this.saldo = saldo;
         this.id = id;
         this.nimi = nimi;
     }
@@ -30,17 +30,17 @@ public class Kayttaja {
         this.nimi = nimi;
     }
     
-    public Integer getSaldo(){
+    public Integer getSaldo() {
         return this.saldo;
     }
     
-    public void setSaldo(Integer saldo){
-        this.saldo=saldo;
+    public void setSaldo(Integer saldo) {
+        this.saldo = saldo;
     }
     
     @Override
     
-    public String toString(){
+    public String toString() {
         return this.nimi + " id: " + this.getId() + " saldo: " + this.getSaldo();
     }
 

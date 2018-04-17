@@ -6,7 +6,7 @@ package DatabaseTests;
  * and open the template in the editor.
  */
 
-import Database.Database;
+import database.Database;
 import java.sql.SQLException;
 import org.junit.After;
 import org.junit.AfterClass;
