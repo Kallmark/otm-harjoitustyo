@@ -59,7 +59,8 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         rs.close();
         stmt.close();
         connection.close();
-
+        
+        System.out.println("tulostus");
         return kayttajat;
     }
 
@@ -70,10 +71,10 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         if (findOne == null) {
 
             try (Connection conn = database.getConnection()) {
-                PreparedStatement stmt = conn.prepareStatement("INSERT INTO Kayttaja (kayttaja_id, nimi, saldo) VALUES (?, ?, ?)");
-                stmt.setInt(1, object.getId());
-                stmt.setString(2, object.getNimi());
-                stmt.setInt(3, object.getSaldo());
+                PreparedStatement stmt = conn.prepareStatement("INSERT INTO Kayttaja (nimi, saldo) VALUES (?, ?)");
+                
+                stmt.setString(1, object.getNimi());
+                stmt.setInt(2, object.getSaldo());
                 stmt.executeUpdate();
             }
             return object;

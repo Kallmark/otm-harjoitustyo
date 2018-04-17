@@ -1,3 +1,5 @@
+package ui;
+
 
 import Database.Database;
 import javafx.application.Application;
@@ -55,7 +57,7 @@ public class Kayttoliittyma extends Application {
 
         lisaaNappi.setOnAction((event) -> {
             try {
-                Kayttaja lisattava = new Kayttaja(-1, nimiKentta.getText(), Integer.parseInt(saldoKentta.getText()));
+                Kayttaja lisattava = new Kayttaja(null, nimiKentta.getText(), Integer.parseInt(saldoKentta.getText()));
                 kayttajat.saveOrUpdate(lisattava);
             } catch (SQLException ex) {
                 Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);

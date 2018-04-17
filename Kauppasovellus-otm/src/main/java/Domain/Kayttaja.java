@@ -37,5 +37,11 @@ public class Kayttaja {
     public void setSaldo(Integer saldo){
         this.saldo=saldo;
     }
+    
+    @Override
+    
+    public String toString(){
+        return this.nimi;
+    }
 
 }
