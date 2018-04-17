@@ -48,6 +48,7 @@ public class Kayttoliittyma extends Application {
             ikkuna.setScene(nakyma);
             ikkuna.show();
         });
+        
         aloitusNakyma.add(label1, 0, 0);
         aloitusNakyma.add(button1, 0, 1);
         aloitusNakyma.setHgap(10);
@@ -93,7 +94,6 @@ public class Kayttoliittyma extends Application {
             }
         });
 
-        
         kayttajanLisaysNakyma.add(nimiTeksti, 0, 0);
         kayttajanLisaysNakyma.add(nimiKentta, 1, 0);
         kayttajanLisaysNakyma.add(saldoTeksti, 0, 1);
