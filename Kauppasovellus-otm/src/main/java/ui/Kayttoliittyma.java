@@ -258,6 +258,15 @@ public class Kayttoliittyma extends Application {
                 Integer tuotteenUusiMaara = tuote.getMaara() - 1;
                 tuote.setMaara(tuotteenUusiMaara);
                 tuotteet.saveOrUpdate(tuote);
+                listakayttajista.getItems().clear();
+                listakayttajista.getItems().addAll(kayttajat.findAll());
+                listatuotteista.getItems().clear();
+                listatuotteista.getItems().addAll(kayttajat.findAll());
+                kayttajaValinta.getItems().clear();
+                kayttajaValinta.getItems().addAll(kayttajat.findAll());
+                tuoteValinta.getItems().clear();
+                tuoteValinta.getItems().addAll(tuotteet.findAll());
+                
             } catch (SQLException ex) {
                 Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
             }
