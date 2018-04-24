@@ -21,12 +21,12 @@ public class OstosDao implements Dao<Ostos, Integer> {
         this.tuotedao = new TuoteDao(database);
     }
 
-    public Ostos findOne(Integer kayttaja_id, Integer tuote_id) throws SQLException {
+    public Ostos findOne(Integer kayttajaId, Integer tuoteId) throws SQLException {
 
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Ostos WHERE kayttaja_id = ? AND tuote_id = ?");
-        stmt.setObject(1, kayttaja_id);
-        stmt.setObject(2, tuote_id);
+        stmt.setObject(1, kayttajaId);
+        stmt.setObject(2, tuoteId);
 
         ResultSet rs = stmt.executeQuery();
         boolean hasOne = rs.next();
@@ -36,7 +36,7 @@ public class OstosDao implements Dao<Ostos, Integer> {
 
         Long aika = rs.getLong("date");
 
-        Ostos o = new Ostos(this.kayttajadao.findOne(kayttaja_id), this.tuotedao.findOne(tuote_id), aika);
+        Ostos o = new Ostos(this.kayttajadao.findOne(kayttajaId), this.tuotedao.findOne(tuoteId), aika);
 
         rs.close();
         stmt.close();
@@ -53,11 +53,11 @@ public class OstosDao implements Dao<Ostos, Integer> {
         ResultSet rs = stmt.executeQuery();
         List<Ostos> ostokset = new ArrayList<>();
         while (rs.next()) {
-            Integer kayttaja_id = rs.getInt("kayttaja_id");
-            Integer tuote_id = rs.getInt("tuote_id");
+            Integer kayttajaId = rs.getInt("kayttaja_id");
+            Integer tuoteId = rs.getInt("tuote_id");
             Long aika = rs.getLong("date");
 
-            ostokset.add(new Ostos(this.kayttajadao.findOne(kayttaja_id), this.tuotedao.findOne(tuote_id), aika));
+            ostokset.add(new Ostos(this.kayttajadao.findOne(kayttajaId), this.tuotedao.findOne(tuoteId), aika));
         }
 
         rs.close();

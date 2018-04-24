@@ -70,12 +70,9 @@ public class TuoteDao implements Dao<Tuote, Integer> {
     @Override
     public Tuote saveOrUpdate(Tuote object) throws SQLException {
         Tuote findOne = findOne(object.getId());
-
         if (findOne == null) {
-
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO Tuote (nimi, hinta, maara, info) VALUES (?, ?, ?, ?)");
-
                 stmt.setString(1, object.getNimi());
                 stmt.setDouble(2, object.getHinta());
                 stmt.setInt(3, object.getMaara());
@@ -84,7 +81,6 @@ public class TuoteDao implements Dao<Tuote, Integer> {
             }
             return object;
         } else {
-
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("UPDATE Tuote SET nimi = ?, hinta = ?, maara = ?, info = ? WHERE tuote_id = ?");
                 stmt.setString(1, object.getNimi());
@@ -97,7 +93,7 @@ public class TuoteDao implements Dao<Tuote, Integer> {
             return object;
         }
     }
-
+    
     @Override
     public void delete(Integer key) throws SQLException {
         // ei toteutettu

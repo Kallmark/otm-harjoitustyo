@@ -29,11 +29,11 @@ public class Ostos {
         this.tuote = tuote;
     }
     
-    public long getAika(){
+    public long getAika() {
         return this.aika;
     }
     
-    public void setAika(long aika){
+    public void setAika(long aika) {
         this.aika =  aika;
     }
 

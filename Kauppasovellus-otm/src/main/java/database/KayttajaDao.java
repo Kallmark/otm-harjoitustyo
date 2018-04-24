@@ -72,41 +72,31 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         HashMap<Kayttaja, Integer> kayttajat = new HashMap<>();
         while (rs.next()) {
             Integer id = rs.getInt("kayttaja_id");
-
             if (this.findOne(id) != null) {
                 String nimi = this.findOne(id).getNimi();
                 Double saldo = this.findOne(id).getSaldo();
                 Integer kayttajaMaara = rs.getInt("maara");
-
                 kayttajat.put(new Kayttaja(id, nimi, saldo), kayttajaMaara);
             }
-
         }
-
         rs.close();
         stmt.close();
         connection.close();
-
-        System.out.println("tulostus");
         return kayttajat;
     }
 
     @Override
     public Kayttaja saveOrUpdate(Kayttaja object) throws SQLException {
         Kayttaja findOne = findOne(object.getId());
-
         if (findOne == null) {
-
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO Kayttaja (nimi, saldo) VALUES (?, ?)");
-
                 stmt.setString(1, object.getNimi());
                 stmt.setDouble(2, object.getSaldo());
                 stmt.executeUpdate();
             }
             return object;
         } else {
-
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("UPDATE Kayttaja SET nimi = ?, saldo = ? WHERE kayttaja_id = ?");
                 stmt.setString(1, object.getNimi());
