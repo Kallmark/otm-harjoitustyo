@@ -11,4 +11,7 @@
 |17.4| 2 | Käyttäjälistan päivittymisen ohjelmoimista|
 |17.4| 1 | Aloitusnäkymän luominen|
 |17.4| 2 | Testien ja checkstylen tekeminen|
-|Yht| 24 | |
+|24.4| 3 | Tuotteidenlisäystoiminnon rakentaminen|
+|24.4| 6 | Ostostoiminnon tekeminen|
+|24.4| 6 | Käyttöliittymän tekeminen, testien tekeminen, koodin hiominen|
+|Yht| 39 | |
