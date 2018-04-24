@@ -11,3 +11,40 @@ Sovelluksen tarkoituksena on toimia kirjanpitovälineenä kaupalle, jolla varast
 [Arkkitehtuuri](https://github.com/Kallmark/otm-harjoitustyo/blob/master/dokumentointi/arkkitehtuuri.md)
 
 <h2>Komentorivitoiminnot<h2>
+
+### Testaus
+
+Testit suoritetaan komennolla
+
+```
+mvn test
+```
+
+Testikattavuusraportti luodaan komennolla
+
+```
+mvn jacoco:report
+```
+
+Kattavuusraporttia voi tarkastella avaamalla selaimella tiedosto otm-harjoitustyo/Kauppasovellus-otm/target/site/jacoco/index.html
+
+### Suoritettavan jarin generointi
+
+Komento
+
+```
+mvn package
+```
+
+generoi hakemistoon _target_ suoritettavan jar-tiedoston Kauppasovellus-otm-1.0-SNAPSHOT.jar
+
+
+### Checkstyle
+
+Tiedostoon [checkstyle.xml](https://github.com/Kallmark/otm-harjoitustyo/blob/master/Kauppasovellus-otm/checkstyle.xml) määrittelemät tarkistukset suoritetaan komennolla
+
+```
+ mvn jxr:jxr checkstyle:checkstyle
+```
+
+Mahdolliset virheilmoitukset selviävät avaamalla selaimella tiedosto otm-harjoitustyo/Kauppasovellus-otm/target/site/checkstyle.html
