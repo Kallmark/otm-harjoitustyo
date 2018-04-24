@@ -20,5 +20,7 @@ Kolme luokkaa (Kayttaja, Tuote, Ostos) vaikuttavat keskenään siten, että käy
   
 <img src= "https://raw.githubusercontent.com/Kallmark/otm-harjoitustyo/master/misc/kuvat/sekvenssikaavio.png" widht="400">
 
+Kuvassa käyttäjä lisää uusen kayttäjä-olion käyttöliittymästä käsin, jolloin käyttöliittymä kutsuu Kayttajaluokkaa. Luodulla kayttaja-oliolla kutsutaan KayttajaDao:n tallennusmetodia, jolla kyseinen käyttäjä tallennetaan sovelluksen käyttämään tietokantaan. 
+
 
 
