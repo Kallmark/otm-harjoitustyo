@@ -27,7 +27,7 @@ public class TuoteDao implements Dao<Tuote, Integer> {
             return null;
         }
 
-        Integer id = rs.getInt("tuote:id");
+        Integer id = rs.getInt("tuote_id");
         String nimi = rs.getString("nimi");
         Double hinta = rs.getDouble("hinta");
         Integer maara = rs.getInt("maara");
@@ -86,7 +86,7 @@ public class TuoteDao implements Dao<Tuote, Integer> {
         } else {
 
             try (Connection conn = database.getConnection()) {
-                PreparedStatement stmt = conn.prepareStatement("UPDATE Tuote SET nimi = ?, hinta = ?, maara = ?, info = ? WHERE kayttaja_id = ?");
+                PreparedStatement stmt = conn.prepareStatement("UPDATE Tuote SET nimi = ?, hinta = ?, maara = ?, info = ? WHERE tuote_id = ?");
                 stmt.setString(1, object.getNimi());
                 stmt.setDouble(2, object.getHinta());
                 stmt.setInt(3, object.getMaara());

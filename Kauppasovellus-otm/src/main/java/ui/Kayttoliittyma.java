@@ -17,8 +17,11 @@ import javafx.scene.layout.HBox;
 
 import domain.Kayttaja;
 import database.KayttajaDao;
+import database.OstosDao;
 import database.TuoteDao;
+import domain.Ostos;
 import domain.Tuote;
+import java.time.Instant;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 
@@ -38,14 +41,15 @@ public class Kayttoliittyma extends Application {
     public void start(Stage ikkuna) throws ClassNotFoundException {
 
         //Luodaan näkymät ja niihin liittyvät tavarat
-        
         GridPane aloitusNakyma = new GridPane();
         Scene aloitus = new Scene(aloitusNakyma);
         GridPane kayttajanLisaysNakyma = new GridPane();
         Scene kayttajaNakyma = new Scene(kayttajanLisaysNakyma);
         GridPane tuotteenLisaysNakyma = new GridPane();
         Scene tuoteNakyma = new Scene(tuotteenLisaysNakyma);
-        
+        GridPane ostosNakyma = new GridPane();
+        Scene ostosnakyma = new Scene(ostosNakyma);
+
         //Aloitusnäkymä
         Label toiminnallisuusTeksti = new Label("Valitse toiminnallisuus");
         Button kayttajanLisaysNappi = new Button("Lisää käyttäjiä!");
@@ -53,25 +57,31 @@ public class Kayttoliittyma extends Application {
             ikkuna.setScene(kayttajaNakyma);
             ikkuna.show();
         });
-        
+
         Button tuotteenLisaysNappi = new Button("Lisää tuotteita!");
         tuotteenLisaysNappi.setOnAction((event) -> {
             ikkuna.setScene(tuoteNakyma);
             ikkuna.show();
         });
-        
+
+        Button OstosNappi = new Button("Tee ostos!");
+        OstosNappi.setOnAction((event) -> {
+            ikkuna.setScene(ostosnakyma);
+            ikkuna.show();
+        });
+
         aloitusNakyma.add(toiminnallisuusTeksti, 0, 0);
         aloitusNakyma.add(kayttajanLisaysNappi, 1, 0);
         aloitusNakyma.add(tuotteenLisaysNappi, 2, 0);
-        aloitusNakyma.setHgap(10);
-        aloitusNakyma.setVgap(10);
-        aloitusNakyma.setPadding(new Insets(10, 10, 10, 10));
-        
+        aloitusNakyma.add(OstosNappi, 3, 0);
+        aloitusNakyma.setHgap(20);
+        aloitusNakyma.setVgap(20);
+        aloitusNakyma.setPadding(new Insets(20, 20, 20, 20));
 
         //Käyttäjienlisäysnäkymä
         Database database = new Database("jdbc:sqlite:kauppasovellus.db");
         KayttajaDao kayttajat = new KayttajaDao(database);
-        
+
         Label toiminnallisuusTekstiKayttajaNakyma = new Label("Valitse toiminnallisuus");
         Button palaaAloitusNakymaanKayttajanakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaanKayttajanakymasta.setOnAction((event) -> {
@@ -117,14 +127,13 @@ public class Kayttoliittyma extends Application {
         kayttajanLisaysNakyma.add(toiminnallisuusTekstiKayttajaNakyma, 4, 0);
         kayttajanLisaysNakyma.add(palaaAloitusNakymaanKayttajanakymasta, 4, 1);
 
-        kayttajanLisaysNakyma.setHgap(10);
-        kayttajanLisaysNakyma.setVgap(10);
-        kayttajanLisaysNakyma.setPadding(new Insets(10, 10, 10, 10));
-        
+        kayttajanLisaysNakyma.setHgap(20);
+        kayttajanLisaysNakyma.setVgap(20);
+        kayttajanLisaysNakyma.setPadding(new Insets(20, 20, 20, 20));
+
         //Tuotteenlisäysnäkymä
-        
         TuoteDao tuotteet = new TuoteDao(database);
-        
+
         Label toiminnallisuusTekstiTuoteNakyma = new Label("Valitse toiminnallisuus");
         Button palaaAloitusNakymaanTuotenakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaanTuotenakymasta.setOnAction((event) -> {
@@ -133,7 +142,7 @@ public class Kayttoliittyma extends Application {
         });
 
         Label listaTuotteista = new Label("Tarkastele tuotteita");
-        
+
         ComboBox<Object> listatuotteista = new ComboBox<>();
         try {
             listatuotteista.getItems().addAll(tuotteet.findAll()
@@ -177,15 +186,72 @@ public class Kayttoliittyma extends Application {
         tuotteenLisaysNakyma.add(toiminnallisuusTekstiTuoteNakyma, 0, 4);
         tuotteenLisaysNakyma.add(palaaAloitusNakymaanTuotenakymasta, 1, 4);
 
-        tuotteenLisaysNakyma.setHgap(10);
-        tuotteenLisaysNakyma.setVgap(10);
+        tuotteenLisaysNakyma.setHgap(20);
+        tuotteenLisaysNakyma.setVgap(20);
         tuotteenLisaysNakyma.setPadding(new Insets(10, 10, 10, 10));
 
+        //Ostosnäkymä
+        OstosDao ostokset = new OstosDao(database);
+        Label toiminallisuusTekstiOstosNakyma = new Label("Valitse toiminnallisuus");
+        Button palaaAloitusNakymaanOstosNakymasta = new Button("Palaa aloitusnäkymään");
+        palaaAloitusNakymaanOstosNakymasta.setOnAction((event) -> {
+            ikkuna.setScene(aloitus);
+            ikkuna.show();
+        });
+
+        Label valitseKayttaja = new Label("Valitse kayttäjä:");
+        Label valitseTuote = new Label("Valitse tuote:");
+        Button teeOstos = new Button("Osta");
+
+        ComboBox<Kayttaja> kayttajaValinta = new ComboBox<>();
+        try {
+            kayttajaValinta.getItems().addAll(kayttajat.findAll()
+            );
+        } catch (SQLException ex) {
+            Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        ComboBox<Tuote> tuoteValinta = new ComboBox<>();
+        try {
+            tuoteValinta.getItems().addAll(tuotteet.findAll()
+            );
+        } catch (SQLException ex) {
+            Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        teeOstos.setOnAction(e -> {
+            try {
+                Kayttaja kayttaja = kayttajaValinta.getValue();
+                Tuote tuote = tuoteValinta.getValue();
+                long sekunnit = Instant.now().getEpochSecond();
+                System.out.println(sekunnit);
+                ostokset.saveOrUpdate(new Ostos(kayttaja, tuote, sekunnit));
+                Double kayttajanUusiSaldo = kayttaja.getSaldo() - tuote.getHinta();
+                kayttaja.setSaldo(kayttajanUusiSaldo);
+                kayttajat.saveOrUpdate(kayttaja);
+                Integer tuotteenUusiMaara = tuote.getMaara() - 1;
+                tuote.setMaara(tuotteenUusiMaara);
+                tuotteet.saveOrUpdate(tuote);
+            } catch (SQLException ex) {
+                Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
+        ostosNakyma.add(valitseKayttaja, 0, 0);
+        ostosNakyma.add(valitseTuote, 0, 1);
+        ostosNakyma.add(kayttajaValinta, 1, 0);
+        ostosNakyma.add(tuoteValinta, 1, 1);
+        ostosNakyma.add(teeOstos, 1, 2);
+        ostosNakyma.add(toiminallisuusTekstiOstosNakyma, 2, 0);
+        ostosNakyma.add(palaaAloitusNakymaanOstosNakymasta, 2, 1);
+
+        ostosNakyma.setHgap(20);
+        ostosNakyma.setVgap(20);
+        ostosNakyma.setPadding(new Insets(10, 10, 10, 10));
+
         //Asetetaan aloitusnäkymä aluksi näytille
-        
         ikkuna.setScene(aloitus);
         ikkuna.show();
-        
-        
+
     }
 }
