@@ -33,9 +33,9 @@ public class OstosDao implements Dao<Ostos, Integer> {
         if (!hasOne) {
             return null;
         }
-        
+
         Long aika = rs.getLong("date");
-        
+
         Ostos o = new Ostos(this.kayttajadao.findOne(kayttaja_id), this.tuotedao.findOne(tuote_id), aika);
 
         rs.close();
@@ -79,7 +79,7 @@ public class OstosDao implements Dao<Ostos, Integer> {
 
                 stmt.setInt(1, object.getKayttaja().getId());
                 stmt.setInt(2, object.getTuote().getId());
-                stmt.setLong(3, object.getAika());                
+                stmt.setLong(3, object.getAika());
                 stmt.executeUpdate();
             }
             return object;

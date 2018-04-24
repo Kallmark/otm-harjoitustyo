@@ -22,8 +22,22 @@ import database.TuoteDao;
 import domain.Ostos;
 import domain.Tuote;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javafx.animation.AnimationTimer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 
 public class Kayttoliittyma extends Application {
 
@@ -41,6 +55,9 @@ public class Kayttoliittyma extends Application {
     public void start(Stage ikkuna) throws ClassNotFoundException {
 
         //Luodaan näkymät ja niihin liittyvät tavarat
+        ikkuna.setTitle("Kauppasovellus");
+        
+        
         GridPane aloitusNakyma = new GridPane();
         Scene aloitus = new Scene(aloitusNakyma);
         GridPane kayttajanLisaysNakyma = new GridPane();
@@ -49,6 +66,8 @@ public class Kayttoliittyma extends Application {
         Scene tuoteNakyma = new Scene(tuotteenLisaysNakyma);
         GridPane ostosNakyma = new GridPane();
         Scene ostosnakyma = new Scene(ostosNakyma);
+        GridPane aikaNakyma = new GridPane();
+        Scene aikanakyma = new Scene(aikaNakyma);
 
         //Aloitusnäkymä
         Label toiminnallisuusTeksti = new Label("Valitse toiminnallisuus");
@@ -67,6 +86,12 @@ public class Kayttoliittyma extends Application {
         Button OstosNappi = new Button("Tee ostos!");
         OstosNappi.setOnAction((event) -> {
             ikkuna.setScene(ostosnakyma);
+            ikkuna.show();
+        });
+
+        Button aikaNappi = new Button("Ostostilastot!");
+        aikaNappi.setOnAction((event) -> {
+            ikkuna.setScene(aikanakyma);
             ikkuna.show();
         });
 
@@ -132,6 +157,7 @@ public class Kayttoliittyma extends Application {
         kayttajanLisaysNakyma.setPadding(new Insets(20, 20, 20, 20));
 
         //Tuotteenlisäysnäkymä
+        
         TuoteDao tuotteet = new TuoteDao(database);
 
         Label toiminnallisuusTekstiTuoteNakyma = new Label("Valitse toiminnallisuus");
@@ -249,6 +275,16 @@ public class Kayttoliittyma extends Application {
         ostosNakyma.setVgap(20);
         ostosNakyma.setPadding(new Insets(10, 10, 10, 10));
 
+        //Aikanäkymä
+        
+
+        aikaNakyma.setHgap(20);
+        aikaNakyma.setVgap(20);
+        aikaNakyma.setPadding(new Insets(20, 20, 20, 20));
+        
+        TableView table = new TableView();
+        
+        
         //Asetetaan aloitusnäkymä aluksi näytille
         ikkuna.setScene(aloitus);
         ikkuna.show();

@@ -17,7 +17,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
 
     @Override
     public Kayttaja findOne(Integer key) throws SQLException {
-        
+
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Kayttaja WHERE kayttaja_id = ?");
         stmt.setObject(1, key);
@@ -59,7 +59,34 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         rs.close();
         stmt.close();
         connection.close();
-        
+
+        System.out.println("tulostus");
+        return kayttajat;
+    }
+
+    public HashMap<Kayttaja, Integer> findAllTime(long date) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT kayttaja_id, COUNT(kayttaja_id) AS maara FROM Ostos WHERE date > ? ORDER BY maara");
+        stmt.setObject(1, date);
+        ResultSet rs = stmt.executeQuery();
+        HashMap<Kayttaja, Integer> kayttajat = new HashMap<>();
+        while (rs.next()) {
+            Integer id = rs.getInt("kayttaja_id");
+
+            if (this.findOne(id) != null) {
+                String nimi = this.findOne(id).getNimi();
+                Double saldo = this.findOne(id).getSaldo();
+                Integer kayttajaMaara = rs.getInt("maara");
+
+                kayttajat.put(new Kayttaja(id, nimi, saldo), kayttajaMaara);
+            }
+
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
         System.out.println("tulostus");
         return kayttajat;
     }
@@ -72,7 +99,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
 
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO Kayttaja (nimi, saldo) VALUES (?, ?)");
-                
+
                 stmt.setString(1, object.getNimi());
                 stmt.setDouble(2, object.getSaldo());
                 stmt.executeUpdate();
@@ -91,9 +118,8 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         }
     }
 
-
-@Override
-        public void delete(Integer key) throws SQLException {
+    @Override
+    public void delete(Integer key) throws SQLException {
         // ei toteutettu
     }
 }
