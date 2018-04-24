@@ -4,11 +4,11 @@ package domain;
 public class Kayttaja {
     
     public String nimi;
-    public Integer saldo;
+    public Double saldo;
     public Integer id;
     
     
-    public Kayttaja(Integer id, String nimi, Integer saldo) {
+    public Kayttaja(Integer id, String nimi, Double saldo) {
         this.saldo = saldo;
         this.id = id;
         this.nimi = nimi;
@@ -30,18 +30,18 @@ public class Kayttaja {
         this.nimi = nimi;
     }
     
-    public Integer getSaldo() {
+    public Double getSaldo() {
         return this.saldo;
     }
     
-    public void setSaldo(Integer saldo) {
+    public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
     
     @Override
     
     public String toString() {
-        return this.nimi + " id: " + this.getId() + " saldo: " + this.getSaldo();
+        return this.nimi + ", id: " + this.getId() + ", saldo: " + this.getSaldo();
     }
 
 }

@@ -30,7 +30,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
 
         Integer id = rs.getInt("kayttaja_id");
         String nimi = rs.getString("nimi");
-        Integer saldo = rs.getInt("saldo");
+        Double saldo = rs.getDouble("saldo");
 
         Kayttaja o = new Kayttaja(id, nimi, saldo);
 
@@ -51,7 +51,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         while (rs.next()) {
             Integer id = rs.getInt("kayttaja_id");
             String nimi = rs.getString("nimi");
-            Integer saldo = rs.getInt("saldo");
+            Double saldo = rs.getDouble("saldo");
 
             kayttajat.add(new Kayttaja(id, nimi, saldo));
         }
@@ -74,7 +74,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO Kayttaja (nimi, saldo) VALUES (?, ?)");
                 
                 stmt.setString(1, object.getNimi());
-                stmt.setInt(2, object.getSaldo());
+                stmt.setDouble(2, object.getSaldo());
                 stmt.executeUpdate();
             }
             return object;
@@ -83,7 +83,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("UPDATE Kayttaja SET nimi = ?, saldo = ? WHERE kayttaja_id = ?");
                 stmt.setString(1, object.getNimi());
-                stmt.setInt(2, object.getSaldo());
+                stmt.setDouble(2, object.getSaldo());
                 stmt.setInt(3, object.getId());
                 stmt.executeUpdate();
             }
