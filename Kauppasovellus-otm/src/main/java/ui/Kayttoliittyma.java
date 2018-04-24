@@ -21,6 +21,7 @@ import database.OstosDao;
 import database.TuoteDao;
 import domain.Ostos;
 import domain.Tuote;
+import java.awt.Color;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +36,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -56,8 +61,23 @@ public class Kayttoliittyma extends Application {
 
         //Luodaan näkymät ja niihin liittyvät tavarat
         ikkuna.setTitle("Kauppasovellus");
-        
-        
+        ikkuna.setHeight(300);
+
+        InnerShadow is = new InnerShadow();
+        is.setOffsetX(4.0f);
+        is.setOffsetY(4.0f);
+
+        Text alkuteksti = new Text();
+        alkuteksti.setEffect(is);
+        alkuteksti.setX(20);
+        alkuteksti.setY(100);
+        alkuteksti.setText("Tervetuloa kauppasovellukseen!");
+        alkuteksti.setFill(javafx.scene.paint.Color.PINK);
+        alkuteksti.setFont(Font.font(null, FontWeight.BOLD, 20));
+
+        alkuteksti.setTranslateX(30);
+        alkuteksti.setTranslateY(30);
+
         GridPane aloitusNakyma = new GridPane();
         Scene aloitus = new Scene(aloitusNakyma);
         GridPane kayttajanLisaysNakyma = new GridPane();
@@ -95,10 +115,11 @@ public class Kayttoliittyma extends Application {
             ikkuna.show();
         });
 
-        aloitusNakyma.add(toiminnallisuusTeksti, 0, 0);
-        aloitusNakyma.add(kayttajanLisaysNappi, 1, 0);
-        aloitusNakyma.add(tuotteenLisaysNappi, 2, 0);
-        aloitusNakyma.add(OstosNappi, 3, 0);
+        aloitusNakyma.add(toiminnallisuusTeksti, 0, 4);
+        aloitusNakyma.add(kayttajanLisaysNappi, 1, 4);
+        aloitusNakyma.add(tuotteenLisaysNappi, 2, 4);
+        aloitusNakyma.add(OstosNappi, 3, 4);
+        aloitusNakyma.add(alkuteksti, 1, 0);
         aloitusNakyma.setHgap(20);
         aloitusNakyma.setVgap(20);
         aloitusNakyma.setPadding(new Insets(20, 20, 20, 20));
@@ -108,8 +129,8 @@ public class Kayttoliittyma extends Application {
         KayttajaDao kayttajat = new KayttajaDao(database);
 
         Label toiminnallisuusTekstiKayttajaNakyma = new Label("Valitse toiminnallisuus");
-        Button palaaAloitusNakymaanKayttajanakymasta = new Button("Palaa aloitusnäkymään");
-        palaaAloitusNakymaanKayttajanakymasta.setOnAction((event) -> {
+        Button palaaAloitusNakymaan = new Button("Palaa aloitusnäkymään");
+        palaaAloitusNakymaan.setOnAction((event) -> {
             ikkuna.setScene(aloitus);
             ikkuna.show();
         });
@@ -150,17 +171,17 @@ public class Kayttoliittyma extends Application {
         kayttajanLisaysNakyma.add(naytaKayttajat, 3, 0);
         kayttajanLisaysNakyma.add(listakayttajista, 3, 1);
         kayttajanLisaysNakyma.add(toiminnallisuusTekstiKayttajaNakyma, 4, 0);
-        kayttajanLisaysNakyma.add(palaaAloitusNakymaanKayttajanakymasta, 4, 1);
+        kayttajanLisaysNakyma.add(palaaAloitusNakymaan, 4, 1);
 
         kayttajanLisaysNakyma.setHgap(20);
         kayttajanLisaysNakyma.setVgap(20);
         kayttajanLisaysNakyma.setPadding(new Insets(20, 20, 20, 20));
 
         //Tuotteenlisäysnäkymä
-        
         TuoteDao tuotteet = new TuoteDao(database);
 
         Label toiminnallisuusTekstiTuoteNakyma = new Label("Valitse toiminnallisuus");
+        Label tarkasteleTuotteita = new Label("Tarkastele tuotteita");
         Button palaaAloitusNakymaanTuotenakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaanTuotenakymasta.setOnAction((event) -> {
             ikkuna.setScene(aloitus);
@@ -209,8 +230,9 @@ public class Kayttoliittyma extends Application {
         tuotteenLisaysNakyma.add(tuotteenInfoKentta, 3, 1);
         tuotteenLisaysNakyma.add(lisaaTuote, 4, 1);
         tuotteenLisaysNakyma.add(listatuotteista, 0, 3);
+        tuotteenLisaysNakyma.add(tarkasteleTuotteita, 0, 2);
         tuotteenLisaysNakyma.add(toiminnallisuusTekstiTuoteNakyma, 0, 4);
-        tuotteenLisaysNakyma.add(palaaAloitusNakymaanTuotenakymasta, 1, 4);
+        tuotteenLisaysNakyma.add(palaaAloitusNakymaanTuotenakymasta, 0, 5);
 
         tuotteenLisaysNakyma.setHgap(20);
         tuotteenLisaysNakyma.setVgap(20);
@@ -266,7 +288,7 @@ public class Kayttoliittyma extends Application {
                 kayttajaValinta.getItems().addAll(kayttajat.findAll());
                 tuoteValinta.getItems().clear();
                 tuoteValinta.getItems().addAll(tuotteet.findAll());
-                
+
             } catch (SQLException ex) {
                 Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -285,15 +307,12 @@ public class Kayttoliittyma extends Application {
         ostosNakyma.setPadding(new Insets(10, 10, 10, 10));
 
         //Aikanäkymä
-        
-
         aikaNakyma.setHgap(20);
         aikaNakyma.setVgap(20);
         aikaNakyma.setPadding(new Insets(20, 20, 20, 20));
-        
+
         TableView table = new TableView();
-        
-        
+
         //Asetetaan aloitusnäkymä aluksi näytille
         ikkuna.setScene(aloitus);
         ikkuna.show();
