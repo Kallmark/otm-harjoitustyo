@@ -10,11 +10,20 @@ import domain.Kayttaja;
 public class KayttajaDao implements Dao<Kayttaja, Integer> {
 
     private Database database;
-
+    
+    /**
+     * Luo KayttajaDao-olion.
+     * @param database Parametrinä toimii tietokanta, johon tietoa lisätään.
+     */
     public KayttajaDao(Database database) {
         this.database = database;
     }
-
+    /**
+     * Etsii halutun kayttajan tietokannasta.
+     * @param key Etsintä tapahtuu antamalla parametriksi id:n
+     * @return Palauttaa löydetyn olion, jos sellainen löytyy. 
+     * @throws SQLException 
+     */
     @Override
     public Kayttaja findOne(Integer key) throws SQLException {
 
@@ -40,7 +49,11 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
 
         return o;
     }
-
+    /**
+     * Etsii kaikki tietokantaan tallennetut kayttajat
+     * @return Palauttaa listan kayttajia.
+     * @throws SQLException 
+     */
     @Override
     public List<Kayttaja> findAll() throws SQLException {
         Connection connection = database.getConnection();
@@ -62,7 +75,13 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
 
         return kayttajat;
     }
-
+    /**
+     * Etsii kaikki ostokset, jotka on tehty annettujen parametrien välisenä aikana. Laskee käyttäjäkohtaisten ostoksien määrän ja luokittelee käyttäjät ostoksien määrän perusteella järjesteykseen suurimmasta alimpaan.
+     * @param sekunnitNyt Nykyhetken sekunnit laskettuna 1.1.1970 lukien.
+     * @param sekunnitEnnen Sekuntimäärä ennen haluttua aikaa.
+     * @return Palauttaa LinkedHashMapin, joka säilyttää lisäysjärjestyksen.
+     * @throws SQLException 
+     */
     public Map<Kayttaja, Integer> findAllTime(long sekunnitNyt, long sekunnitEnnen) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT DISTINCT kayttaja_id, COUNT(kayttaja_id) AS maara FROM Ostos WHERE date <= ? AND date >= ?  GROUP BY kayttaja_id ORDER BY maara DESC");
@@ -85,7 +104,12 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         connection.close();
         return kayttajat;
     }
-
+    /**
+     * Lisää uusia käyttäjiä ttietokantaan ai sellaisen jo ollessa olemassa päivittää olemassaolevaa käyttäjää.
+     * @param object Parametrinä luotu käyttäjä-olio.
+     * @return
+     * @throws SQLException 
+     */
     @Override
     public Kayttaja saveOrUpdate(Kayttaja object) throws SQLException {
         Kayttaja findOne = findOne(object.getId());

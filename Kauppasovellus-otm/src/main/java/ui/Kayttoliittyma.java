@@ -126,11 +126,11 @@ public class Kayttoliittyma extends Application {
         aloitusNakyma.setPadding(new Insets(20, 20, 20, 20));
 
         //Käyttäjienlisäysnäkymä
-        Database database = new Database("jdbc:sqlite:kauppasovellus.db");
+        Database database = new Database("jdbc:sqlite:db/kauppasovellus.db");
         KayttajaDao kayttajat = new KayttajaDao(database);
 
         Label toiminnallisuusTekstiKayttajaNakyma = new Label("Valitse toiminnallisuus");
-        
+
 
         Button palaaAloitusnakymaanKayttajanakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusnakymaanKayttajanakymasta.setOnAction((event) -> {
@@ -224,7 +224,7 @@ public class Kayttoliittyma extends Application {
 
             kayttajaTaulukko.setItems(kayttajaData);
             kayttajaTaulukko.getColumns().addAll(idSarake, nimiSarake, saldoSarake);
-            
+
         }
 
         kayttajanTietoNakyma.add(kayttajaTietoja, 0, 0);
@@ -428,4 +428,5 @@ public class Kayttoliittyma extends Application {
         ikkuna.show();
 
     }
+
 }

@@ -30,7 +30,7 @@ public class TuoteDaoTest {
     TuoteDao tuotedao;
 
     public TuoteDaoTest() throws ClassNotFoundException {
-        this.database = new Database("jdbc:sqlite:testi.db");
+        this.database = new Database("jdbc:sqlite:src/test/dbTest/testi.db");
         this.tuotedao = new TuoteDao(database);
     }
 

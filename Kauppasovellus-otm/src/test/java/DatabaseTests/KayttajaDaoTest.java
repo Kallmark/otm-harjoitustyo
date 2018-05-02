@@ -23,7 +23,7 @@ public class KayttajaDaoTest {
     KayttajaDao kayttajadao;
 
     public KayttajaDaoTest() throws ClassNotFoundException {
-        this.database = new Database("jdbc:sqlite:testi.db");
+        this.database = new Database("jdbc:sqlite:src/test/dbTest/testi.db");
         this.kayttajadao = new KayttajaDao(this.database);
     }
 
