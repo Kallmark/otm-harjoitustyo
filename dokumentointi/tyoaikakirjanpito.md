@@ -16,4 +16,5 @@
 |24.4| 6 | Käyttöliittymän tekeminen, testien tekeminen, koodin hiominen|
 |2.5| 8 | Ostostilastojen työstämistä|
 |2.5| 3 | Testien tekemistä|
-|Yht| 50 | |
+|3.5| 3 | Bugien korjailua ja configin tekemistä|
+|Yht| 53 | |
