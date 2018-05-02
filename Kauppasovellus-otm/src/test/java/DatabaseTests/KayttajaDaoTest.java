@@ -28,9 +28,16 @@ public class KayttajaDaoTest {
     }
 
     @Before
-    public void setUp() throws ClassNotFoundException {
-        
+    public void setUp() throws ClassNotFoundException, SQLException {
+        kayttajadao.deleteAll();
     }
+    
+    @Test
+    public void deleteKaikkiToimii() throws SQLException{
+        kayttajadao.deleteAll();
+        assertEquals(0, kayttajadao.findAll().size());
+    }
+    
     
     @Test
     public void saveJaEtsiToimii() throws SQLException {
@@ -54,6 +61,7 @@ public class KayttajaDaoTest {
     @Test
     public void etsiKaikkiToimii() throws SQLException{
         Kayttaja kayttaja = new Kayttaja(1, "Kalle", 10.0);
+        kayttajadao.saveOrUpdate(kayttaja);
         assertEquals(1, kayttajadao.findAll().size());
     }
 

@@ -68,11 +68,9 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
 
             kayttajat.add(new Kayttaja(id, nimi, saldo));
         }
-
         rs.close();
         stmt.close();
         connection.close();
-
         return kayttajat;
     }
     /**
@@ -136,5 +134,17 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
     @Override
     public void delete(Integer key) throws SQLException {
         // ei toteutettu
+    }
+    
+    /**
+     * Poistaa kaikki taulun tiedot.
+     * @throws SQLException 
+     */
+    public void deleteAll() throws SQLException{
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("DELETE FROM Kayttaja");
+        stmt.executeUpdate();
+        stmt.close();
+        connection.close();
     }
 }

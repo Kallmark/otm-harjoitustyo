@@ -20,8 +20,12 @@ import database.OstosDao;
 import database.TuoteDao;
 import domain.Ostos;
 import domain.Tuote;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.Map;
+import java.util.Properties;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -45,13 +49,21 @@ public class Kayttoliittyma extends Application {
     private KayttajaDao kayttajat;
     private TuoteDao tuotteet;
     private OstosDao ostokset;
+    private String aika;
     
     @Override
-    public void init() throws ClassNotFoundException {
+    public void init() throws ClassNotFoundException, FileNotFoundException, IOException {
+        Properties prop = new Properties();
+        //prop.load(new FileInputStream("config.properties"));
+        
+        String databaseFile = prop.getProperty("database");
+        this.aika = prop.getProperty("aika");
+        
         Database database = new Database("jdbc:sqlite:db/kauppasovellus.db");
         this.kayttajat = new KayttajaDao(database);
         this.tuotteet = new TuoteDao(database);
         this.ostokset = new OstosDao(database);
+        
     }
 
     public static void start(String[] args) {

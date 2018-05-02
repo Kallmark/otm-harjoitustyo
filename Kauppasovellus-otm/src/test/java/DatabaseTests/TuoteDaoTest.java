@@ -36,6 +36,13 @@ public class TuoteDaoTest {
 
     @Before
     public void setUp() throws SQLException {
+        tuotedao.deleteAll();
+    }
+    
+    @Test
+    public void deleteKaikkiToimii() throws SQLException{
+        tuotedao.deleteAll();
+        assertEquals(0, tuotedao.findAll().size());
     }
 
     @After
@@ -47,6 +54,16 @@ public class TuoteDaoTest {
         Tuote tuote = new Tuote(1, "Tuote", 10.0, 10, "Tuote");
         tuotedao.saveOrUpdate(tuote);
         assertEquals(tuote.toString(), tuotedao.findOne(1).toString());
+    }
+    
+    @Test
+    public void UpdateToimii() throws SQLException {
+        Tuote tuote = new Tuote(1, "Tuote", 10.0, 10, "Tuote");
+        Tuote tuote2 = new Tuote(1, "Tuote2", 10.0, 10, "Tuote");
+        tuotedao.saveOrUpdate(tuote);
+        tuotedao.saveOrUpdate(tuote2);
+        
+        assertEquals(tuote2.toString(), tuotedao.findOne(1).toString());
     }
 
     // TODO add test methods here.

@@ -98,4 +98,12 @@ public class TuoteDao implements Dao<Tuote, Integer> {
     public void delete(Integer key) throws SQLException {
         // ei toteutettu
     }
+    
+    public void deleteAll() throws SQLException{
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("DELETE FROM Tuote");
+        stmt.executeUpdate();
+        stmt.close();
+        connection.close();
+    }
 }
