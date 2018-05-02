@@ -14,4 +14,6 @@
 |24.4| 3 | Tuotteidenlisäystoiminnon rakentaminen|
 |24.4| 6 | Ostostoiminnon tekeminen|
 |24.4| 6 | Käyttöliittymän tekeminen, testien tekeminen, koodin hiominen|
-|Yht| 39 | |
+|2.5| 8 | Ostostilastojen työstämistä|
+|2.5| 3 | Testien tekemistä
+|Yht| 50 | |
