@@ -7,7 +7,6 @@ package DatabaseTests;
  */
 
 import database.Database;
-import java.sql.SQLException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
