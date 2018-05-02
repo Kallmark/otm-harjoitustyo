@@ -47,9 +47,8 @@ public class DatabaseTest {
     
     @Test
     public void tietokantaLoytyyTiedostosta() throws ClassNotFoundException {
-        Database database = new Database("jdbc:sqlite:kauppasovellus.db");
-        assertNotNull(database);
-        
+        Database database = new Database("jdbc:sqlite:testitietokanta.db");
+        assertNotNull(database);    
     }
     
     

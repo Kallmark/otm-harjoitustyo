@@ -7,7 +7,7 @@ public class Database {
     private String databaseAddress;
 
     public Database(String databaseAddress) throws ClassNotFoundException {
-        this.databaseAddress = ("jdbc:sqlite:db/kauppasovellus.db");
+        this.databaseAddress = databaseAddress;
     }
 
     public Connection getConnection() throws SQLException {

@@ -29,7 +29,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -131,7 +130,7 @@ public class Kayttoliittyma extends Application {
         KayttajaDao kayttajat = new KayttajaDao(database);
 
         Label toiminnallisuusTekstiKayttajaNakyma = new Label("Valitse toiminnallisuus");
-        Label kayttajaTiedot = new Label("Tarkastele käyttäjien tietoja");
+        
 
         Button palaaAloitusnakymaanKayttajanakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusnakymaanKayttajanakymasta.setOnAction((event) -> {
@@ -189,7 +188,6 @@ public class Kayttoliittyma extends Application {
         kayttajanLisaysNakyma.add(lisaaNappi, 2, 1);
         kayttajanLisaysNakyma.add(naytaKayttajat, 3, 0);
         kayttajanLisaysNakyma.add(listakayttajista, 3, 1);
-        kayttajanLisaysNakyma.add(kayttajaTiedot, 0, 4);
         kayttajanLisaysNakyma.add(toiminnallisuusTekstiKayttajaNakyma, 0, 6);
         kayttajanLisaysNakyma.add(palaaAloitusnakymaanKayttajanakymasta, 0, 7);
         kayttajanLisaysNakyma.add(tarkasteleKayttajaa, 3, 2);

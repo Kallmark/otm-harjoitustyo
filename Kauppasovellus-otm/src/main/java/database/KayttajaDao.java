@@ -60,7 +60,6 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         stmt.close();
         connection.close();
 
-        System.out.println("tulostus");
         return kayttajat;
     }
 
@@ -84,11 +83,6 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         rs.close();
         stmt.close();
         connection.close();
-        
-        for (int i : kayttajat.values()) {
-            //System.out.println(i);
-        }
-        
         return kayttajat;
     }
 
