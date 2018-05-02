@@ -1,6 +1,6 @@
-<h1>Arkkitehtuurikuvaus<h1>
+#Arkkitehtuurikuvaus
 
-<h2>Pakkausrakenne<h2>
+##Pakkausrakenne
 
 Sovelluksen pakkaus on rakennettu kutakuinkin kyseistä kuvaa vastaavalla tavalla:
 
@@ -8,7 +8,7 @@ Sovelluksen pakkaus on rakennettu kutakuinkin kyseistä kuvaa vastaavalla tavall
 
 Pakkauksista ui sisältää JavaFX:llä toteutetun käyttöliittymän, domain sovelluslogiigan ja database tietojen pysyväistallennusta vastaavan koodin.
 
-<h2>Käyttöliittymä<h2>
+##Käyttöliittymä
 
 Käyttöliittymä sisältää neljä eri näkymää:
 
@@ -19,7 +19,7 @@ Käyttöliittymä sisältää neljä eri näkymää:
 
 Kukin näistä on toteutettu omana Scene-oliona,, joista yksi kerrallaan on näkyvänä ja sijoitettuna sovelluksen stageen. Käyttöliittyä on erotettu itse sovelluslogiikasta ja ainoastaan kutsuu sovelluslogiikan ja pysyväistallentamisen metodeja. 
 
-<h2> Sovelluslogiikka<h2>
+##Sovelluslogiikka
 
 
 Sovelluksen sisäinen logiikka rakentuu oheisen mallin perusteella:
@@ -27,9 +27,9 @@ Sovelluksen sisäinen logiikka rakentuu oheisen mallin perusteella:
 
 Kolme luokkaa (Kayttaja, Tuote, Ostos) vaikuttavat keskenään siten, että käyttäjät voivat ostaa tuotteita, joista jää historiamerkintä tallennetun Ostos-olion muodossa. Tämä logiikka on integroituna Dao-suunnittelumallin avulla SQLlite-tietokantaan, jonka päälle itse sovellus on rakennettu. 
 
-<h2>Päätoiminnallisuudet<h2>
+##Päätoiminnallisuudet
 
-<b>käyttäjän lisääminen<b> tapahtuu oiheisen kuvan osoittamalla tavalla:
+##käyttäjän lisääminen<b> tapahtuu oiheisen kuvan osoittamalla tavalla:
   
 <img src= "https://raw.githubusercontent.com/Kallmark/otm-harjoitustyo/master/misc/kuvat/sekvenssikaavio.png" widht="400">
 
