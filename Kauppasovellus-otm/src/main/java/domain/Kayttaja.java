@@ -3,9 +3,9 @@ package domain;
 
 public class Kayttaja {
     
-    public String nimi;
-    public Double saldo;
-    public Integer id;
+    private String nimi;
+    private Double saldo;
+    private Integer id;
     
     
     public Kayttaja(Integer id, String nimi, Double saldo) {

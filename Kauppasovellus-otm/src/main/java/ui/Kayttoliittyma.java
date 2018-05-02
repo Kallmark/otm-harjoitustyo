@@ -41,10 +41,17 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 public class Kayttoliittyma extends Application {
-
+    
+    private KayttajaDao kayttajat;
+    private TuoteDao tuotteet;
+    private OstosDao ostokset;
+    
     @Override
     public void init() throws ClassNotFoundException {
-
+        Database database = new Database("jdbc:sqlite:db/kauppasovellus.db");
+        this.kayttajat = new KayttajaDao(database);
+        this.tuotteet = new TuoteDao(database);
+        this.ostokset = new OstosDao(database);
     }
 
     public static void start(String[] args) {
@@ -231,7 +238,6 @@ public class Kayttoliittyma extends Application {
         kayttajanTietoNakyma.add(kayttajaTaulukko, 1, 1);
 
         //Tuotteenlisäysnäkymä
-        TuoteDao tuotteet = new TuoteDao(database);
 
         Label toiminnallisuusTekstiTuoteNakyma = new Label("Valitse toiminnallisuus");
         Label tarkasteleTuotteita = new Label("Tarkastele tuotteita");
@@ -302,7 +308,7 @@ public class Kayttoliittyma extends Application {
         tuotteenLisaysNakyma.setPadding(new Insets(10, 10, 10, 10));
 
         //Ostosnäkymä
-        OstosDao ostokset = new OstosDao(database);
+        
         Label toiminallisuusTekstiOstosNakyma = new Label("Valitse toiminnallisuus");
         Button palaaAloitusNakymaanOstosNakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaanOstosNakymasta.setOnAction((event) -> {

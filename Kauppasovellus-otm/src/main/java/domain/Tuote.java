@@ -11,11 +11,11 @@ package domain;
  */
 public class Tuote {
     
-    public String nimi;
-    public Double hinta;
-    public Integer id;
-    public Integer maara;
-    public String info;
+    private String nimi;
+    private Double hinta;
+    private Integer id;
+    private Integer maara;
+    private String info;
     
     
     public Tuote(Integer id, String nimi, Double hinta, Integer maara, String info) {

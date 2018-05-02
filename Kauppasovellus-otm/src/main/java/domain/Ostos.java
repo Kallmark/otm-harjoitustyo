@@ -2,9 +2,9 @@ package domain;
 
 public class Ostos {
     
-    public Kayttaja kayttaja;
-    public Tuote tuote;
-    public long aika;
+    private Kayttaja kayttaja;
+    private Tuote tuote;
+    private long aika;
     
 
     public Ostos(Kayttaja kayttaja, Tuote tuote, long aika) {
