@@ -15,5 +15,5 @@
 |24.4| 6 | Ostostoiminnon tekeminen|
 |24.4| 6 | Käyttöliittymän tekeminen, testien tekeminen, koodin hiominen|
 |2.5| 8 | Ostostilastojen työstämistä|
-|2.5| 3 | Testien tekemistä
+|2.5| 3 | Testien tekemistä|
 |Yht| 50 | |
