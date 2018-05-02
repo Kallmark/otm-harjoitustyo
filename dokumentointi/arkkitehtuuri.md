@@ -29,7 +29,7 @@ Kolme luokkaa (Kayttaja, Tuote, Ostos) vaikuttavat keskenään siten, että käy
 
 ##Päätoiminnallisuudet
 
-##käyttäjän lisääminen<b> tapahtuu oiheisen kuvan osoittamalla tavalla:
+##käyttäjän lisääminen tapahtuu oiheisen kuvan osoittamalla tavalla:
   
 <img src= "https://raw.githubusercontent.com/Kallmark/otm-harjoitustyo/master/misc/kuvat/sekvenssikaavio.png" widht="400">
 
