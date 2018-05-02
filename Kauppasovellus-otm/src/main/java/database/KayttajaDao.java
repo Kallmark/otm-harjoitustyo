@@ -66,7 +66,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
 
     public HashMap<Kayttaja, Integer> findAllTime(long date) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT kayttaja_id, COUNT(kayttaja_id) AS maara FROM Ostos WHERE date > ? ORDER BY maara");
+        PreparedStatement stmt = connection.prepareStatement("SELECT DISTINCT kayttaja_id, COUNT(kayttaja_id) AS maara FROM Ostos WHERE date > ? GROUP BY kayttaja_id ORDER BY maara DESC");
         stmt.setObject(1, date);
         ResultSet rs = stmt.executeQuery();
         HashMap<Kayttaja, Integer> kayttajat = new HashMap<>();

@@ -22,13 +22,19 @@ import database.TuoteDao;
 import domain.Ostos;
 import domain.Tuote;
 import java.awt.Color;
+import java.sql.Date;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
@@ -43,6 +49,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import static jdk.nashorn.internal.objects.NativeArray.map;
+import static jdk.nashorn.internal.objects.NativeDebug.map;
 
 public class Kayttoliittyma extends Application {
 
@@ -57,7 +65,7 @@ public class Kayttoliittyma extends Application {
 
     @Override
 
-    public void start(Stage ikkuna) throws ClassNotFoundException {
+    public void start(Stage ikkuna) throws ClassNotFoundException, SQLException {
 
         //Luodaan näkymät ja niihin liittyvät tavarat
         ikkuna.setTitle("Kauppasovellus");
@@ -119,6 +127,7 @@ public class Kayttoliittyma extends Application {
         aloitusNakyma.add(kayttajanLisaysNappi, 1, 4);
         aloitusNakyma.add(tuotteenLisaysNappi, 2, 4);
         aloitusNakyma.add(OstosNappi, 3, 4);
+        aloitusNakyma.add(aikaNappi, 4, 4);
         aloitusNakyma.add(alkuteksti, 1, 0);
         aloitusNakyma.setHgap(20);
         aloitusNakyma.setVgap(20);
@@ -307,11 +316,60 @@ public class Kayttoliittyma extends Application {
         ostosNakyma.setPadding(new Insets(10, 10, 10, 10));
 
         //Aikanäkymä
+        TableColumn<Map.Entry<Kayttaja, Integer>, Kayttaja> column1 = new TableColumn<>("Key");
+        column1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<Kayttaja, Integer>, Kayttaja>, ObservableValue<Kayttaja>>() {
+
+            @Override
+            public ObservableValue<Kayttaja> call(TableColumn.CellDataFeatures<Map.Entry<Kayttaja, Integer>, Kayttaja> p) {
+                return new SimpleObjectProperty<>(p.getValue().getKey());
+            }
+
+        });
+
+        TableColumn<Map.Entry<Kayttaja, Integer>, Integer> column2 = new TableColumn<>("Value");
+        column2.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<Kayttaja, Integer>, Integer>, ObservableValue<Integer>>() {
+
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Map.Entry<Kayttaja, Integer>, Integer> p) {
+                return new SimpleObjectProperty<>(p.getValue().getValue());
+            }
+
+        });
+
+        new AnimationTimer() {
+            private long edellinen;
+
+            @Override
+            public void handle(long nykyhetki) {
+                if (nykyhetki - edellinen < 200_000_000_0L) {
+                    return;
+                }
+                edellinen = nykyhetki;
+                System.out.println("testi");
+                long sekunnit = java.time.Instant.EPOCH.getEpochSecond() -3600;
+                try {
+                    Map<Kayttaja, Integer> ostosData = kayttajat.findAllTime(sekunnit);
+                    System.out.println(ostosData);
+                    ObservableList<Map.Entry<Kayttaja, Integer>> items = FXCollections.observableArrayList(ostosData.entrySet());
+
+                    final TableView<Map.Entry<Kayttaja, Integer>> table = new TableView<>(items);
+
+                    table.getColumns().setAll(column1, column2);
+                    aikaNakyma.add(table, 0, 0);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }.start();
+
         aikaNakyma.setHgap(20);
         aikaNakyma.setVgap(20);
         aikaNakyma.setPadding(new Insets(20, 20, 20, 20));
 
-        TableView table = new TableView();
+        TableView table2 = new TableView();
+
+        aikaNakyma.add(palaaAloitusNakymaan, 0, 2);
 
         //Asetetaan aloitusnäkymä aluksi näytille
         ikkuna.setScene(aloitus);
