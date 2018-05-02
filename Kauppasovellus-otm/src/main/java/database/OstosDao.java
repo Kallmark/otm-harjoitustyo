@@ -70,21 +70,16 @@ public class OstosDao implements Dao<Ostos, Integer> {
 
     @Override
     public Ostos saveOrUpdate(Ostos object) throws SQLException {
-        Ostos findOne = findOne(object.getKayttaja().getId(), object.getTuote().getId());
 
-        if (findOne == null) {
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO Ostos (kayttaja_id, tuote_id, date) VALUES (?, ?, ?)");
 
-            try (Connection conn = database.getConnection()) {
-                PreparedStatement stmt = conn.prepareStatement("INSERT INTO Ostos (kayttaja_id, tuote_id, date) VALUES (?, ?, ?)");
-
-                stmt.setInt(1, object.getKayttaja().getId());
-                stmt.setInt(2, object.getTuote().getId());
-                stmt.setLong(3, object.getAika());
-                stmt.executeUpdate();
-            }
-            return object;
+            stmt.setInt(1, object.getKayttaja().getId());
+            stmt.setInt(2, object.getTuote().getId());
+            stmt.setLong(3, object.getAika());
+            stmt.executeUpdate();
         }
-        return null;
+        return object;
     }
 
     @Override

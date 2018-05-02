@@ -138,6 +138,7 @@ public class Kayttoliittyma extends Application {
         KayttajaDao kayttajat = new KayttajaDao(database);
 
         Label toiminnallisuusTekstiKayttajaNakyma = new Label("Valitse toiminnallisuus");
+        
         Button palaaAloitusNakymaan = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaan.setOnAction((event) -> {
             ikkuna.setScene(aloitus);
@@ -187,6 +188,7 @@ public class Kayttoliittyma extends Application {
         kayttajanLisaysNakyma.setPadding(new Insets(20, 20, 20, 20));
 
         //Tuotteenlisäysnäkymä
+        
         TuoteDao tuotteet = new TuoteDao(database);
 
         Label toiminnallisuusTekstiTuoteNakyma = new Label("Valitse toiminnallisuus");
@@ -349,7 +351,7 @@ public class Kayttoliittyma extends Application {
                 long sekunnit = java.time.Instant.EPOCH.getEpochSecond() -3600;
                 try {
                     Map<Kayttaja, Integer> ostosData = kayttajat.findAllTime(sekunnit);
-                    System.out.println(ostosData);
+                    // System.out.println(ostosData);
                     ObservableList<Map.Entry<Kayttaja, Integer>> items = FXCollections.observableArrayList(ostosData.entrySet());
 
                     final TableView<Map.Entry<Kayttaja, Integer>> table = new TableView<>(items);

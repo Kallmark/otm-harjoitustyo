@@ -82,6 +82,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         rs.close();
         stmt.close();
         connection.close();
+        
         return kayttajat;
     }
 
