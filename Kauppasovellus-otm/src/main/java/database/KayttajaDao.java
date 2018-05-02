@@ -64,24 +64,30 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         return kayttajat;
     }
 
-    public HashMap<Kayttaja, Integer> findAllTime(long date) throws SQLException {
+    public Map<Kayttaja, Integer> findAllTime(long sekunnitNyt, long sekunnitEnnen) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT DISTINCT kayttaja_id, COUNT(kayttaja_id) AS maara FROM Ostos WHERE date > ? GROUP BY kayttaja_id ORDER BY maara DESC");
-        stmt.setObject(1, date);
+        PreparedStatement stmt = connection.prepareStatement("SELECT DISTINCT kayttaja_id, COUNT(kayttaja_id) AS maara FROM Ostos WHERE date <= ? AND date >= ?  GROUP BY kayttaja_id ORDER BY maara DESC");
+        stmt.setObject(1, sekunnitNyt);
+        stmt.setObject(2, sekunnitEnnen);
         ResultSet rs = stmt.executeQuery();
-        HashMap<Kayttaja, Integer> kayttajat = new HashMap<>();
+        Map<Kayttaja, Integer> kayttajat = new LinkedHashMap<>();
         while (rs.next()) {
             Integer id = rs.getInt("kayttaja_id");
             if (this.findOne(id) != null) {
                 String nimi = this.findOne(id).getNimi();
                 Double saldo = this.findOne(id).getSaldo();
                 Integer kayttajaMaara = rs.getInt("maara");
+                System.out.println(kayttajaMaara);
                 kayttajat.put(new Kayttaja(id, nimi, saldo), kayttajaMaara);
             }
         }
         rs.close();
         stmt.close();
         connection.close();
+        
+        for (int i : kayttajat.values()) {
+            //System.out.println(i);
+        }
         
         return kayttajat;
     }

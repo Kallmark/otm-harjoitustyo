@@ -13,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 
 import domain.Kayttaja;
 import database.KayttajaDao;
@@ -21,36 +20,22 @@ import database.OstosDao;
 import database.TuoteDao;
 import domain.Ostos;
 import domain.Tuote;
-import java.awt.Color;
-import java.sql.Date;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javafx.animation.AnimationTimer;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.effect.InnerShadow;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
-import javafx.util.StringConverter;
-import static jdk.nashorn.internal.objects.NativeArray.map;
-import static jdk.nashorn.internal.objects.NativeDebug.map;
 
 public class Kayttoliittyma extends Application {
 
@@ -69,7 +54,7 @@ public class Kayttoliittyma extends Application {
 
         //Luodaan näkymät ja niihin liittyvät tavarat
         ikkuna.setTitle("Kauppasovellus");
-        ikkuna.setHeight(300);
+        ikkuna.setHeight(600);
 
         InnerShadow is = new InnerShadow();
         is.setOffsetX(4.0f);
@@ -82,7 +67,6 @@ public class Kayttoliittyma extends Application {
         alkuteksti.setText("Tervetuloa kauppasovellukseen!");
         alkuteksti.setFill(javafx.scene.paint.Color.PINK);
         alkuteksti.setFont(Font.font(null, FontWeight.BOLD, 20));
-
         alkuteksti.setTranslateX(30);
         alkuteksti.setTranslateY(30);
 
@@ -139,8 +123,8 @@ public class Kayttoliittyma extends Application {
 
         Label toiminnallisuusTekstiKayttajaNakyma = new Label("Valitse toiminnallisuus");
         
-        Button palaaAloitusNakymaan = new Button("Palaa aloitusnäkymään");
-        palaaAloitusNakymaan.setOnAction((event) -> {
+        Button palaaAloitusnakymaanKayttajanakymasta = new Button("Palaa aloitusnäkymään");
+        palaaAloitusnakymaanKayttajanakymasta.setOnAction((event) -> {
             ikkuna.setScene(aloitus);
             ikkuna.show();
         });
@@ -180,15 +164,14 @@ public class Kayttoliittyma extends Application {
         kayttajanLisaysNakyma.add(lisaaNappi, 2, 1);
         kayttajanLisaysNakyma.add(naytaKayttajat, 3, 0);
         kayttajanLisaysNakyma.add(listakayttajista, 3, 1);
-        kayttajanLisaysNakyma.add(toiminnallisuusTekstiKayttajaNakyma, 4, 0);
-        kayttajanLisaysNakyma.add(palaaAloitusNakymaan, 4, 1);
+        kayttajanLisaysNakyma.add(toiminnallisuusTekstiKayttajaNakyma, 0, 4);
+        kayttajanLisaysNakyma.add(palaaAloitusnakymaanKayttajanakymasta, 0, 5);
 
         kayttajanLisaysNakyma.setHgap(20);
         kayttajanLisaysNakyma.setVgap(20);
         kayttajanLisaysNakyma.setPadding(new Insets(20, 20, 20, 20));
 
         //Tuotteenlisäysnäkymä
-        
         TuoteDao tuotteet = new TuoteDao(database);
 
         Label toiminnallisuusTekstiTuoteNakyma = new Label("Valitse toiminnallisuus");
@@ -318,7 +301,14 @@ public class Kayttoliittyma extends Application {
         ostosNakyma.setPadding(new Insets(10, 10, 10, 10));
 
         //Aikanäkymä
-        TableColumn<Map.Entry<Kayttaja, Integer>, Kayttaja> column1 = new TableColumn<>("Key");
+        
+        Button palaaAloitusNakymaanAikanakymasta = new Button("Palaa aloitusnäkymään");
+        palaaAloitusNakymaanAikanakymasta.setOnAction((event) -> {
+            ikkuna.setScene(aloitus);
+            ikkuna.show();
+        });
+        
+        TableColumn<Map.Entry<Kayttaja, Integer>, Kayttaja> column1 = new TableColumn<>("Henkilö");
         column1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<Kayttaja, Integer>, Kayttaja>, ObservableValue<Kayttaja>>() {
 
             @Override
@@ -328,7 +318,7 @@ public class Kayttoliittyma extends Application {
 
         });
 
-        TableColumn<Map.Entry<Kayttaja, Integer>, Integer> column2 = new TableColumn<>("Value");
+        TableColumn<Map.Entry<Kayttaja, Integer>, Integer> column2 = new TableColumn<>("Ostosten määrä");
         column2.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<Kayttaja, Integer>, Integer>, ObservableValue<Integer>>() {
 
             @Override
@@ -348,16 +338,21 @@ public class Kayttoliittyma extends Application {
                 }
                 edellinen = nykyhetki;
                 System.out.println("testi");
-                long sekunnit = java.time.Instant.EPOCH.getEpochSecond() -3600;
+                long sekunnitNyt = Instant.now().getEpochSecond();
+                long sekunnitEnnen = sekunnitNyt - 3600;
+                
                 try {
-                    Map<Kayttaja, Integer> ostosData = kayttajat.findAllTime(sekunnit);
+                    Map<Kayttaja, Integer> ostosData = kayttajat.findAllTime(sekunnitNyt, sekunnitEnnen);
                     // System.out.println(ostosData);
                     ObservableList<Map.Entry<Kayttaja, Integer>> items = FXCollections.observableArrayList(ostosData.entrySet());
 
                     final TableView<Map.Entry<Kayttaja, Integer>> table = new TableView<>(items);
 
                     table.getColumns().setAll(column1, column2);
-                    aikaNakyma.add(table, 0, 0);
+                    table.setMaxWidth(Region.USE_PREF_SIZE);
+                    table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+                    aikaNakyma.add(table, 0, 1);
                 } catch (SQLException ex) {
                     Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -367,12 +362,14 @@ public class Kayttoliittyma extends Application {
 
         aikaNakyma.setHgap(20);
         aikaNakyma.setVgap(20);
-        aikaNakyma.setPadding(new Insets(20, 20, 20, 20));
+        aikaNakyma.setPadding(new Insets(50, 50, 50, 50));
 
         TableView table2 = new TableView();
+        
+        Label tilastot = new Label("Eniten ostoksia tehneet käyttäjät:");
 
-        aikaNakyma.add(palaaAloitusNakymaan, 0, 2);
-
+        aikaNakyma.add(palaaAloitusNakymaanAikanakymasta, 0, 2);
+        aikaNakyma.add(tilastot, 0, 0);
         //Asetetaan aloitusnäkymä aluksi näytille
         ikkuna.setScene(aloitus);
         ikkuna.show();
