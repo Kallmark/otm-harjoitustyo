@@ -27,10 +27,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.InnerShadow;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -70,8 +74,9 @@ public class Kayttoliittyma extends Application {
         alkuteksti.setTranslateX(30);
         alkuteksti.setTranslateY(30);
 
+        BorderPane aloitusNakyma2 = new BorderPane();
         GridPane aloitusNakyma = new GridPane();
-        Scene aloitus = new Scene(aloitusNakyma);
+        Scene aloitus = new Scene(aloitusNakyma2);
         GridPane kayttajanLisaysNakyma = new GridPane();
         Scene kayttajaNakyma = new Scene(kayttajanLisaysNakyma);
         GridPane tuotteenLisaysNakyma = new GridPane();
@@ -80,6 +85,8 @@ public class Kayttoliittyma extends Application {
         Scene ostosnakyma = new Scene(ostosNakyma);
         GridPane aikaNakyma = new GridPane();
         Scene aikanakyma = new Scene(aikaNakyma);
+        GridPane kayttajanTietoNakyma = new GridPane();
+        Scene kayttajanTiedot = new Scene(kayttajanTietoNakyma);
 
         //Aloitusnäkymä
         Label toiminnallisuusTeksti = new Label("Valitse toiminnallisuus");
@@ -107,12 +114,14 @@ public class Kayttoliittyma extends Application {
             ikkuna.show();
         });
 
+        aloitusNakyma2.setTop(alkuteksti);
+        BorderPane.setAlignment(alkuteksti, Pos.CENTER);
+        aloitusNakyma2.setCenter(aloitusNakyma);
         aloitusNakyma.add(toiminnallisuusTeksti, 0, 4);
         aloitusNakyma.add(kayttajanLisaysNappi, 1, 4);
         aloitusNakyma.add(tuotteenLisaysNappi, 2, 4);
         aloitusNakyma.add(OstosNappi, 3, 4);
         aloitusNakyma.add(aikaNappi, 4, 4);
-        aloitusNakyma.add(alkuteksti, 1, 0);
         aloitusNakyma.setHgap(20);
         aloitusNakyma.setVgap(20);
         aloitusNakyma.setPadding(new Insets(20, 20, 20, 20));
@@ -122,7 +131,8 @@ public class Kayttoliittyma extends Application {
         KayttajaDao kayttajat = new KayttajaDao(database);
 
         Label toiminnallisuusTekstiKayttajaNakyma = new Label("Valitse toiminnallisuus");
-        
+        Label kayttajaTiedot = new Label("Tarkastele käyttäjien tietoja");
+
         Button palaaAloitusnakymaanKayttajanakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusnakymaanKayttajanakymasta.setOnAction((event) -> {
             ikkuna.setScene(aloitus);
@@ -138,6 +148,14 @@ public class Kayttoliittyma extends Application {
             Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        ComboBox<Kayttaja> kayttajaValinta = new ComboBox<>();
+        try {
+            kayttajaValinta.getItems().addAll(kayttajat.findAll()
+            );
+        } catch (SQLException ex) {
+            Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         Label nimiTeksti = new Label("Nimi: ");
         TextField nimiKentta = new TextField();
         Label saldoTeksti = new Label("Saldo: ");
@@ -145,16 +163,23 @@ public class Kayttoliittyma extends Application {
         TextField saldoKentta = new TextField();
 
         Button lisaaNappi = new Button("Lisää henkilö!");
-
         lisaaNappi.setOnAction((event) -> {
             try {
                 Kayttaja lisattava = new Kayttaja(null, nimiKentta.getText(), Double.parseDouble(saldoKentta.getText()));
                 kayttajat.saveOrUpdate(lisattava);
                 listakayttajista.getItems().clear();
                 listakayttajista.getItems().addAll(kayttajat.findAll());
+                kayttajaValinta.getItems().clear();
+                kayttajaValinta.getItems().addAll(kayttajat.findAll());
             } catch (SQLException ex) {
                 Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
             }
+        });
+
+        Button tarkasteleKayttajaa = new Button("Tarkastele");
+        tarkasteleKayttajaa.setOnAction((event) -> {
+            ikkuna.setScene(kayttajanTiedot);
+            ikkuna.show();
         });
 
         kayttajanLisaysNakyma.add(nimiTeksti, 0, 0);
@@ -164,12 +189,48 @@ public class Kayttoliittyma extends Application {
         kayttajanLisaysNakyma.add(lisaaNappi, 2, 1);
         kayttajanLisaysNakyma.add(naytaKayttajat, 3, 0);
         kayttajanLisaysNakyma.add(listakayttajista, 3, 1);
-        kayttajanLisaysNakyma.add(toiminnallisuusTekstiKayttajaNakyma, 0, 4);
-        kayttajanLisaysNakyma.add(palaaAloitusnakymaanKayttajanakymasta, 0, 5);
+        kayttajanLisaysNakyma.add(kayttajaTiedot, 0, 4);
+        kayttajanLisaysNakyma.add(toiminnallisuusTekstiKayttajaNakyma, 0, 6);
+        kayttajanLisaysNakyma.add(palaaAloitusnakymaanKayttajanakymasta, 0, 7);
+        kayttajanLisaysNakyma.add(tarkasteleKayttajaa, 3, 2);
 
         kayttajanLisaysNakyma.setHgap(20);
         kayttajanLisaysNakyma.setVgap(20);
         kayttajanLisaysNakyma.setPadding(new Insets(20, 20, 20, 20));
+
+        //Kayttajantietonäkymä
+        Kayttaja tarkasteltava = (Kayttaja) listakayttajista.getValue();
+
+        Label kayttajaTietoja = new Label("Käyttäjän tiedot");
+        Label muutaKayttajaTietoja = new Label("Muuta käyttäjän tietoja");
+        Label kayttajanOstosHistoria = new Label("Käyttäjän ostoshistoria");
+
+        TableView kayttajaTaulukko = new TableView<>();
+        TableColumn nimiSarake = new TableColumn("Nimi");
+        TableColumn saldoSarake = new TableColumn("Saldo");
+        TableColumn idSarake = new TableColumn("Id");
+
+        if (listakayttajista.getValue() != null) {
+            ObservableList<Kayttaja> kayttajaData = FXCollections.observableArrayList(
+                    new Kayttaja(tarkasteltava.getId(), tarkasteltava.getNimi(), tarkasteltava.getSaldo()));
+
+            nimiSarake.setCellValueFactory(
+                    new PropertyValueFactory<>("Id")
+            );
+            saldoSarake.setCellValueFactory(
+                    new PropertyValueFactory<>("Nimi")
+            );
+            idSarake.setCellValueFactory(
+                    new PropertyValueFactory<>("Saldo")
+            );
+
+            kayttajaTaulukko.setItems(kayttajaData);
+            kayttajaTaulukko.getColumns().addAll(idSarake, nimiSarake, saldoSarake);
+            
+        }
+
+        kayttajanTietoNakyma.add(kayttajaTietoja, 0, 0);
+        kayttajanTietoNakyma.add(kayttajaTaulukko, 1, 1);
 
         //Tuotteenlisäysnäkymä
         TuoteDao tuotteet = new TuoteDao(database);
@@ -192,6 +253,14 @@ public class Kayttoliittyma extends Application {
             Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        ComboBox<Tuote> tuoteValinta = new ComboBox<>();
+        try {
+            tuoteValinta.getItems().addAll(tuotteet.findAll()
+            );
+        } catch (SQLException ex) {
+            Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         Label tuotteenNimi = new Label("Nimi: ");
         TextField tuotteenNimiKentta = new TextField();
         Label tuotteenHinta = new Label("Hinta: ");
@@ -208,7 +277,9 @@ public class Kayttoliittyma extends Application {
                 Tuote lisattavaTuote = new Tuote(null, tuotteenNimiKentta.getText(), Double.parseDouble(tuotteenHintaKentta.getText()), Integer.parseInt(tuotteenMaaraKentta.getText()), tuotteenInfoKentta.getText());
                 tuotteet.saveOrUpdate(lisattavaTuote);
                 listatuotteista.getItems().clear();
-                listatuotteista.getItems().addAll(kayttajat.findAll());
+                listatuotteista.getItems().addAll(tuotteet.findAll());
+                tuoteValinta.getItems().clear();
+                tuoteValinta.getItems().addAll(tuotteet.findAll());
             } catch (SQLException ex) {
                 Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -244,22 +315,6 @@ public class Kayttoliittyma extends Application {
         Label valitseKayttaja = new Label("Valitse kayttäjä:");
         Label valitseTuote = new Label("Valitse tuote:");
         Button teeOstos = new Button("Osta");
-
-        ComboBox<Kayttaja> kayttajaValinta = new ComboBox<>();
-        try {
-            kayttajaValinta.getItems().addAll(kayttajat.findAll()
-            );
-        } catch (SQLException ex) {
-            Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        ComboBox<Tuote> tuoteValinta = new ComboBox<>();
-        try {
-            tuoteValinta.getItems().addAll(tuotteet.findAll()
-            );
-        } catch (SQLException ex) {
-            Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
         teeOstos.setOnAction(e -> {
             try {
@@ -301,13 +356,12 @@ public class Kayttoliittyma extends Application {
         ostosNakyma.setPadding(new Insets(10, 10, 10, 10));
 
         //Aikanäkymä
-        
         Button palaaAloitusNakymaanAikanakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaanAikanakymasta.setOnAction((event) -> {
             ikkuna.setScene(aloitus);
             ikkuna.show();
         });
-        
+
         TableColumn<Map.Entry<Kayttaja, Integer>, Kayttaja> column1 = new TableColumn<>("Henkilö");
         column1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<Kayttaja, Integer>, Kayttaja>, ObservableValue<Kayttaja>>() {
 
@@ -340,7 +394,7 @@ public class Kayttoliittyma extends Application {
                 System.out.println("testi");
                 long sekunnitNyt = Instant.now().getEpochSecond();
                 long sekunnitEnnen = sekunnitNyt - 3600;
-                
+
                 try {
                     Map<Kayttaja, Integer> ostosData = kayttajat.findAllTime(sekunnitNyt, sekunnitEnnen);
                     // System.out.println(ostosData);
@@ -365,11 +419,12 @@ public class Kayttoliittyma extends Application {
         aikaNakyma.setPadding(new Insets(50, 50, 50, 50));
 
         TableView table2 = new TableView();
-        
+
         Label tilastot = new Label("Eniten ostoksia tehneet käyttäjät:");
 
         aikaNakyma.add(palaaAloitusNakymaanAikanakymasta, 0, 2);
         aikaNakyma.add(tilastot, 0, 0);
+
         //Asetetaan aloitusnäkymä aluksi näytille
         ikkuna.setScene(aloitus);
         ikkuna.show();
