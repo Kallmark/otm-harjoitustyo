@@ -6,7 +6,20 @@ Sovelluksen pakkaus on rakennettu kutakuinkin kyseistä kuvaa vastaavalla tavall
 
 <img src= "https://raw.githubusercontent.com/Kallmark/otm-harjoitustyo/master/misc/kuvat/pakkauskaavio.jpg" widht="400">
 
-<h2> Sovellusrakenne<h2>
+Pakkauksista ui sisältää JavaFX:llä toteutetun käyttöliittymän, domain sovelluslogiigan ja database tietojen pysyväistallennusta vastaavan koodin.
+
+<h2>Käyttöliittymä<h2>
+
+Käyttöliittymä sisältää neljä eri näkymää:
+
+-aloitusnäkymän
+-käyttäjien lisäämiseen tarkoitetun näkymän
+-tuotteiden lisäämiseen tarkoitetun näkymän
+-ostosten tilastojen tarkkailuun tarkoitetun näkymän
+
+Kukin näistä on toteutettu omana Scene-oliona,, joista yksi kerrallaan on näkyvänä ja sijoitettuna sovelluksen stageen. Käyttöliittyä on erotettu itse sovelluslogiikasta ja ainoastaan kutsuu sovelluslogiikan ja pysyväistallentamisen metodeja. 
+
+<h2> Sovelluslogiikka<h2>
 
 
 Sovelluksen sisäinen logiikka rakentuu oheisen mallin perusteella:
