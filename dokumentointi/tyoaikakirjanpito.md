@@ -17,4 +17,5 @@
 |2.5| 8 | Ostostilastojen työstämistä|
 |2.5| 3 | Testien tekemistä|
 |3.5| 3 | Bugien korjailua ja configin tekemistä|
-|Yht| 53 | |
+|4.5| 1 | Testien tekemistä|
+|Yht| 54 | |
