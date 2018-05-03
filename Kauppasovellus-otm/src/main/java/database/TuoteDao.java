@@ -2,6 +2,7 @@ package database;
 
 import database.Dao;
 import database.Database;
+import domain.Kayttaja;
 import java.util.*;
 import java.sql.*;
 import domain.Tuote;
@@ -105,5 +106,27 @@ public class TuoteDao implements Dao<Tuote, Integer> {
         stmt.executeUpdate();
         stmt.close();
         connection.close();
+    }
+    
+    public Map<Tuote, Integer> findUserHistory(Integer id) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT DISTINCT tuote_id, date FROM Ostos WHERE kayttaja_id = ? GROUP BY tuote_id ORDER BY date DESC");
+        stmt.setObject(1, id);
+        ResultSet rs = stmt.executeQuery();
+        Map<Tuote, Integer> tuotehistoria = new LinkedHashMap<>();
+        while (rs.next()) {
+            Integer tuote_id = rs.getInt("tuote_id");
+            if (this.findOne(id) != null) {
+                String nimi = this.findOne(id).getNimi();
+                Double hinta = this.findOne(id).getHinta();
+                int maara = this.findOne(id).getMaara();
+                String info = this.findOne(id).getInfo();
+                tuotehistoria.put(new Tuote(id, nimi, hinta, maara, info), rs.getInt("date"));
+            }
+        }
+        rs.close();
+        stmt.close();
+        connection.close();
+        return tuotehistoria;
     }
 }

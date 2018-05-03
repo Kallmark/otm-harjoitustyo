@@ -45,25 +45,25 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 
 public class Kayttoliittyma extends Application {
-    
+
     private KayttajaDao kayttajat;
     private TuoteDao tuotteet;
     private OstosDao ostokset;
     private String aika;
-    
+
     @Override
     public void init() throws ClassNotFoundException, FileNotFoundException, IOException {
         Properties prop = new Properties();
         //prop.load(new FileInputStream("config.properties"));
-        
+
         String databaseFile = prop.getProperty("database");
         this.aika = prop.getProperty("aika");
-        
+
         Database database = new Database("jdbc:sqlite:db/kauppasovellus.db");
         this.kayttajat = new KayttajaDao(database);
         this.tuotteet = new TuoteDao(database);
         this.ostokset = new OstosDao(database);
-        
+
     }
 
     public static void start(String[] args) {
@@ -146,10 +146,8 @@ public class Kayttoliittyma extends Application {
 
         //Käyttäjienlisäysnäkymä
         Database database = new Database("jdbc:sqlite:db/kauppasovellus.db");
-        KayttajaDao kayttajat = new KayttajaDao(database);
 
         Label toiminnallisuusTekstiKayttajaNakyma = new Label("Valitse toiminnallisuus");
-
 
         Button palaaAloitusnakymaanKayttajanakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusnakymaanKayttajanakymasta.setOnAction((event) -> {
@@ -216,7 +214,12 @@ public class Kayttoliittyma extends Application {
         kayttajanLisaysNakyma.setPadding(new Insets(20, 20, 20, 20));
 
         //Kayttajantietonäkymä
-        Kayttaja tarkasteltava = (Kayttaja) listakayttajista.getValue();
+        
+        if (listakayttajista.getValue() != null) {
+            Kayttaja tarkasteltava = (Kayttaja) listakayttajista.getValue();
+            tarkasteltava.getId();
+            System.out.println(tarkasteltava);
+        }
 
         Label kayttajaTietoja = new Label("Käyttäjän tiedot");
         Label muutaKayttajaTietoja = new Label("Muuta käyttäjän tietoja");
@@ -227,30 +230,11 @@ public class Kayttoliittyma extends Application {
         TableColumn saldoSarake = new TableColumn("Saldo");
         TableColumn idSarake = new TableColumn("Id");
 
-        if (listakayttajista.getValue() != null) {
-            ObservableList<Kayttaja> kayttajaData = FXCollections.observableArrayList(
-                    new Kayttaja(tarkasteltava.getId(), tarkasteltava.getNimi(), tarkasteltava.getSaldo()));
-
-            nimiSarake.setCellValueFactory(
-                    new PropertyValueFactory<>("Id")
-            );
-            saldoSarake.setCellValueFactory(
-                    new PropertyValueFactory<>("Nimi")
-            );
-            idSarake.setCellValueFactory(
-                    new PropertyValueFactory<>("Saldo")
-            );
-
-            kayttajaTaulukko.setItems(kayttajaData);
-            kayttajaTaulukko.getColumns().addAll(idSarake, nimiSarake, saldoSarake);
-
-        }
 
         kayttajanTietoNakyma.add(kayttajaTietoja, 0, 0);
-        kayttajanTietoNakyma.add(kayttajaTaulukko, 1, 1);
+        
 
         //Tuotteenlisäysnäkymä
-
         Label toiminnallisuusTekstiTuoteNakyma = new Label("Valitse toiminnallisuus");
         Label tarkasteleTuotteita = new Label("Tarkastele tuotteita");
         Button palaaAloitusNakymaanTuotenakymasta = new Button("Palaa aloitusnäkymään");
@@ -320,7 +304,6 @@ public class Kayttoliittyma extends Application {
         tuotteenLisaysNakyma.setPadding(new Insets(10, 10, 10, 10));
 
         //Ostosnäkymä
-        
         Label toiminallisuusTekstiOstosNakyma = new Label("Valitse toiminnallisuus");
         Button palaaAloitusNakymaanOstosNakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaanOstosNakymasta.setOnAction((event) -> {

@@ -67,6 +67,7 @@ public class TuoteDaoTest {
         
         assertEquals(tuote2.toString(), tuotedao.findOne(1).toString());
     }
+    
 
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:

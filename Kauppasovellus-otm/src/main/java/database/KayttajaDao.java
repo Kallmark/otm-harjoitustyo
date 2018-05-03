@@ -6,23 +6,27 @@ import java.util.*;
 import java.sql.*;
 import domain.Kayttaja;
 import domain.Kayttaja;
+import domain.Tuote;
 
 public class KayttajaDao implements Dao<Kayttaja, Integer> {
 
     private Database database;
-    
+
     /**
      * Luo KayttajaDao-olion.
+     *
      * @param database Parametrinä toimii tietokanta, johon tietoa lisätään.
      */
     public KayttajaDao(Database database) {
         this.database = database;
     }
+
     /**
      * Etsii halutun kayttajan tietokannasta.
+     *
      * @param key Etsintä tapahtuu antamalla parametriksi id:n
-     * @return Palauttaa löydetyn olion, jos sellainen löytyy. 
-     * @throws SQLException 
+     * @return Palauttaa löydetyn olion, jos sellainen löytyy.
+     * @throws SQLException
      */
     @Override
     public Kayttaja findOne(Integer key) throws SQLException {
@@ -49,10 +53,12 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
 
         return o;
     }
+
     /**
      * Etsii kaikki tietokantaan tallennetut kayttajat
+     *
      * @return Palauttaa listan kayttajia.
-     * @throws SQLException 
+     * @throws SQLException
      */
     @Override
     public List<Kayttaja> findAll() throws SQLException {
@@ -73,12 +79,17 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         connection.close();
         return kayttajat;
     }
+
     /**
-     * Etsii kaikki ostokset, jotka on tehty annettujen parametrien välisenä aikana. Laskee käyttäjäkohtaisten ostoksien määrän ja luokittelee käyttäjät ostoksien määrän perusteella järjesteykseen suurimmasta alimpaan.
+     * Etsii kaikki ostokset, jotka on tehty annettujen parametrien välisenä
+     * aikana. Laskee käyttäjäkohtaisten ostoksien määrän ja luokittelee
+     * käyttäjät ostoksien määrän perusteella järjesteykseen suurimmasta
+     * alimpaan.
+     *
      * @param sekunnitNyt Nykyhetken sekunnit laskettuna 1.1.1970 lukien.
      * @param sekunnitEnnen Sekuntimäärä ennen haluttua aikaa.
      * @return Palauttaa LinkedHashMapin, joka säilyttää lisäysjärjestyksen.
-     * @throws SQLException 
+     * @throws SQLException
      */
     public Map<Kayttaja, Integer> findAllTime(long sekunnitNyt, long sekunnitEnnen) throws SQLException {
         Connection connection = database.getConnection();
@@ -102,11 +113,14 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         connection.close();
         return kayttajat;
     }
+
     /**
-     * Lisää uusia käyttäjiä ttietokantaan ai sellaisen jo ollessa olemassa päivittää olemassaolevaa käyttäjää.
+     * Lisää uusia käyttäjiä ttietokantaan ai sellaisen jo ollessa olemassa
+     * päivittää olemassaolevaa käyttäjää.
+     *
      * @param object Parametrinä luotu käyttäjä-olio.
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
     @Override
     public Kayttaja saveOrUpdate(Kayttaja object) throws SQLException {
@@ -135,16 +149,19 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
     public void delete(Integer key) throws SQLException {
         // ei toteutettu
     }
-    
+
     /**
      * Poistaa kaikki taulun tiedot.
-     * @throws SQLException 
+     *
+     * @throws SQLException
      */
-    public void deleteAll() throws SQLException{
+    public void deleteAll() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("DELETE FROM Kayttaja");
         stmt.executeUpdate();
         stmt.close();
         connection.close();
     }
+
+
 }
