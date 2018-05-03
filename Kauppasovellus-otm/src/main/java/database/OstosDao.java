@@ -91,4 +91,12 @@ public class OstosDao implements Dao<Ostos, Integer> {
     public Ostos findOne(Integer key) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public void deleteAll() throws SQLException{
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("DELETE FROM Ostos");
+        stmt.executeUpdate();
+        stmt.close();
+        connection.close();
+    }
 }

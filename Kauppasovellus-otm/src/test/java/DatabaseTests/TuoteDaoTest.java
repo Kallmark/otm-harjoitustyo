@@ -41,6 +41,8 @@ public class TuoteDaoTest {
     
     @Test
     public void deleteKaikkiToimii() throws SQLException{
+        Tuote tuote = new Tuote(1, "Tuote", 10.0, 10, "Tuote");
+        tuotedao.saveOrUpdate(tuote);
         tuotedao.deleteAll();
         assertEquals(0, tuotedao.findAll().size());
     }

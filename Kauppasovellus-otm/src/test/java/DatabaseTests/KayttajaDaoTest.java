@@ -7,7 +7,11 @@ package DatabaseTests;
 
 import database.Database;
 import database.KayttajaDao;
+import database.OstosDao;
+import database.TuoteDao;
 import domain.Kayttaja;
+import domain.Ostos;
+import domain.Tuote;
 import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,19 +25,27 @@ public class KayttajaDaoTest {
 
     Database database;
     KayttajaDao kayttajadao;
+    TuoteDao tuotedao;
+    OstosDao ostosdao;
 
     public KayttajaDaoTest() throws ClassNotFoundException {
         this.database = new Database("jdbc:sqlite:src/test/dbTest/testi.db");
         this.kayttajadao = new KayttajaDao(this.database);
+        this.tuotedao = new TuoteDao(database);
+        this.ostosdao = new OstosDao(database);
     }
 
     @Before
     public void setUp() throws ClassNotFoundException, SQLException {
         kayttajadao.deleteAll();
+        tuotedao.deleteAll();
+        ostosdao.deleteAll();
     }
     
     @Test
     public void deleteKaikkiToimii() throws SQLException{
+        Kayttaja kayttaja = new Kayttaja(1, "Kalle", 10.0);
+        kayttajadao.saveOrUpdate(kayttaja);
         kayttajadao.deleteAll();
         assertEquals(0, kayttajadao.findAll().size());
     }
@@ -63,6 +75,18 @@ public class KayttajaDaoTest {
         Kayttaja kayttaja = new Kayttaja(1, "Kalle", 10.0);
         kayttajadao.saveOrUpdate(kayttaja);
         assertEquals(1, kayttajadao.findAll().size());
+    }
+    
+    @Test
+    public void findAllTimeToimii() throws SQLException{
+        Tuote tuote = new Tuote(1, "Tuote", 10.0, 10, "Tuote");
+        tuotedao.saveOrUpdate(tuote);
+        Kayttaja kayttaja = new Kayttaja(1, "Kalle", 10.0);
+        kayttajadao.saveOrUpdate(kayttaja);
+        Ostos ostos = new Ostos(kayttaja, tuote, 100);
+        ostosdao.saveOrUpdate(ostos);
+        
+        assertEquals(1, kayttajadao.findAllTime(200, 0).size());
     }
 
     // TODO add test methods here.
