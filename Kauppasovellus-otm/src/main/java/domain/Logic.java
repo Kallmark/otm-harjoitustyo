@@ -110,6 +110,7 @@ public class Logic {
             ostos.getKayttaja().setSaldo(newBalance);
             this.kayttajaDao.saveOrUpdate(ostos.getKayttaja());
             int newAmount = ostos.getTuote().getMaara() - 1;
+            ostos.getTuote().setMaara(newAmount);
             this.tuotedao.saveOrUpdate(ostos.getTuote());
         } catch (SQLException e) {
             return false;

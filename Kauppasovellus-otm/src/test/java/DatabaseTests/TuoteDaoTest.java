@@ -36,42 +36,44 @@ public class TuoteDaoTest {
 
     @Before
     public void setUp() throws SQLException {
-        tuotedao.deleteAll();
+        this.database.init();
     }
     
     @Test
     public void deleteKaikkiToimii() throws SQLException{
-        Tuote tuote = new Tuote(1, "Tuote", 10.0, 10, "Tuote");
-        tuotedao.saveOrUpdate(tuote);
         tuotedao.deleteAll();
         assertEquals(0, tuotedao.findAll().size());
     }
-
-    @After
-    public void tearDown() {
-    }
+    
+    //@Test
+    //public void deleteOneWorks() throws SQLException{
+    //    tuotedao.delete(1);
+    //    assertEquals(0, tuotedao.findAll().size());
+    //}
 
     @Test
     public void saveJaEtsiToimii() throws SQLException {
-        Tuote tuote = new Tuote(1, "Tuote", 10.0, 10, "Tuote");
+        Tuote tuote = new Tuote(2, "Tuote", 10.0, 10, "Tuote");
         tuotedao.saveOrUpdate(tuote);
-        assertEquals(tuote.toString(), tuotedao.findOne(1).toString());
+        assertEquals(tuote.toString(), tuotedao.findOne(2).toString());
     }
     
     @Test
     public void UpdateToimii() throws SQLException {
-        Tuote tuote = new Tuote(1, "Tuote", 10.0, 10, "Tuote");
-        Tuote tuote2 = new Tuote(1, "Tuote2", 10.0, 10, "Tuote");
+        Tuote tuote = new Tuote(2, "Tuote", 10.0, 10, "Tuote");
+        Tuote tuote2 = new Tuote(2, "Tuote2", 10.0, 10, "Tuote");
         tuotedao.saveOrUpdate(tuote);
         tuotedao.saveOrUpdate(tuote2);
         
-        assertEquals(tuote2.toString(), tuotedao.findOne(1).toString());
+        assertEquals(tuote2.toString(), tuotedao.findOne(2).toString());
     }
     
+    @Test
+    
+    public void findAllWorks() throws SQLException {
+        Tuote tuote = new Tuote(2, "Tuote", 10.0, 10, "Tuote");
+        tuotedao.saveOrUpdate(tuote);
+        assertEquals(2, tuotedao.findAll().size());
+    }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
 }

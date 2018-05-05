@@ -14,7 +14,7 @@ public class Kayttaja {
         this.nimi = nimi;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -30,7 +30,7 @@ public class Kayttaja {
         this.nimi = nimi;
     }
     
-    public Double getSaldo() {
+    public double getSaldo() {
         return this.saldo;
     }
     

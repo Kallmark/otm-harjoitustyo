@@ -26,7 +26,7 @@ public class Tuote {
         this.info = info;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -42,7 +42,7 @@ public class Tuote {
         this.nimi = nimi;
     }
     
-    public Double getHinta() {
+    public double getHinta() {
         return this.hinta;
     }
     
@@ -50,7 +50,7 @@ public class Tuote {
         this.hinta = saldo;
     }
     
-    public Integer getMaara() {
+    public int getMaara() {
         return this.maara;
     }
     
