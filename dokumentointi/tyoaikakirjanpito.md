@@ -18,4 +18,6 @@
 |2.5| 3 | Testien tekemistä|
 |3.5| 3 | Bugien korjailua ja configin tekemistä|
 |4.5| 1 | Testien tekemistä|
-|Yht| 54 | |
+|5.5| 2 | Eriytettiin lisää sovelluslogiikkaa käyttöliittymästä |
+|5.5| 3 | Paranneltiin testejä, testikattavuus n.90% |
+|Yht| 59 | |
