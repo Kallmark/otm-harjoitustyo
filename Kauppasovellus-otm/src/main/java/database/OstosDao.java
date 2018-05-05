@@ -63,8 +63,6 @@ public class OstosDao implements Dao<Ostos, Integer> {
         rs.close();
         stmt.close();
         connection.close();
-
-        System.out.println("tulostus");
         return ostokset;
     }
 
@@ -87,10 +85,6 @@ public class OstosDao implements Dao<Ostos, Integer> {
         // ei toteutettu
     }
 
-    @Override
-    public Ostos findOne(Integer key) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     public void deleteAll() throws SQLException{
         Connection connection = database.getConnection();
@@ -98,5 +92,10 @@ public class OstosDao implements Dao<Ostos, Integer> {
         stmt.executeUpdate();
         stmt.close();
         connection.close();
+    }
+
+    @Override
+    public Ostos findOne(Integer key) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

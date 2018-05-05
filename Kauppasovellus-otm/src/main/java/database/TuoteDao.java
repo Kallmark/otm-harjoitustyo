@@ -97,7 +97,13 @@ public class TuoteDao implements Dao<Tuote, Integer> {
     
     @Override
     public void delete(Integer key) throws SQLException {
-        // ei toteutettu
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("DELETE FROM Tuote WHERE tuote_id = ?");
+        stmt.setObject(1, key);
+        ResultSet rs = stmt.executeQuery();
+        rs.close();
+        stmt.close();
+        connection.close();    
     }
     
     public void deleteAll() throws SQLException{

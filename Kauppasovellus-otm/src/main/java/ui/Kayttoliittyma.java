@@ -18,6 +18,7 @@ import domain.Kayttaja;
 import database.KayttajaDao;
 import database.OstosDao;
 import database.TuoteDao;
+import domain.Logic;
 import domain.Ostos;
 import domain.Tuote;
 import java.io.FileInputStream;
@@ -35,7 +36,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
@@ -50,6 +50,7 @@ public class Kayttoliittyma extends Application {
     private TuoteDao tuotteet;
     private OstosDao ostokset;
     private String aika;
+    private Logic logic;
 
     @Override
     public void init() throws ClassNotFoundException, FileNotFoundException, IOException {
@@ -63,6 +64,7 @@ public class Kayttoliittyma extends Application {
         this.kayttajat = new KayttajaDao(database);
         this.tuotteet = new TuoteDao(database);
         this.ostokset = new OstosDao(database);
+        this.logic = new Logic(kayttajat, tuotteet, ostokset);
 
     }
 
@@ -157,20 +159,12 @@ public class Kayttoliittyma extends Application {
 
         Label listaKayttajista = new Label("Tarkastele asiakkaita");
         ComboBox<Object> listakayttajista = new ComboBox<>();
-        try {
-            listakayttajista.getItems().addAll(kayttajat.findAll()
-            );
-        } catch (SQLException ex) {
-            Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        listakayttajista.getItems().addAll(logic.findAllUsers()
+        );
 
         ComboBox<Kayttaja> kayttajaValinta = new ComboBox<>();
-        try {
-            kayttajaValinta.getItems().addAll(kayttajat.findAll()
-            );
-        } catch (SQLException ex) {
-            Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        kayttajaValinta.getItems().addAll(logic.findAllUsers()
+        );
 
         Label nimiTeksti = new Label("Nimi: ");
         TextField nimiKentta = new TextField();
@@ -180,16 +174,11 @@ public class Kayttoliittyma extends Application {
 
         Button lisaaNappi = new Button("Lisää henkilö!");
         lisaaNappi.setOnAction((event) -> {
-            try {
-                Kayttaja lisattava = new Kayttaja(null, nimiKentta.getText(), Double.parseDouble(saldoKentta.getText()));
-                kayttajat.saveOrUpdate(lisattava);
-                listakayttajista.getItems().clear();
-                listakayttajista.getItems().addAll(kayttajat.findAll());
-                kayttajaValinta.getItems().clear();
-                kayttajaValinta.getItems().addAll(kayttajat.findAll());
-            } catch (SQLException ex) {
-                Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            logic.saveOrUpdateUser(new Kayttaja(null, nimiKentta.getText(), Double.parseDouble(saldoKentta.getText())));
+            listakayttajista.getItems().clear();
+            listakayttajista.getItems().addAll(logic.findAllUsers());
+            kayttajaValinta.getItems().clear();
+            kayttajaValinta.getItems().addAll(logic.findAllUsers());
         });
 
         Button tarkasteleKayttajaa = new Button("Tarkastele");
@@ -214,7 +203,6 @@ public class Kayttoliittyma extends Application {
         kayttajanLisaysNakyma.setPadding(new Insets(20, 20, 20, 20));
 
         //Kayttajantietonäkymä
-        
         if (listakayttajista.getValue() != null) {
             Kayttaja tarkasteltava = (Kayttaja) listakayttajista.getValue();
             tarkasteltava.getId();
@@ -230,9 +218,7 @@ public class Kayttoliittyma extends Application {
         TableColumn saldoSarake = new TableColumn("Saldo");
         TableColumn idSarake = new TableColumn("Id");
 
-
         kayttajanTietoNakyma.add(kayttajaTietoja, 0, 0);
-        
 
         //Tuotteenlisäysnäkymä
         Label toiminnallisuusTekstiTuoteNakyma = new Label("Valitse toiminnallisuus");
@@ -246,20 +232,12 @@ public class Kayttoliittyma extends Application {
         Label listaTuotteista = new Label("Tarkastele tuotteita");
 
         ComboBox<Object> listatuotteista = new ComboBox<>();
-        try {
-            listatuotteista.getItems().addAll(tuotteet.findAll()
-            );
-        } catch (SQLException ex) {
-            Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        listatuotteista.getItems().addAll(logic.findAllProducts()
+        );
 
         ComboBox<Tuote> tuoteValinta = new ComboBox<>();
-        try {
-            tuoteValinta.getItems().addAll(tuotteet.findAll()
-            );
-        } catch (SQLException ex) {
-            Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        tuoteValinta.getItems().addAll(logic.findAllProducts()
+        );
 
         Label tuotteenNimi = new Label("Nimi: ");
         TextField tuotteenNimiKentta = new TextField();
@@ -273,16 +251,11 @@ public class Kayttoliittyma extends Application {
         Button lisaaTuote = new Button("Lisää tuote!");
 
         lisaaTuote.setOnAction((event) -> {
-            try {
-                Tuote lisattavaTuote = new Tuote(null, tuotteenNimiKentta.getText(), Double.parseDouble(tuotteenHintaKentta.getText()), Integer.parseInt(tuotteenMaaraKentta.getText()), tuotteenInfoKentta.getText());
-                tuotteet.saveOrUpdate(lisattavaTuote);
-                listatuotteista.getItems().clear();
-                listatuotteista.getItems().addAll(tuotteet.findAll());
-                tuoteValinta.getItems().clear();
-                tuoteValinta.getItems().addAll(tuotteet.findAll());
-            } catch (SQLException ex) {
-                Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            logic.saveOrUpdateProduct(new Tuote(null, tuotteenNimiKentta.getText(), Double.parseDouble(tuotteenHintaKentta.getText()), Integer.parseInt(tuotteenMaaraKentta.getText()), tuotteenInfoKentta.getText()));
+            listatuotteista.getItems().clear();
+            listatuotteista.getItems().addAll(logic.findAllProducts());
+            tuoteValinta.getItems().clear();
+            tuoteValinta.getItems().addAll(logic.findAllProducts());
         });
 
         tuotteenLisaysNakyma.add(tuotteenNimi, 0, 0);
@@ -316,30 +289,15 @@ public class Kayttoliittyma extends Application {
         Button teeOstos = new Button("Osta");
 
         teeOstos.setOnAction(e -> {
-            try {
-                Kayttaja kayttaja = kayttajaValinta.getValue();
-                Tuote tuote = tuoteValinta.getValue();
-                long sekunnit = Instant.now().getEpochSecond();
-                System.out.println(sekunnit);
-                ostokset.saveOrUpdate(new Ostos(kayttaja, tuote, sekunnit));
-                Double kayttajanUusiSaldo = kayttaja.getSaldo() - tuote.getHinta();
-                kayttaja.setSaldo(kayttajanUusiSaldo);
-                kayttajat.saveOrUpdate(kayttaja);
-                Integer tuotteenUusiMaara = tuote.getMaara() - 1;
-                tuote.setMaara(tuotteenUusiMaara);
-                tuotteet.saveOrUpdate(tuote);
-                listakayttajista.getItems().clear();
-                listakayttajista.getItems().addAll(kayttajat.findAll());
-                listatuotteista.getItems().clear();
-                listatuotteista.getItems().addAll(kayttajat.findAll());
-                kayttajaValinta.getItems().clear();
-                kayttajaValinta.getItems().addAll(kayttajat.findAll());
-                tuoteValinta.getItems().clear();
-                tuoteValinta.getItems().addAll(tuotteet.findAll());
-
-            } catch (SQLException ex) {
-                Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            logic.saveOrUpdatePurchase(new Ostos(kayttajaValinta.getValue(), tuoteValinta.getValue(), Instant.now().getEpochSecond()));
+            listakayttajista.getItems().clear();
+            listakayttajista.getItems().addAll(logic.findAllUsers());
+            listatuotteista.getItems().clear();
+            listatuotteista.getItems().addAll(logic.findAllProducts());
+            kayttajaValinta.getItems().clear();
+            kayttajaValinta.getItems().addAll(logic.findAllUsers());
+            tuoteValinta.getItems().clear();
+            tuoteValinta.getItems().addAll(logic.findAllProducts());
         });
 
         ostosNakyma.add(valitseKayttaja, 0, 0);
@@ -390,26 +348,15 @@ public class Kayttoliittyma extends Application {
                     return;
                 }
                 edellinen = nykyhetki;
-                System.out.println("testi");
                 long sekunnitNyt = Instant.now().getEpochSecond();
                 long sekunnitEnnen = sekunnitNyt - 3600;
-
-                try {
-                    Map<Kayttaja, Integer> ostosData = kayttajat.findAllTime(sekunnitNyt, sekunnitEnnen);
-                    // System.out.println(ostosData);
-                    ObservableList<Map.Entry<Kayttaja, Integer>> items = FXCollections.observableArrayList(ostosData.entrySet());
-
-                    final TableView<Map.Entry<Kayttaja, Integer>> table = new TableView<>(items);
-
-                    table.getColumns().setAll(column1, column2);
-                    table.setMaxWidth(Region.USE_PREF_SIZE);
-                    table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-                    aikaNakyma.add(table, 0, 1);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Kayttoliittyma.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
+                Map<Kayttaja, Integer> ostosData = logic.findTopUsers(sekunnitNyt, sekunnitEnnen);
+                ObservableList<Map.Entry<Kayttaja, Integer>> items = FXCollections.observableArrayList(ostosData.entrySet());
+                final TableView<Map.Entry<Kayttaja, Integer>> table = new TableView<>(items);
+                table.getColumns().setAll(column1, column2);
+                table.setMaxWidth(Region.USE_PREF_SIZE);
+                table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+                aikaNakyma.add(table, 0, 1);
             }
         }.start();
 
@@ -425,6 +372,7 @@ public class Kayttoliittyma extends Application {
         aikaNakyma.add(tilastot, 0, 0);
 
         //Asetetaan aloitusnäkymä aluksi näytille
+        
         ikkuna.setScene(aloitus);
         ikkuna.show();
 

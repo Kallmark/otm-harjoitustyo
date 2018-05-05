@@ -104,7 +104,6 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
                 String nimi = this.findOne(id).getNimi();
                 Double saldo = this.findOne(id).getSaldo();
                 Integer kayttajaMaara = rs.getInt("maara");
-                System.out.println(kayttajaMaara);
                 kayttajat.put(new Kayttaja(id, nimi, saldo), kayttajaMaara);
             }
         }
@@ -144,10 +143,21 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
             return object;
         }
     }
-
+    
+    /**
+     * Deletes a given user from the database.
+     * @param key id of the User
+     * @throws SQLException 
+     */
     @Override
     public void delete(Integer key) throws SQLException {
-        // ei toteutettu
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("DELETE FROM Kayttaja WHERE kayttaja_id = ?");
+        stmt.setObject(1, key);
+        ResultSet rs = stmt.executeQuery();
+        rs.close();
+        stmt.close();
+        connection.close();    
     }
 
     /**
