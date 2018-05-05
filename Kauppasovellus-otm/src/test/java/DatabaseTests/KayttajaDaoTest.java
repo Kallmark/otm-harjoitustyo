@@ -52,12 +52,12 @@ public class KayttajaDaoTest {
         assertEquals(0, kayttajadao.findAll().size());
     }
     
-    //@Test
+    @Test
     
-    //public void deleteOneWorks() throws SQLException {
-    //    kayttajadao.delete(1);
-    //    assertEquals(0, kayttajadao.findAll().size());
-    //}
+    public void deleteOneWorks() throws SQLException {
+        kayttajadao.delete(1);
+        assertEquals(0, kayttajadao.findAll().size());
+    }
     
     
     @Test

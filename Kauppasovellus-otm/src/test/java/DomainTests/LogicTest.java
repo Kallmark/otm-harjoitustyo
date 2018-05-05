@@ -150,5 +150,17 @@ public class LogicTest {
         assertEquals(9, logic.findProduct(2).getMaara());
     }
     
+    @Test
+    public void deleteUserWorks() {
+        logic.deleteUser(1);
+        assertEquals(0, logic.findAllUsers().size());
+    }
+    
+    @Test
+    public void deleteProductsWorks() {
+        logic.deleteProduct(1);
+        assertEquals(0, logic.findAllProducts().size());
+    }
+    
 
 }

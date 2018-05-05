@@ -45,11 +45,11 @@ public class TuoteDaoTest {
         assertEquals(0, tuotedao.findAll().size());
     }
     
-    //@Test
-    //public void deleteOneWorks() throws SQLException{
-    //    tuotedao.delete(1);
-    //    assertEquals(0, tuotedao.findAll().size());
-    //}
+    @Test
+    public void deleteOneWorks() throws SQLException{
+        tuotedao.delete(1);
+        assertEquals(null, tuotedao.findOne(1));
+    }
 
     @Test
     public void saveJaEtsiToimii() throws SQLException {

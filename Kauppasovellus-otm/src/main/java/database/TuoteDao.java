@@ -100,8 +100,7 @@ public class TuoteDao implements Dao<Tuote, Integer> {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("DELETE FROM Tuote WHERE tuote_id = ?");
         stmt.setObject(1, key);
-        ResultSet rs = stmt.executeQuery();
-        rs.close();
+        stmt.executeUpdate();
         stmt.close();
         connection.close();    
     }
