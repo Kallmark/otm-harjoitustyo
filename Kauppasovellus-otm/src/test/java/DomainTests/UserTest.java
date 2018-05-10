@@ -5,7 +5,7 @@
  */
 package DomainTests;
 
-import domain.Kayttaja;
+import domain.User;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,35 +17,35 @@ import static org.junit.Assert.*;
  *
  * @author kallmark
  */
-public class KayttajaTest {
+public class UserTest {
     
-    Kayttaja kayttaja;
+    User kayttaja;
 
     @Before
     public void setUp() {
-        Kayttaja kayttaja = new Kayttaja(1, "Testi", 1.0);
+        User kayttaja = new User(1, "Testi", 1.0);
     }
 
     @Test
     public void konstruktoriLuoKayttajan() {
-        Kayttaja kayttaja = new Kayttaja(1, "Testi", 1.0);
-        assertEquals("Testi", kayttaja.getNimi());
+        User kayttaja = new User(1, "Testi", 1.0);
+        assertEquals("Testi", kayttaja.getName());
         
     }
     
     @Test
     public void oikeaIdJaSaldo() {
-        Kayttaja kayttaja = new Kayttaja(1, "Testi", 1.0);
+        User kayttaja = new User(1, "Testi", 1.0);
         assertEquals("Testi, id: 1, saldo: 1.0", kayttaja.toString());
         
     }
     
     @Test
     public void oikeaIdJaSaldoPaivittyy() {
-        Kayttaja kayttaja = new Kayttaja(1, "Testi", 1.0);
+        User kayttaja = new User(1, "Testi", 1.0);
         kayttaja.setId(2);
-        kayttaja.setNimi("Testi2");
-        kayttaja.setSaldo(2.0);
+        kayttaja.setName("Testi2");
+        kayttaja.setBalance(2.0);
         assertEquals("Testi2, id: 2, saldo: 2.0", kayttaja.toString());
         
     }

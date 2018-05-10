@@ -4,24 +4,24 @@ import database.Dao;
 import database.Database;
 import java.util.*;
 import java.sql.*;
-import domain.Tuote;
-import domain.Kayttaja;
-import domain.Ostos;
+import domain.Product;
+import domain.User;
+import domain.Purchase;
 import java.time.Instant;
 
-public class OstosDao implements Dao<Ostos, Integer> {
+public class PurchaseDao implements Dao<Purchase, Integer> {
 
     private Database database;
-    private KayttajaDao kayttajadao;
-    private TuoteDao tuotedao;
+    private UserDao kayttajadao;
+    private ProductDao tuotedao;
 
-    public OstosDao(Database database) {
+    public PurchaseDao(Database database) {
         this.database = database;
-        this.kayttajadao = new KayttajaDao(database);
-        this.tuotedao = new TuoteDao(database);
+        this.kayttajadao = new UserDao(database);
+        this.tuotedao = new ProductDao(database);
     }
 
-    public Ostos findOne(Integer kayttajaId, Integer tuoteId) throws SQLException {
+    public Purchase findOne(Integer kayttajaId, Integer tuoteId) throws SQLException {
 
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Ostos WHERE kayttaja_id = ? AND tuote_id = ?");
@@ -36,7 +36,7 @@ public class OstosDao implements Dao<Ostos, Integer> {
 
         Long aika = rs.getLong("date");
 
-        Ostos o = new Ostos(this.kayttajadao.findOne(kayttajaId), this.tuotedao.findOne(tuoteId), aika);
+        Purchase o = new Purchase(this.kayttajadao.findOne(kayttajaId), this.tuotedao.findOne(tuoteId), aika);
 
         rs.close();
         stmt.close();
@@ -46,18 +46,18 @@ public class OstosDao implements Dao<Ostos, Integer> {
     }
 
     @Override
-    public List<Ostos> findAll() throws SQLException {
+    public List<Purchase> findAll() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Ostos");
 
         ResultSet rs = stmt.executeQuery();
-        List<Ostos> ostokset = new ArrayList<>();
+        List<Purchase> ostokset = new ArrayList<>();
         while (rs.next()) {
             Integer kayttajaId = rs.getInt("kayttaja_id");
             Integer tuoteId = rs.getInt("tuote_id");
             Long aika = rs.getLong("date");
 
-            ostokset.add(new Ostos(this.kayttajadao.findOne(kayttajaId), this.tuotedao.findOne(tuoteId), aika));
+            ostokset.add(new Purchase(this.kayttajadao.findOne(kayttajaId), this.tuotedao.findOne(tuoteId), aika));
         }
 
         rs.close();
@@ -67,14 +67,14 @@ public class OstosDao implements Dao<Ostos, Integer> {
     }
 
     @Override
-    public Ostos saveOrUpdate(Ostos object) throws SQLException {
+    public Purchase saveOrUpdate(Purchase object) throws SQLException {
 
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO Ostos (kayttaja_id, tuote_id, date) VALUES (?, ?, ?)");
 
-            stmt.setInt(1, object.getKayttaja().getId());
-            stmt.setInt(2, object.getTuote().getId());
-            stmt.setLong(3, object.getAika());
+            stmt.setInt(1, object.getUser().getId());
+            stmt.setInt(2, object.getProduct().getId());
+            stmt.setLong(3, object.getTime());
             stmt.executeUpdate();
         }
         return object;
@@ -95,7 +95,7 @@ public class OstosDao implements Dao<Ostos, Integer> {
     }
 
     @Override
-    public Ostos findOne(Integer key) throws SQLException {
+    public Purchase findOne(Integer key) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

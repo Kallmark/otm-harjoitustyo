@@ -14,13 +14,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
-import domain.Kayttaja;
-import database.KayttajaDao;
-import database.OstosDao;
-import database.TuoteDao;
+import domain.User;
+import database.UserDao;
+import database.PurchaseDao;
+import database.ProductDao;
 import domain.Logic;
-import domain.Ostos;
-import domain.Tuote;
+import domain.Purchase;
+import domain.Product;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -44,26 +44,26 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
-public class Kayttoliittyma extends Application {
+public class UserInterface extends Application {
 
-    private KayttajaDao kayttajat;
-    private TuoteDao tuotteet;
-    private OstosDao ostokset;
+    private UserDao kayttajat;
+    private ProductDao tuotteet;
+    private PurchaseDao ostokset;
     private String aika;
     private Logic logic;
 
     @Override
     public void init() throws ClassNotFoundException, FileNotFoundException, IOException {
-        Properties prop = new Properties();
-        //prop.load(new FileInputStream("config.properties"));
+        Properties properties = new Properties();
+        //properties.load(new FileInputStream("config.properties"));
 
-        String databaseFile = prop.getProperty("database");
-        this.aika = prop.getProperty("aika");
+        String databaseFile = properties.getProperty("database");
+        this.aika = properties.getProperty("aika");
 
         Database database = new Database("jdbc:sqlite:db/kauppasovellus.db");
-        this.kayttajat = new KayttajaDao(database);
-        this.tuotteet = new TuoteDao(database);
-        this.ostokset = new OstosDao(database);
+        this.kayttajat = new UserDao(database);
+        this.tuotteet = new ProductDao(database);
+        this.ostokset = new PurchaseDao(database);
         this.logic = new Logic(kayttajat, tuotteet, ostokset);
 
     }
@@ -95,6 +95,7 @@ public class Kayttoliittyma extends Application {
         alkuteksti.setTranslateY(30);
 
         BorderPane aloitusNakyma2 = new BorderPane();
+        BorderPane kayttajanTietoNakyma2 = new BorderPane();
         GridPane aloitusNakyma = new GridPane();
         Scene aloitus = new Scene(aloitusNakyma2);
         GridPane kayttajanLisaysNakyma = new GridPane();
@@ -145,10 +146,94 @@ public class Kayttoliittyma extends Application {
         aloitusNakyma.setHgap(20);
         aloitusNakyma.setVgap(20);
         aloitusNakyma.setPadding(new Insets(20, 20, 20, 20));
+        
+        //Kayttajantietonäkymä
+        
+        Label kayttajaTietoja = new Label("Käyttäjän tiedot:");
+        Label muutaKayttajaTietoja = new Label("Muuta käyttäjän tietoja");
+        Label kayttajanOstosHistoria = new Label("Käyttäjän ostoshistoria");
+        TextField kayttajanNimiMuokkaa = new TextField();
+        TextField kayttajanSaldoMuokkaa = new TextField();
+        TextField kayttajanIdMuokkaa = new TextField();
+        Label kayttajanNimi = new Label("Nimi: ");
+        Label kayttajanSaldo = new Label("Saldo: ");
+        Label kayttajanId = new Label("Id :");
+        
+        Label listaKayttajista = new Label("Tarkastele asiakkaita");
+        ComboBox<Object> listakayttajista = new ComboBox<>();
+        listakayttajista.getItems().addAll(logic.findAllUsers()
+        );
+        
+        TableColumn<Map.Entry<java.time.LocalDateTime, String>, java.time.LocalDateTime> column3 = new TableColumn<>("Milloin ostettu");
+        column3.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<java.time.LocalDateTime, String>, java.time.LocalDateTime>, ObservableValue<java.time.LocalDateTime>>() {
+
+            @Override
+            public ObservableValue<java.time.LocalDateTime> call(TableColumn.CellDataFeatures<Map.Entry<java.time.LocalDateTime, String>, java.time.LocalDateTime> p) {
+                return new SimpleObjectProperty<>(p.getValue().getKey());
+            }
+
+        });
+
+        TableColumn<Map.Entry<java.time.LocalDateTime, String>, String> column4 = new TableColumn<>("Tuote");
+        column4.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<java.time.LocalDateTime, String>, String>, ObservableValue<String>>() {
+
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Map.Entry<java.time.LocalDateTime, String>, String> p) {
+                return new SimpleObjectProperty<>(p.getValue().getValue());
+            }
+
+        });
+        
+        Button tarkasteleKayttajaa = new Button("Tarkastele");
+        tarkasteleKayttajaa.setOnAction((event) -> {
+            User tarkasteltava = (User) listakayttajista.getValue();
+            kayttajanNimiMuokkaa.setText(tarkasteltava.getName());
+            kayttajanSaldoMuokkaa.setText(Double.toString(tarkasteltava.getBalance()));
+            kayttajanIdMuokkaa.setText(Integer.toString(tarkasteltava.getId()));
+            Map<java.time.LocalDateTime, String> tuotehistoria = logic.findUsersPurchaseHistory(tarkasteltava.getId());
+                ObservableList<Map.Entry<java.time.LocalDateTime, String>> items = FXCollections.observableArrayList(tuotehistoria.entrySet());
+                final TableView<Map.Entry<java.time.LocalDateTime, String>> table = new TableView<>(items);
+                table.getColumns().setAll(column4, column3);
+                
+                kayttajanTietoNakyma.add(table, 5, 0);
+            ikkuna.setScene(kayttajanTiedot);
+            ikkuna.show();
+        });
+        
+        Button muokkaaKayttajaa = new Button("Muokkaa");
+        muokkaaKayttajaa.setOnAction((event) -> {
+            logic.saveOrUpdateUser(new User(Integer.parseInt(kayttajanIdMuokkaa.getText()), kayttajanNimiMuokkaa.getText(), Double.parseDouble(kayttajanSaldoMuokkaa.getText())));
+        });
+        
+        Button palaaAloitusNakymaanKayttajaTietoNakymasta = new Button("Palaa aloitusnäkymään");
+        palaaAloitusNakymaanKayttajaTietoNakymasta.setOnAction((event) -> {
+            ikkuna.setScene(aloitus);
+            ikkuna.show();
+        });
+        
+        Button palaaKayttajanLisaysNakymaanTietoNakymasta = new Button("Palaa lisäysnäkymään");
+        palaaKayttajanLisaysNakymaanTietoNakymasta.setOnAction((event) -> {
+            ikkuna.setScene(kayttajaNakyma);
+            ikkuna.show();
+        });
+        
+        
+        kayttajanTietoNakyma.add(kayttajaTietoja, 0, 0);
+        kayttajanTietoNakyma.add(kayttajanNimi, 0, 1);
+        kayttajanTietoNakyma.add(kayttajanSaldo, 0, 2);
+        kayttajanTietoNakyma.add(kayttajanId, 0, 3);
+        kayttajanTietoNakyma.add(kayttajanNimiMuokkaa, 1, 1);
+        kayttajanTietoNakyma.add(kayttajanSaldoMuokkaa, 1, 2);
+        kayttajanTietoNakyma.add(kayttajanIdMuokkaa, 1, 3);
+        kayttajanTietoNakyma.add(muokkaaKayttajaa, 1, 4);
+        kayttajanTietoNakyma.add(palaaAloitusNakymaanKayttajaTietoNakymasta, 0, 4);
+        kayttajanTietoNakyma.add(palaaKayttajanLisaysNakymaanTietoNakymasta, 0, 5);
+        kayttajanTietoNakyma.setHgap(10);
+        kayttajanTietoNakyma.setVgap(20);
+        kayttajanTietoNakyma.setPadding(new Insets(20, 20, 20, 20));
 
         //Käyttäjienlisäysnäkymä
-        Database database = new Database("jdbc:sqlite:db/kauppasovellus.db");
-
+        
         Label toiminnallisuusTekstiKayttajaNakyma = new Label("Valitse toiminnallisuus");
 
         Button palaaAloitusnakymaanKayttajanakymasta = new Button("Palaa aloitusnäkymään");
@@ -157,12 +242,7 @@ public class Kayttoliittyma extends Application {
             ikkuna.show();
         });
 
-        Label listaKayttajista = new Label("Tarkastele asiakkaita");
-        ComboBox<Object> listakayttajista = new ComboBox<>();
-        listakayttajista.getItems().addAll(logic.findAllUsers()
-        );
-
-        ComboBox<Kayttaja> kayttajaValinta = new ComboBox<>();
+        ComboBox<User> kayttajaValinta = new ComboBox<>();
         kayttajaValinta.getItems().addAll(logic.findAllUsers()
         );
 
@@ -174,17 +254,11 @@ public class Kayttoliittyma extends Application {
 
         Button lisaaNappi = new Button("Lisää henkilö!");
         lisaaNappi.setOnAction((event) -> {
-            logic.saveOrUpdateUser(new Kayttaja(null, nimiKentta.getText(), Double.parseDouble(saldoKentta.getText())));
+            logic.saveOrUpdateUser(new User(-1, nimiKentta.getText(), Double.parseDouble(saldoKentta.getText())));
             listakayttajista.getItems().clear();
             listakayttajista.getItems().addAll(logic.findAllUsers());
             kayttajaValinta.getItems().clear();
             kayttajaValinta.getItems().addAll(logic.findAllUsers());
-        });
-
-        Button tarkasteleKayttajaa = new Button("Tarkastele");
-        tarkasteleKayttajaa.setOnAction((event) -> {
-            ikkuna.setScene(kayttajanTiedot);
-            ikkuna.show();
         });
 
         kayttajanLisaysNakyma.add(nimiTeksti, 0, 0);
@@ -202,25 +276,8 @@ public class Kayttoliittyma extends Application {
         kayttajanLisaysNakyma.setVgap(20);
         kayttajanLisaysNakyma.setPadding(new Insets(20, 20, 20, 20));
 
-        //Kayttajantietonäkymä
-        if (listakayttajista.getValue() != null) {
-            Kayttaja tarkasteltava = (Kayttaja) listakayttajista.getValue();
-            tarkasteltava.getId();
-            System.out.println(tarkasteltava);
-        }
-
-        Label kayttajaTietoja = new Label("Käyttäjän tiedot");
-        Label muutaKayttajaTietoja = new Label("Muuta käyttäjän tietoja");
-        Label kayttajanOstosHistoria = new Label("Käyttäjän ostoshistoria");
-
-        TableView kayttajaTaulukko = new TableView<>();
-        TableColumn nimiSarake = new TableColumn("Nimi");
-        TableColumn saldoSarake = new TableColumn("Saldo");
-        TableColumn idSarake = new TableColumn("Id");
-
-        kayttajanTietoNakyma.add(kayttajaTietoja, 0, 0);
-
         //Tuotteenlisäysnäkymä
+        
         Label toiminnallisuusTekstiTuoteNakyma = new Label("Valitse toiminnallisuus");
         Label tarkasteleTuotteita = new Label("Tarkastele tuotteita");
         Button palaaAloitusNakymaanTuotenakymasta = new Button("Palaa aloitusnäkymään");
@@ -235,7 +292,7 @@ public class Kayttoliittyma extends Application {
         listatuotteista.getItems().addAll(logic.findAllProducts()
         );
 
-        ComboBox<Tuote> tuoteValinta = new ComboBox<>();
+        ComboBox<Product> tuoteValinta = new ComboBox<>();
         tuoteValinta.getItems().addAll(logic.findAllProducts()
         );
 
@@ -251,7 +308,7 @@ public class Kayttoliittyma extends Application {
         Button lisaaTuote = new Button("Lisää tuote!");
 
         lisaaTuote.setOnAction((event) -> {
-            logic.saveOrUpdateProduct(new Tuote(null, tuotteenNimiKentta.getText(), Double.parseDouble(tuotteenHintaKentta.getText()), Integer.parseInt(tuotteenMaaraKentta.getText()), tuotteenInfoKentta.getText()));
+            logic.saveOrUpdateProduct(new Product(-1, tuotteenNimiKentta.getText(), Double.parseDouble(tuotteenHintaKentta.getText()), Integer.parseInt(tuotteenMaaraKentta.getText()), tuotteenInfoKentta.getText()));
             listatuotteista.getItems().clear();
             listatuotteista.getItems().addAll(logic.findAllProducts());
             tuoteValinta.getItems().clear();
@@ -277,6 +334,7 @@ public class Kayttoliittyma extends Application {
         tuotteenLisaysNakyma.setPadding(new Insets(10, 10, 10, 10));
 
         //Ostosnäkymä
+        
         Label toiminallisuusTekstiOstosNakyma = new Label("Valitse toiminnallisuus");
         Button palaaAloitusNakymaanOstosNakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaanOstosNakymasta.setOnAction((event) -> {
@@ -289,7 +347,7 @@ public class Kayttoliittyma extends Application {
         Button teeOstos = new Button("Osta");
 
         teeOstos.setOnAction(e -> {
-            logic.saveOrUpdatePurchase(new Ostos(kayttajaValinta.getValue(), tuoteValinta.getValue(), Instant.now().getEpochSecond()));
+            logic.saveOrUpdatePurchase(new Purchase(kayttajaValinta.getValue(), tuoteValinta.getValue(), Instant.now().getEpochSecond()));
             listakayttajista.getItems().clear();
             listakayttajista.getItems().addAll(logic.findAllUsers());
             listatuotteista.getItems().clear();
@@ -313,27 +371,28 @@ public class Kayttoliittyma extends Application {
         ostosNakyma.setPadding(new Insets(10, 10, 10, 10));
 
         //Aikanäkymä
+        
         Button palaaAloitusNakymaanAikanakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaanAikanakymasta.setOnAction((event) -> {
             ikkuna.setScene(aloitus);
             ikkuna.show();
         });
 
-        TableColumn<Map.Entry<Kayttaja, Integer>, Kayttaja> column1 = new TableColumn<>("Henkilö");
-        column1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<Kayttaja, Integer>, Kayttaja>, ObservableValue<Kayttaja>>() {
+        TableColumn<Map.Entry<User, Integer>, User> column1 = new TableColumn<>("Henkilö");
+        column1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<User, Integer>, User>, ObservableValue<User>>() {
 
             @Override
-            public ObservableValue<Kayttaja> call(TableColumn.CellDataFeatures<Map.Entry<Kayttaja, Integer>, Kayttaja> p) {
+            public ObservableValue<User> call(TableColumn.CellDataFeatures<Map.Entry<User, Integer>, User> p) {
                 return new SimpleObjectProperty<>(p.getValue().getKey());
             }
 
         });
 
-        TableColumn<Map.Entry<Kayttaja, Integer>, Integer> column2 = new TableColumn<>("Ostosten määrä");
-        column2.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<Kayttaja, Integer>, Integer>, ObservableValue<Integer>>() {
+        TableColumn<Map.Entry<User, Integer>, Integer> column2 = new TableColumn<>("Ostosten määrä");
+        column2.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<User, Integer>, Integer>, ObservableValue<Integer>>() {
 
             @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Map.Entry<Kayttaja, Integer>, Integer> p) {
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Map.Entry<User, Integer>, Integer> p) {
                 return new SimpleObjectProperty<>(p.getValue().getValue());
             }
 
@@ -350,9 +409,9 @@ public class Kayttoliittyma extends Application {
                 edellinen = nykyhetki;
                 long sekunnitNyt = Instant.now().getEpochSecond();
                 long sekunnitEnnen = sekunnitNyt - 3600;
-                Map<Kayttaja, Integer> ostosData = logic.findTopUsers(sekunnitNyt, sekunnitEnnen);
-                ObservableList<Map.Entry<Kayttaja, Integer>> items = FXCollections.observableArrayList(ostosData.entrySet());
-                final TableView<Map.Entry<Kayttaja, Integer>> table = new TableView<>(items);
+                Map<User, Integer> ostosData = logic.findTopUsers(sekunnitNyt, sekunnitEnnen);
+                ObservableList<Map.Entry<User, Integer>> items = FXCollections.observableArrayList(ostosData.entrySet());
+                final TableView<Map.Entry<User, Integer>> table = new TableView<>(items);
                 table.getColumns().setAll(column1, column2);
                 table.setMaxWidth(Region.USE_PREF_SIZE);
                 table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DomainTests;
+package DatabaseTests;
 
 import database.Database;
-import database.OstosDao;
-import domain.Kayttaja;
-import domain.Ostos;
-import domain.Tuote;
+import database.PurchaseDao;
+import domain.User;
+import domain.Purchase;
+import domain.Product;
 import java.sql.SQLException;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -22,14 +22,14 @@ import static org.junit.Assert.*;
  *
  * @author kallmark
  */
-public class OstosDaoTest {
+public class PurchaseDaoTest {
     
     Database database;
-    private OstosDao ostosdao;
+    private PurchaseDao ostosdao;
     
-    public OstosDaoTest() throws ClassNotFoundException {
+    public PurchaseDaoTest() throws ClassNotFoundException {
         this.database = new Database("jdbc:sqlite:src/test/dbTest/testi.db");
-        this.ostosdao = new OstosDao(database);
+        this.ostosdao = new PurchaseDao(database);
     }
     
     @BeforeClass
@@ -51,20 +51,20 @@ public class OstosDaoTest {
     }
 
     @Test
-    public void deleteAllToimii() throws SQLException{
-        Tuote tuote = new Tuote(1, "Tuote", 10.0, 10, "Tuote");
-        Kayttaja kayttaja = new Kayttaja(1, "Kalle", 10.0);
-        Ostos ostos = new Ostos(kayttaja, tuote, 100);
+    public void deleteAllWorks() throws SQLException{
+        Product tuote = new Product(1, "Tuote", 10.0, 10, "Tuote");
+        User kayttaja = new User(1, "Kalle", 10.0);
+        Purchase ostos = new Purchase(kayttaja, tuote, 100);
         ostosdao.saveOrUpdate(ostos);
         ostosdao.deleteAll();
         assertEquals(0, ostosdao.findAll().size());
     }
     
     @Test
-    public void saveJaEtsiToimii() throws SQLException{
-        Tuote tuote = new Tuote(1, "Tuote", 10.0, 10, "Tuote");
-        Kayttaja kayttaja = new Kayttaja(1, "Kalle", 10.0);
-        Ostos ostos = new Ostos(kayttaja, tuote, 100);
+    public void saveOrUpdateWorks() throws SQLException{
+        Product tuote = new Product(1, "Tuote", 10.0, 10, "Tuote");
+        User kayttaja = new User(1, "Kalle", 10.0);
+        Purchase ostos = new Purchase(kayttaja, tuote, 100);
         ostosdao.saveOrUpdate(ostos);
         assertEquals(1, ostosdao.findAll().size());
     }

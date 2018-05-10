@@ -4,11 +4,11 @@ import database.Dao;
 import database.Database;
 import java.util.*;
 import java.sql.*;
-import domain.Kayttaja;
-import domain.Kayttaja;
-import domain.Tuote;
+import domain.User;
+import domain.User;
+import domain.Product;
 
-public class KayttajaDao implements Dao<Kayttaja, Integer> {
+public class UserDao implements Dao<User, Integer> {
 
     private Database database;
 
@@ -17,7 +17,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
      *
      * @param database Parametrinä toimii tietokanta, johon tietoa lisätään.
      */
-    public KayttajaDao(Database database) {
+    public UserDao(Database database) {
         this.database = database;
     }
 
@@ -29,7 +29,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
      * @throws SQLException
      */
     @Override
-    public Kayttaja findOne(Integer key) throws SQLException {
+    public User findOne(Integer key) throws SQLException {
 
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Kayttaja WHERE kayttaja_id = ?");
@@ -45,7 +45,7 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
         String nimi = rs.getString("nimi");
         Double saldo = rs.getDouble("saldo");
 
-        Kayttaja o = new Kayttaja(id, nimi, saldo);
+        User o = new User(id, nimi, saldo);
 
         rs.close();
         stmt.close();
@@ -61,18 +61,18 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
      * @throws SQLException
      */
     @Override
-    public List<Kayttaja> findAll() throws SQLException {
+    public List<User> findAll() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Kayttaja");
 
         ResultSet rs = stmt.executeQuery();
-        List<Kayttaja> kayttajat = new ArrayList<>();
+        List<User> kayttajat = new ArrayList<>();
         while (rs.next()) {
             Integer id = rs.getInt("kayttaja_id");
             String nimi = rs.getString("nimi");
             Double saldo = rs.getDouble("saldo");
 
-            kayttajat.add(new Kayttaja(id, nimi, saldo));
+            kayttajat.add(new User(id, nimi, saldo));
         }
         rs.close();
         stmt.close();
@@ -91,20 +91,20 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
      * @return Palauttaa LinkedHashMapin, joka säilyttää lisäysjärjestyksen.
      * @throws SQLException
      */
-    public Map<Kayttaja, Integer> findAllTime(long sekunnitNyt, long sekunnitEnnen) throws SQLException {
+    public Map<User, Integer> findAllTime(long sekunnitNyt, long sekunnitEnnen) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT DISTINCT kayttaja_id, COUNT(kayttaja_id) AS maara FROM Ostos WHERE date <= ? AND date >= ?  GROUP BY kayttaja_id ORDER BY maara DESC");
         stmt.setObject(1, sekunnitNyt);
         stmt.setObject(2, sekunnitEnnen);
         ResultSet rs = stmt.executeQuery();
-        Map<Kayttaja, Integer> kayttajat = new LinkedHashMap<>();
+        Map<User, Integer> kayttajat = new LinkedHashMap<>();
         while (rs.next()) {
             Integer id = rs.getInt("kayttaja_id");
             if (this.findOne(id) != null) {
-                String nimi = this.findOne(id).getNimi();
-                Double saldo = this.findOne(id).getSaldo();
+                String nimi = this.findOne(id).getName();
+                Double saldo = this.findOne(id).getBalance();
                 Integer kayttajaMaara = rs.getInt("maara");
-                kayttajat.put(new Kayttaja(id, nimi, saldo), kayttajaMaara);
+                kayttajat.put(new User(id, nimi, saldo), kayttajaMaara);
             }
         }
         rs.close();
@@ -122,21 +122,21 @@ public class KayttajaDao implements Dao<Kayttaja, Integer> {
      * @throws SQLException
      */
     @Override
-    public Kayttaja saveOrUpdate(Kayttaja object) throws SQLException {
-        Kayttaja findOne = findOne(object.getId());
+    public User saveOrUpdate(User object) throws SQLException {
+        User findOne = findOne(object.getId());
         if (findOne == null) {
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO Kayttaja (nimi, saldo) VALUES (?, ?)");
-                stmt.setString(1, object.getNimi());
-                stmt.setDouble(2, object.getSaldo());
+                stmt.setString(1, object.getName());
+                stmt.setDouble(2, object.getBalance());
                 stmt.executeUpdate();
             }
             return object;
         } else {
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("UPDATE Kayttaja SET nimi = ?, saldo = ? WHERE kayttaja_id = ?");
-                stmt.setString(1, object.getNimi());
-                stmt.setDouble(2, object.getSaldo());
+                stmt.setString(1, object.getName());
+                stmt.setDouble(2, object.getBalance());
                 stmt.setInt(3, object.getId());
                 stmt.executeUpdate();
             }

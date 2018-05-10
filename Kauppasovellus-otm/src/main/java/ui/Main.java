@@ -1,10 +1,10 @@
 package ui;
 
-public class Paaohjelma {
+public class Main {
     
     
     public static void main(String[] args) throws ClassNotFoundException {
         
-        Kayttoliittyma.start(args);
+        UserInterface.start(args);
     }
 }

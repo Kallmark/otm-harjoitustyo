@@ -2,21 +2,22 @@ package database;
 
 import database.Dao;
 import database.Database;
-import domain.Kayttaja;
+import domain.User;
 import java.util.*;
 import java.sql.*;
-import domain.Tuote;
+import domain.Product;
+import java.time.ZoneOffset;
 
-public class TuoteDao implements Dao<Tuote, Integer> {
+public class ProductDao implements Dao<Product, Integer> {
 
     private Database database;
 
-    public TuoteDao(Database database) {
+    public ProductDao(Database database) {
         this.database = database;
     }
 
     @Override
-    public Tuote findOne(Integer key) throws SQLException {
+    public Product findOne(Integer key) throws SQLException {
 
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Tuote WHERE tuote_id = ?");
@@ -34,7 +35,7 @@ public class TuoteDao implements Dao<Tuote, Integer> {
         Integer maara = rs.getInt("maara");
         String info = rs.getString("info");
 
-        Tuote o = new Tuote(id, nimi, hinta, maara, info);
+        Product o = new Product(id, nimi, hinta, maara, info);
 
         rs.close();
         stmt.close();
@@ -44,12 +45,12 @@ public class TuoteDao implements Dao<Tuote, Integer> {
     }
 
     @Override
-    public List<Tuote> findAll() throws SQLException {
+    public List<Product> findAll() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Tuote");
 
         ResultSet rs = stmt.executeQuery();
-        List<Tuote> tuotteet = new ArrayList<>();
+        List<Product> tuotteet = new ArrayList<>();
         while (rs.next()) {
             Integer id = rs.getInt("tuote_id");
             String nimi = rs.getString("nimi");
@@ -57,7 +58,7 @@ public class TuoteDao implements Dao<Tuote, Integer> {
             Integer maara = rs.getInt("maara");
             String info = rs.getString("info");
 
-            tuotteet.add(new Tuote(id, nimi, hinta, maara, info));
+            tuotteet.add(new Product(id, nimi, hinta, maara, info));
         }
 
         rs.close();
@@ -69,14 +70,14 @@ public class TuoteDao implements Dao<Tuote, Integer> {
     }
 
     @Override
-    public Tuote saveOrUpdate(Tuote object) throws SQLException {
-        Tuote findOne = findOne(object.getId());
+    public Product saveOrUpdate(Product object) throws SQLException {
+        Product findOne = findOne(object.getId());
         if (findOne == null) {
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO Tuote (nimi, hinta, maara, info) VALUES (?, ?, ?, ?)");
-                stmt.setString(1, object.getNimi());
-                stmt.setDouble(2, object.getHinta());
-                stmt.setInt(3, object.getMaara());
+                stmt.setString(1, object.getName());
+                stmt.setDouble(2, object.getPrice());
+                stmt.setInt(3, object.getAmount());
                 stmt.setString(4, object.getInfo());
                 stmt.executeUpdate();
             }
@@ -84,9 +85,9 @@ public class TuoteDao implements Dao<Tuote, Integer> {
         } else {
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("UPDATE Tuote SET nimi = ?, hinta = ?, maara = ?, info = ? WHERE tuote_id = ?");
-                stmt.setString(1, object.getNimi());
-                stmt.setDouble(2, object.getHinta());
-                stmt.setInt(3, object.getMaara());
+                stmt.setString(1, object.getName());
+                stmt.setDouble(2, object.getPrice());
+                stmt.setInt(3, object.getAmount());
                 stmt.setString(4, object.getInfo());
                 stmt.setInt(5, object.getId());
                 stmt.executeUpdate();
@@ -113,21 +114,19 @@ public class TuoteDao implements Dao<Tuote, Integer> {
         connection.close();
     }
     
-    public Map<Tuote, Integer> findUserHistory(Integer id) throws SQLException {
+    public Map<java.time.LocalDateTime, String> findUserHistory(Integer id) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT DISTINCT tuote_id, date FROM Ostos WHERE kayttaja_id = ? GROUP BY tuote_id ORDER BY date DESC");
+        PreparedStatement stmt = connection.prepareStatement("SELECT tuote_id, date FROM Ostos WHERE kayttaja_id = ? GROUP BY date ORDER BY date DESC");
         stmt.setObject(1, id);
         ResultSet rs = stmt.executeQuery();
-        Map<Tuote, Integer> tuotehistoria = new LinkedHashMap<>();
+        Map<java.time.LocalDateTime, String> tuotehistoria = new LinkedHashMap<>();
         while (rs.next()) {
             Integer tuote_id = rs.getInt("tuote_id");
-            if (this.findOne(id) != null) {
-                String nimi = this.findOne(id).getNimi();
-                Double hinta = this.findOne(id).getHinta();
-                int maara = this.findOne(id).getMaara();
-                String info = this.findOne(id).getInfo();
-                tuotehistoria.put(new Tuote(id, nimi, hinta, maara, info), rs.getInt("date"));
+            if (this.findOne(tuote_id) != null) {
+                String nimi = this.findOne(tuote_id).getName();
+                tuotehistoria.put(java.time.LocalDateTime.ofEpochSecond(rs.getInt("date"), 10000, ZoneOffset.ofHours(2)), nimi);
             }
+            
         }
         rs.close();
         stmt.close();

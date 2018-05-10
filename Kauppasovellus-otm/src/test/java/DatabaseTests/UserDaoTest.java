@@ -6,12 +6,12 @@
 package DatabaseTests;
 
 import database.Database;
-import database.KayttajaDao;
-import database.OstosDao;
-import database.TuoteDao;
-import domain.Kayttaja;
-import domain.Ostos;
-import domain.Tuote;
+import database.UserDao;
+import database.PurchaseDao;
+import database.ProductDao;
+import domain.User;
+import domain.Purchase;
+import domain.Product;
 import java.sql.SQLException;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,18 +21,18 @@ import static org.junit.Assert.*;
  *
  * @author kallmark
  */
-public class KayttajaDaoTest {
+public class UserDaoTest {
 
     Database database;
-    KayttajaDao kayttajadao;
-    TuoteDao tuotedao;
-    OstosDao ostosdao;
+    UserDao kayttajadao;
+    ProductDao tuotedao;
+    PurchaseDao ostosdao;
 
-    public KayttajaDaoTest() throws ClassNotFoundException {
+    public UserDaoTest() throws ClassNotFoundException {
         this.database = new Database("jdbc:sqlite:src/test/dbTest/testi.db");
-        this.kayttajadao = new KayttajaDao(this.database);
-        this.tuotedao = new TuoteDao(database);
-        this.ostosdao = new OstosDao(database);
+        this.kayttajadao = new UserDao(this.database);
+        this.tuotedao = new ProductDao(database);
+        this.ostosdao = new PurchaseDao(database);
     }
 
     @Before
@@ -62,15 +62,15 @@ public class KayttajaDaoTest {
     
     @Test
     public void saveJaEtsiToimii() throws SQLException {
-        Kayttaja kayttaja = new Kayttaja(2, "Kalle", 10.0);
+        User kayttaja = new User(2, "Kalle", 10.0);
         kayttajadao.saveOrUpdate(kayttaja);
         assertEquals(kayttaja.toString(), kayttajadao.findOne(2).toString());
     }
     
     @Test
     public void UpdateToimii() throws SQLException {
-        Kayttaja kayttaja = new Kayttaja(2, "Kalle", 10.0);
-        Kayttaja kayttaja2 = new Kayttaja(2, "Jaakko", 20.0);
+        User kayttaja = new User(2, "Kalle", 10.0);
+        User kayttaja2 = new User(2, "Jaakko", 20.0);
         kayttajadao.saveOrUpdate(kayttaja);
         kayttajadao.saveOrUpdate(kayttaja2);
         assertEquals(kayttaja2.toString(), kayttajadao.findOne(2).toString());
@@ -78,7 +78,7 @@ public class KayttajaDaoTest {
     
     @Test
     public void etsiKaikkiToimii() throws SQLException{
-        Kayttaja kayttaja = new Kayttaja(2, "Jaakko", 20.0);
+        User kayttaja = new User(2, "Jaakko", 20.0);
         kayttajadao.saveOrUpdate(kayttaja);
         assertEquals(2, kayttajadao.findAll().size());
     }

@@ -6,9 +6,9 @@
 package DatabaseTests;
 
 import database.Database;
-import database.KayttajaDao;
-import database.TuoteDao;
-import domain.Tuote;
+import database.UserDao;
+import database.ProductDao;
+import domain.Product;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,14 +24,14 @@ import static org.junit.Assert.*;
  *
  * @author kallmark
  */
-public class TuoteDaoTest {
+public class ProductDaoTest {
 
     Database database;
-    TuoteDao tuotedao;
+    ProductDao tuotedao;
 
-    public TuoteDaoTest() throws ClassNotFoundException {
+    public ProductDaoTest() throws ClassNotFoundException {
         this.database = new Database("jdbc:sqlite:src/test/dbTest/testi.db");
-        this.tuotedao = new TuoteDao(database);
+        this.tuotedao = new ProductDao(database);
     }
 
     @Before
@@ -53,15 +53,15 @@ public class TuoteDaoTest {
 
     @Test
     public void saveJaEtsiToimii() throws SQLException {
-        Tuote tuote = new Tuote(2, "Tuote", 10.0, 10, "Tuote");
+        Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
         tuotedao.saveOrUpdate(tuote);
         assertEquals(tuote.toString(), tuotedao.findOne(2).toString());
     }
     
     @Test
     public void UpdateToimii() throws SQLException {
-        Tuote tuote = new Tuote(2, "Tuote", 10.0, 10, "Tuote");
-        Tuote tuote2 = new Tuote(2, "Tuote2", 10.0, 10, "Tuote");
+        Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
+        Product tuote2 = new Product(2, "Tuote2", 10.0, 10, "Tuote");
         tuotedao.saveOrUpdate(tuote);
         tuotedao.saveOrUpdate(tuote2);
         
@@ -71,7 +71,7 @@ public class TuoteDaoTest {
     @Test
     
     public void findAllWorks() throws SQLException {
-        Tuote tuote = new Tuote(2, "Tuote", 10.0, 10, "Tuote");
+        Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
         tuotedao.saveOrUpdate(tuote);
         assertEquals(2, tuotedao.findAll().size());
     }
