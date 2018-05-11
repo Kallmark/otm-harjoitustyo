@@ -89,3 +89,7 @@ Tämä toiminnallisuus on hieman erikoinen, sillä käyttöliittymä kutsuu logi
 
 Tilastojen saaminen muodostaa samaa logiikkaa kuin Top käyttäjien tietojen saaminen, paitsi että tässä tapauksessa Logic-luokka kommunikoi myös Statistics -luokan kanssa. Ensin Logic -luokka kutsuu UserDao-luokkaa, joka antaa Logic-luokalle listan kaikista käyttäjistä. Logic-luokka välittää parametrina tämän Statistics-luokalle, joka laskee listan käyttäjä-olioiden keskimääräisen saldon. Logic-luokka välittää arvon käyttöliittymälle, jossa AnimationTimer -olio päivittää tulosta jatkuvalla syötöllä.
 
+## Ohjelman rakenteeseen jääneet heikkoudet
+
+Graafinen käyttöliittymä on rakennettu varsin vaikeasti luettavasti siten, että lähes koko graafinen osio toteutetaan luokan UserInterface start-metodissa. Jatkoa ajaetllen voisi olla järkevä erotella kunkin näkymän rakentava koodi omaksi metodikseen.
+
