@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.Properties;
 import javafx.animation.AnimationTimer;
@@ -33,6 +34,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -108,6 +114,8 @@ public class UserInterface extends Application {
         Scene aikanakyma = new Scene(aikaNakyma);
         GridPane kayttajanTietoNakyma = new GridPane();
         Scene kayttajanTiedot = new Scene(kayttajanTietoNakyma);
+        GridPane stats = new GridPane();
+        Scene statsView = new Scene(stats);
 
         //Aloitusnäkymä
         Label toiminnallisuusTeksti = new Label("Valitse toiminnallisuus");
@@ -135,6 +143,12 @@ public class UserInterface extends Application {
             ikkuna.show();
         });
 
+        Button statsButton = new Button("Tarkastele tilastoja");
+        statsButton.setOnAction((event) -> {
+            ikkuna.setScene(statsView);
+            ikkuna.show();
+        });
+
         aloitusNakyma2.setTop(alkuteksti);
         BorderPane.setAlignment(alkuteksti, Pos.CENTER);
         aloitusNakyma2.setCenter(aloitusNakyma);
@@ -143,12 +157,43 @@ public class UserInterface extends Application {
         aloitusNakyma.add(tuotteenLisaysNappi, 2, 4);
         aloitusNakyma.add(OstosNappi, 3, 4);
         aloitusNakyma.add(aikaNappi, 4, 4);
+        aloitusNakyma.add(statsButton, 4, 5);
         aloitusNakyma.setHgap(20);
         aloitusNakyma.setVgap(20);
         aloitusNakyma.setPadding(new Insets(20, 20, 20, 20));
+
+        //Tilastonäkymä
+        Label statsLabel = new Label("Käyttäjätilastoja");
+        Label averageLabel = new Label();
+        Label overallLabel = new Label();
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Variable");
+        yAxis.setLabel("Balance");
+        BarChart<String, Number> statsBar = new BarChart<String, Number>(xAxis, yAxis);
+        statsBar.setTitle("Database stats");
+        XYChart.Series overallBalance = new XYChart.Series();
+        overallBalance.setName("Overall balance");
+        XYChart.Series averageBalance = new XYChart.Series();
+        averageBalance.setName("Average balance");
+        statsBar.getData().addAll(overallBalance, averageBalance);
         
+        Button returnToStartFromStats = new Button("Palaa aloitusnäkymään");
+        returnToStartFromStats.setOnAction((event) -> {
+            ikkuna.setScene(aloitus);
+            ikkuna.show();
+        });
+
+        stats.add(statsBar, 1, 1);
+        stats.add(statsLabel, 0, 1);
+        stats.add(averageLabel, 1, 2);
+        stats.add(overallLabel, 1, 3);
+        stats.add(returnToStartFromStats, 1, 4);
+        stats.setHgap(20);
+        stats.setVgap(20);
+        stats.setPadding(new Insets(20, 20, 20, 20));
+
         //Kayttajantietonäkymä
-        
         Label kayttajaTietoja = new Label("Käyttäjän tiedot:");
         Label muutaKayttajaTietoja = new Label("Muuta käyttäjän tietoja");
         Label kayttajanOstosHistoria = new Label("Käyttäjän ostoshistoria");
@@ -158,12 +203,15 @@ public class UserInterface extends Application {
         Label kayttajanNimi = new Label("Nimi: ");
         Label kayttajanSaldo = new Label("Saldo: ");
         Label kayttajanId = new Label("Id :");
-        
+
         Label listaKayttajista = new Label("Tarkastele asiakkaita");
         ComboBox<Object> listakayttajista = new ComboBox<>();
         listakayttajista.getItems().addAll(logic.findAllUsers()
         );
-        
+        ComboBox<User> kayttajaValinta = new ComboBox<>();
+        kayttajaValinta.getItems().addAll(logic.findAllUsers()
+        );
+
         TableColumn<Map.Entry<java.time.LocalDateTime, String>, java.time.LocalDateTime> column3 = new TableColumn<>("Milloin ostettu");
         column3.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<java.time.LocalDateTime, String>, java.time.LocalDateTime>, ObservableValue<java.time.LocalDateTime>>() {
 
@@ -183,7 +231,7 @@ public class UserInterface extends Application {
             }
 
         });
-        
+
         Button tarkasteleKayttajaa = new Button("Tarkastele");
         tarkasteleKayttajaa.setOnAction((event) -> {
             User tarkasteltava = (User) listakayttajista.getValue();
@@ -191,33 +239,35 @@ public class UserInterface extends Application {
             kayttajanSaldoMuokkaa.setText(Double.toString(tarkasteltava.getBalance()));
             kayttajanIdMuokkaa.setText(Integer.toString(tarkasteltava.getId()));
             Map<java.time.LocalDateTime, String> tuotehistoria = logic.findUsersPurchaseHistory(tarkasteltava.getId());
-                ObservableList<Map.Entry<java.time.LocalDateTime, String>> items = FXCollections.observableArrayList(tuotehistoria.entrySet());
-                final TableView<Map.Entry<java.time.LocalDateTime, String>> table = new TableView<>(items);
-                table.getColumns().setAll(column4, column3);
-                
-                kayttajanTietoNakyma.add(table, 5, 0);
+            ObservableList<Map.Entry<java.time.LocalDateTime, String>> items = FXCollections.observableArrayList(tuotehistoria.entrySet());
+            final TableView<Map.Entry<java.time.LocalDateTime, String>> table = new TableView<>(items);
+            table.getColumns().setAll(column4, column3);
+            kayttajanTietoNakyma.add(table, 5, 0);
             ikkuna.setScene(kayttajanTiedot);
             ikkuna.show();
         });
-        
+
         Button muokkaaKayttajaa = new Button("Muokkaa");
         muokkaaKayttajaa.setOnAction((event) -> {
             logic.saveOrUpdateUser(new User(Integer.parseInt(kayttajanIdMuokkaa.getText()), kayttajanNimiMuokkaa.getText(), Double.parseDouble(kayttajanSaldoMuokkaa.getText())));
+            listakayttajista.getItems().clear();
+            listakayttajista.getItems().addAll(logic.findAllUsers());
+            kayttajaValinta.getItems().clear();
+            kayttajaValinta.getItems().addAll(logic.findAllUsers());
         });
-        
+
         Button palaaAloitusNakymaanKayttajaTietoNakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaanKayttajaTietoNakymasta.setOnAction((event) -> {
             ikkuna.setScene(aloitus);
             ikkuna.show();
         });
-        
+
         Button palaaKayttajanLisaysNakymaanTietoNakymasta = new Button("Palaa lisäysnäkymään");
         palaaKayttajanLisaysNakymaanTietoNakymasta.setOnAction((event) -> {
             ikkuna.setScene(kayttajaNakyma);
             ikkuna.show();
         });
-        
-        
+
         kayttajanTietoNakyma.add(kayttajaTietoja, 0, 0);
         kayttajanTietoNakyma.add(kayttajanNimi, 0, 1);
         kayttajanTietoNakyma.add(kayttajanSaldo, 0, 2);
@@ -233,7 +283,6 @@ public class UserInterface extends Application {
         kayttajanTietoNakyma.setPadding(new Insets(20, 20, 20, 20));
 
         //Käyttäjienlisäysnäkymä
-        
         Label toiminnallisuusTekstiKayttajaNakyma = new Label("Valitse toiminnallisuus");
 
         Button palaaAloitusnakymaanKayttajanakymasta = new Button("Palaa aloitusnäkymään");
@@ -241,10 +290,6 @@ public class UserInterface extends Application {
             ikkuna.setScene(aloitus);
             ikkuna.show();
         });
-
-        ComboBox<User> kayttajaValinta = new ComboBox<>();
-        kayttajaValinta.getItems().addAll(logic.findAllUsers()
-        );
 
         Label nimiTeksti = new Label("Nimi: ");
         TextField nimiKentta = new TextField();
@@ -277,7 +322,6 @@ public class UserInterface extends Application {
         kayttajanLisaysNakyma.setPadding(new Insets(20, 20, 20, 20));
 
         //Tuotteenlisäysnäkymä
-        
         Label toiminnallisuusTekstiTuoteNakyma = new Label("Valitse toiminnallisuus");
         Label tarkasteleTuotteita = new Label("Tarkastele tuotteita");
         Button palaaAloitusNakymaanTuotenakymasta = new Button("Palaa aloitusnäkymään");
@@ -334,7 +378,6 @@ public class UserInterface extends Application {
         tuotteenLisaysNakyma.setPadding(new Insets(10, 10, 10, 10));
 
         //Ostosnäkymä
-        
         Label toiminallisuusTekstiOstosNakyma = new Label("Valitse toiminnallisuus");
         Button palaaAloitusNakymaanOstosNakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaanOstosNakymasta.setOnAction((event) -> {
@@ -371,7 +414,6 @@ public class UserInterface extends Application {
         ostosNakyma.setPadding(new Insets(10, 10, 10, 10));
 
         //Aikanäkymä
-        
         Button palaaAloitusNakymaanAikanakymasta = new Button("Palaa aloitusnäkymään");
         palaaAloitusNakymaanAikanakymasta.setOnAction((event) -> {
             ikkuna.setScene(aloitus);
@@ -409,6 +451,7 @@ public class UserInterface extends Application {
                 edellinen = nykyhetki;
                 long sekunnitNyt = Instant.now().getEpochSecond();
                 long sekunnitEnnen = sekunnitNyt - 3600;
+                int i = 0;
                 Map<User, Integer> ostosData = logic.findTopUsers(sekunnitNyt, sekunnitEnnen);
                 ObservableList<Map.Entry<User, Integer>> items = FXCollections.observableArrayList(ostosData.entrySet());
                 final TableView<Map.Entry<User, Integer>> table = new TableView<>(items);
@@ -416,6 +459,10 @@ public class UserInterface extends Application {
                 table.setMaxWidth(Region.USE_PREF_SIZE);
                 table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
                 aikaNakyma.add(table, 0, 1);
+                averageBalance.getData().add(new XYChart.Data("Average balance", logic.calculateAverageBalance()));
+                overallBalance.getData().add(new XYChart.Data<>("Overall balance", logic.calculateOverallBalance()));
+                averageLabel.setText("Average balance for a user: " + logic.calculateAverageBalance());
+                overallLabel.setText("Overall balance for users: " + logic.calculateOverallBalance());
             }
         }.start();
 
@@ -431,7 +478,6 @@ public class UserInterface extends Application {
         aikaNakyma.add(tilastot, 0, 0);
 
         //Asetetaan aloitusnäkymä aluksi näytille
-        
         ikkuna.setScene(aloitus);
         ikkuna.show();
 

@@ -124,7 +124,7 @@ public class ProductDao implements Dao<Product, Integer> {
             Integer tuote_id = rs.getInt("tuote_id");
             if (this.findOne(tuote_id) != null) {
                 String nimi = this.findOne(tuote_id).getName();
-                tuotehistoria.put(java.time.LocalDateTime.ofEpochSecond(rs.getInt("date"), 10000, ZoneOffset.ofHours(2)), nimi);
+                tuotehistoria.put(java.time.LocalDateTime.ofEpochSecond(rs.getInt("date"), 100, ZoneOffset.ofHours(3)), nimi);
             }
             
         }

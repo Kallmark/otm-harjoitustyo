@@ -4,16 +4,15 @@ import database.UserDao;
 import database.PurchaseDao;
 import database.ProductDao;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 public class Logic {
 
     private PurchaseDao ostosdao;
     private ProductDao tuotedao;
     private UserDao kayttajaDao;
+    private Statistics stats;
     
     /**
      * Create Logic-object to handle the program's logic. 
@@ -25,6 +24,7 @@ public class Logic {
         this.kayttajaDao = kayttajaDao;
         this.tuotedao = tuotedao;
         this.ostosdao = ostosdao;
+        this.stats = new Statistics();
     }
     
     /**
@@ -68,8 +68,8 @@ public class Logic {
     }
     /**
      * Find users that have purchased products in a given time frame
-     * @param secondsNow the current Unix time in seconds at the end of the timeframe
-     * @param secondsBefore the unix time in seconds at the start of the timeframe
+     * @param secondsNow the current Unix time in seconds at the end of the time frame
+     * @param secondsBefore the unix time in seconds at the start of the time frame
      * @return returns a LinkedMap with the users from top (most purchases) to bottom (only one purchase). 
      */
     public Map findTopUsers(long secondsNow, long secondsBefore) {
@@ -154,7 +154,7 @@ public class Logic {
     /**
      * Save a new product or update an existing one in the database
      * @param ostos
-     * @return true if successfull and false if not succesfull
+     * @return true if successful and false if not successful
      */
     public boolean saveOrUpdatePurchase(Purchase ostos) {
 
@@ -196,9 +196,22 @@ public class Logic {
         }
     }
     
-    //public Double averageBalance() throws SQLException {
-    //    DescriptiveStatistics stats = new DescriptiveStatistics();
-    //    return stats.getSum(kayttajaDao.findAll().forEach(e -> e.getSaldo()));
-    //}
+    /**
+     * Calculates the overall balance from all of the users in the database. 
+     * @return overall balance as a double. 
+     */
+    public Double calculateOverallBalance() {
+        List<User> users = this.findAllUsers();
+        return stats.calculateOverallBalance(users);
+    }
+    
+    /**
+     * Calculates the average balance from all of the users in the database.
+     * @return the average balance as a double. 
+     */
+    public Double calculateAverageBalance() {
+        List<User> users = this.findAllUsers();
+        return stats.calculateAverageBalance(users);
+    }
 
 }
