@@ -13,19 +13,19 @@ public class UserDao implements Dao<User, Integer> {
     private Database database;
 
     /**
-     * Luo KayttajaDao-olion.
+     * Creates a UserDao object. 
      *
-     * @param database Parametrinä toimii tietokanta, johon tietoa lisätään.
+     * @param database
      */
     public UserDao(Database database) {
         this.database = database;
     }
 
     /**
-     * Etsii halutun kayttajan tietokannasta.
+     * Finds a specific user from the database. 
      *
-     * @param key Etsintä tapahtuu antamalla parametriksi id:n
-     * @return Palauttaa löydetyn olion, jos sellainen löytyy.
+     * @param key primary key of the user. 
+     * @return user or null if not found. 
      * @throws SQLException
      */
     @Override
@@ -55,9 +55,8 @@ public class UserDao implements Dao<User, Integer> {
     }
 
     /**
-     * Etsii kaikki tietokantaan tallennetut kayttajat
-     *
-     * @return Palauttaa listan kayttajia.
+     * Finds all the users from the database. 
+     * @return List<User> of all users. 
      * @throws SQLException
      */
     @Override
@@ -81,14 +80,11 @@ public class UserDao implements Dao<User, Integer> {
     }
 
     /**
-     * Etsii kaikki ostokset, jotka on tehty annettujen parametrien välisenä
-     * aikana. Laskee käyttäjäkohtaisten ostoksien määrän ja luokittelee
-     * käyttäjät ostoksien määrän perusteella järjesteykseen suurimmasta
-     * alimpaan.
+     * Finds all the purchases a user has made in a given time frame.
      *
-     * @param sekunnitNyt Nykyhetken sekunnit laskettuna 1.1.1970 lukien.
-     * @param sekunnitEnnen Sekuntimäärä ennen haluttua aikaa.
-     * @return Palauttaa LinkedHashMapin, joka säilyttää lisäysjärjestyksen.
+     * @param sekunnitNyt Current time as unix seconds counting from 1.1.1970.
+     * @param sekunnitEnnen Unix seconds at the start of the time frame. 
+     * @return LinkedMap<User, Integer> where user is key and value is integer amount of purchases made during the time frame.
      * @throws SQLException
      */
     public Map<User, Integer> findAllTime(long sekunnitNyt, long sekunnitEnnen) throws SQLException {
@@ -114,11 +110,9 @@ public class UserDao implements Dao<User, Integer> {
     }
 
     /**
-     * Lisää uusia käyttäjiä ttietokantaan ai sellaisen jo ollessa olemassa
-     * päivittää olemassaolevaa käyttäjää.
-     *
-     * @param object Parametrinä luotu käyttäjä-olio.
-     * @return
+     * Saves a new user or updates an existing one in the database. 
+     * @param object user as a object. 
+     * @return user.
      * @throws SQLException
      */
     @Override
@@ -160,8 +154,7 @@ public class UserDao implements Dao<User, Integer> {
     }
 
     /**
-     * Poistaa kaikki taulun tiedot.
-     *
+     * Deletes all users from the database. 
      * @throws SQLException
      */
     public void deleteAll() throws SQLException {

@@ -9,36 +9,35 @@ import java.util.Map;
 
 public class Logic {
 
-    private PurchaseDao ostosdao;
-    private ProductDao tuotedao;
-    private UserDao kayttajaDao;
+    private PurchaseDao purchaseDao;
+    private ProductDao productDao;
+    private UserDao userDao;
     private Statistics stats;
     
     /**
      * Create Logic-object to handle the program's logic. 
-     * @param kayttajaDao
+     * @param userDao
      * @param tuotedao
-     * @param ostosdao 
+     * @param purchaseDao 
      */
-    public Logic(UserDao kayttajaDao, ProductDao tuotedao, PurchaseDao ostosdao) {
-        this.kayttajaDao = kayttajaDao;
-        this.tuotedao = tuotedao;
-        this.ostosdao = ostosdao;
+    public Logic(UserDao userDao, ProductDao productDao, PurchaseDao purchaseDao) {
+        this.userDao = userDao;
+        this.productDao = productDao;
+        this.purchaseDao = purchaseDao;
         this.stats = new Statistics();
     }
     
     /**
      * Save a new user or update an existing user in the database. 
-     * @param id
-     * @param name
-     * @param balance
-     * @param kayttaja
-     * @return true if successfull and false id not succesfull
+     * @param id user's primary key as a string 
+     * @param name user's name as a string
+     * @param balance user's balance as a string
+     * @return true if successful and false id not successful.
      */
     public boolean saveOrUpdateUser(String id, String name, String balance) {
         try {
             User user = new User(Integer.parseInt(id), name, Double.parseDouble(balance));
-            this.kayttajaDao.saveOrUpdate(user);
+            this.userDao.saveOrUpdate(user);
         } catch (Exception e) {
             return false;
         }
@@ -47,11 +46,11 @@ public class Logic {
     
     /**
      * Find all existing users in the database. 
-     * @return a list of all users
+     * @return List<User> of all users
      */
     public List<User> findAllUsers() {
         try {
-            return this.kayttajaDao.findAll();
+            return this.userDao.findAll();
         } catch (SQLException e) {
             return null;
         }
@@ -60,11 +59,11 @@ public class Logic {
     /**
      * Find a specific user from the database. 
      * @param id primary key of the user 
-     * @return 
+     * @return wanted User or null if not found.
      */
     public User findUser(Integer id) {
         try {
-            return this.kayttajaDao.findOne(id);
+            return this.userDao.findOne(id);
         } catch (SQLException e) {
             return null;
         }
@@ -72,40 +71,40 @@ public class Logic {
     /**
      * Find users that have purchased products in a given time frame
      * @param secondsNow the current Unix time in seconds at the end of the time frame
-     * @param secondsBefore the unix time in seconds at the start of the time frame
-     * @return returns a LinkedMap with the users from top (most purchases) to bottom (only one purchase). 
+     * @param secondsBefore the Unix time in seconds at the start of the time frame
+     * @return returns a LinkedMap<User, Integer> where User is key and value is amount of purchases. LinkedMap gives the users from top (most purchases) to bottom (only one purchase). 
      */
     public Map findTopUsers(long secondsNow, long secondsBefore) {
         try {
-            return this.kayttajaDao.findAllTime(secondsNow, secondsBefore);
+            return this.userDao.findAllTime(secondsNow, secondsBefore);
         } catch (SQLException e) {
             return null;
         }
     }
 
     /**
-     * Delete a specific use from the database
+     * Delete a specific user from the database
      * @param id primary key for the user
      */
     public void deleteUser(Integer id) {
         try {
-            this.kayttajaDao.delete(id);
+            this.userDao.delete(id);
         } catch (SQLException e) {
         }
     }
     /**
-     * 
-     * @param id
-     * @param name
-     * @param price
-     * @param amount
-     * @param info
-     * @return 
+     * Save a new product or update and existing one in the database. 
+     * @param id primary key of the product as a string.
+     * @param name name of the product as a string.
+     * @param price price of the product as a string.
+     * @param amount amount of the product in stock as a string. 
+     * @param info info about the product as a string. 
+     * @return true if successful and false if not successful.
      */
     public boolean saveOrUpdateProduct(String id, String name, String price, String amount, String info) {
         try {
             Product product = new Product(Integer.parseInt(id), name, Double.parseDouble(price), Integer.parseInt(amount), info);
-            this.tuotedao.saveOrUpdate(product);
+            this.productDao.saveOrUpdate(product);
         } catch (Exception e) {
             return false;
         }
@@ -114,23 +113,23 @@ public class Logic {
     
     /**
      * Find all existing products in the database
-     * @return a list of all products
+     * @return List<Product> of all products.
      */
     public List<Product> findAllProducts() {
         try {
-            return this.tuotedao.findAll();
+            return this.productDao.findAll();
         } catch (SQLException e) {
             return null;
         }
     }
     /**
-     * Find a specific product from the dataabse
+     * Find a specific product from the database.
      * @param id primary key for the product
-     * @return 
+     * @return product or null if not found.
      */
     public Product findProduct(Integer id) {
         try {
-            return this.tuotedao.findOne(id);
+            return this.productDao.findOne(id);
         } catch (SQLException e) {
             return null;
         }
@@ -141,7 +140,7 @@ public class Logic {
      */
     public void deleteProduct(Integer id) {
         try {
-            this.tuotedao.delete(id);
+            this.productDao.delete(id);
         } catch (Exception e) {
         }
     }
@@ -153,26 +152,26 @@ public class Logic {
      */
     public Map findUsersPurchaseHistory(Integer id) {
         try {
-            return this.tuotedao.findUserHistory(id);
+            return this.productDao.findUserHistory(id);
         } catch (Exception e) {
             return null;
         }
     }
     /**
-     * Save a new product or update an existing one in the database
-     * @param ostos
+     * Save a new purchase or update an existing one in the database
+     * @param purchase purchase as a object. 
      * @return true if successful and false if not successful
      */
-    public boolean saveOrUpdatePurchase(Purchase ostos) {
+    public boolean saveOrUpdatePurchase(Purchase purchase) {
 
         try {
-            this.ostosdao.saveOrUpdate(ostos);
-            Double newBalance = ostos.getUser().getBalance() - ostos.getProduct().getPrice();
-            ostos.getUser().setBalance(newBalance);
-            this.kayttajaDao.saveOrUpdate(ostos.getUser());
-            int newAmount = ostos.getProduct().getAmount() - 1;
-            ostos.getProduct().setAmount(newAmount);
-            this.tuotedao.saveOrUpdate(ostos.getProduct());
+            this.purchaseDao.saveOrUpdate(purchase);
+            Double newBalance = purchase.getUser().getBalance() - purchase.getProduct().getPrice();
+            purchase.getUser().setBalance(newBalance);
+            this.userDao.saveOrUpdate(purchase.getUser());
+            int newAmount = purchase.getProduct().getAmount() - 1;
+            purchase.getProduct().setAmount(newAmount);
+            this.productDao.saveOrUpdate(purchase.getProduct());
         } catch (SQLException e) {
             return false;
         }
@@ -184,7 +183,7 @@ public class Logic {
      */
     public List<Purchase> findAllPurchases() {
         try {
-            return this.ostosdao.findAll();
+            return this.purchaseDao.findAll();
         } catch (Exception e) {
             return null;
         }
@@ -197,7 +196,7 @@ public class Logic {
      */
     public Purchase findPurchase(Integer user_id, Integer product_id) {
         try {
-            return this.ostosdao.findOne(user_id, product_id);
+            return this.purchaseDao.findOne(user_id, product_id);
         } catch (SQLException e) {
             return null;
         }

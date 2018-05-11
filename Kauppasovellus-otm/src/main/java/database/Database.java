@@ -15,7 +15,10 @@ public class Database {
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(databaseAddress);
     }
-
+    
+    /**
+     * Initialises the database by using sqliteCommands(). 
+     */
     public void init() {
         List<String> commands = sqliteCommands();
 
@@ -31,10 +34,8 @@ public class Database {
     }
 
     /**
-     * Creates SQL commands for the database tables. inserts a test user,
-     * product and purchase.
-     *
-     * @return list of SQL commands in String format
+     * Creates sqlite-commands for database creation and insertion of test data to the database. 
+     * @return List<String> of database creation and data insertion commands. 
      */
     private List<String> sqliteCommands() {
         ArrayList<String> commands = new ArrayList<>();

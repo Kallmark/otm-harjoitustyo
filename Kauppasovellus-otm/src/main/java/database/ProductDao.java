@@ -15,7 +15,13 @@ public class ProductDao implements Dao<Product, Integer> {
     public ProductDao(Database database) {
         this.database = database;
     }
-
+    
+    /**
+     * Finds a specific product from the database. 
+     * @param key primary key for the product
+     * @return the product that is searched.
+     * @throws SQLException 
+     */
     @Override
     public Product findOne(Integer key) throws SQLException {
 
@@ -44,6 +50,11 @@ public class ProductDao implements Dao<Product, Integer> {
         return o;
     }
 
+    /**
+     * Finds all the products from the database.
+     * @return List<Product>  of all products. 
+     * @throws SQLException 
+     */
     @Override
     public List<Product> findAll() throws SQLException {
         Connection connection = database.getConnection();
@@ -68,34 +79,44 @@ public class ProductDao implements Dao<Product, Integer> {
         System.out.println("tulostus");
         return tuotteet;
     }
-
+    
+    /**
+     * Saves or updates a product to the database. 
+     * @param product product as a object. 
+     * @return product. 
+     * @throws SQLException 
+     */
     @Override
-    public Product saveOrUpdate(Product object) throws SQLException {
-        Product findOne = findOne(object.getId());
+    public Product saveOrUpdate(Product product) throws SQLException {
+        Product findOne = findOne(product.getId());
         if (findOne == null) {
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO Tuote (nimi, hinta, maara, info) VALUES (?, ?, ?, ?)");
-                stmt.setString(1, object.getName());
-                stmt.setDouble(2, object.getPrice());
-                stmt.setInt(3, object.getAmount());
-                stmt.setString(4, object.getInfo());
+                stmt.setString(1, product.getName());
+                stmt.setDouble(2, product.getPrice());
+                stmt.setInt(3, product.getAmount());
+                stmt.setString(4, product.getInfo());
                 stmt.executeUpdate();
             }
-            return object;
+            return product;
         } else {
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("UPDATE Tuote SET nimi = ?, hinta = ?, maara = ?, info = ? WHERE tuote_id = ?");
-                stmt.setString(1, object.getName());
-                stmt.setDouble(2, object.getPrice());
-                stmt.setInt(3, object.getAmount());
-                stmt.setString(4, object.getInfo());
-                stmt.setInt(5, object.getId());
+                stmt.setString(1, product.getName());
+                stmt.setDouble(2, product.getPrice());
+                stmt.setInt(3, product.getAmount());
+                stmt.setString(4, product.getInfo());
+                stmt.setInt(5, product.getId());
                 stmt.executeUpdate();
             }
-            return object;
+            return product;
         }
     }
-    
+    /**
+     * Deletes a specific product from the database.
+     * @param key primary key of the product. 
+     * @throws SQLException 
+     */
     @Override
     public void delete(Integer key) throws SQLException {
         Connection connection = database.getConnection();
@@ -106,6 +127,10 @@ public class ProductDao implements Dao<Product, Integer> {
         connection.close();    
     }
     
+    /**
+     * Deletes all the products from the database.
+     * @throws SQLException 
+     */
     public void deleteAll() throws SQLException{
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("DELETE FROM Tuote");
@@ -114,6 +139,12 @@ public class ProductDao implements Dao<Product, Integer> {
         connection.close();
     }
     
+    /**
+     * Searches all the products that a user has purchased. 
+     * @param id primary key of the user. 
+     * @return Map<java.time.LocalDateTime, String> where key is timestamp for the purchase and value name of the product. 
+     * @throws SQLException 
+     */
     public Map<java.time.LocalDateTime, String> findUserHistory(Integer id) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT tuote_id, date FROM Ostos WHERE kayttaja_id = ? GROUP BY date ORDER BY date DESC");

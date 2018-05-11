@@ -66,14 +66,12 @@ public class PurchaseTest {
     public void valuesUpdateWorks() {
         Product tuote = new Product(1, "Tuote", 1.0, 1, "info");
         User kayttaja = new User(1, "Testi", 1.0);
-        Purchase ostos = new Purchase(kayttaja, tuote, 0);
-        
+        Purchase ostos = new Purchase(kayttaja, tuote, 0); 
         Product tuote2 = new Product(2, "Tuote2", 2.0, 2, "info2");
         User kayttaja2 = new User(2, "Testi2", 2.0);
         ostos.setUser(kayttaja2);
         ostos.setProduct(tuote2);
         ostos.setTime(2);
-        
         assertEquals("Käyttäjä: Testi2, tuote: Tuote2, aika: 2", ostos.toString());
         
     }

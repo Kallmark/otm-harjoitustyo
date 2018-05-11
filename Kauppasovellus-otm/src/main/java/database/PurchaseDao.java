@@ -12,21 +12,21 @@ import java.time.Instant;
 public class PurchaseDao implements Dao<Purchase, Integer> {
 
     private Database database;
-    private UserDao kayttajadao;
-    private ProductDao tuotedao;
+    private UserDao userDao;
+    private ProductDao productDao;
 
     public PurchaseDao(Database database) {
         this.database = database;
-        this.kayttajadao = new UserDao(database);
-        this.tuotedao = new ProductDao(database);
+        this.userDao = new UserDao(database);
+        this.productDao = new ProductDao(database);
     }
 
-    public Purchase findOne(Integer kayttajaId, Integer tuoteId) throws SQLException {
+    public Purchase findOne(Integer userId, Integer productId) throws SQLException {
 
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Ostos WHERE kayttaja_id = ? AND tuote_id = ?");
-        stmt.setObject(1, kayttajaId);
-        stmt.setObject(2, tuoteId);
+        stmt.setObject(1, userId);
+        stmt.setObject(2, productId);
 
         ResultSet rs = stmt.executeQuery();
         boolean hasOne = rs.next();
@@ -36,7 +36,7 @@ public class PurchaseDao implements Dao<Purchase, Integer> {
 
         Long aika = rs.getLong("date");
 
-        Purchase o = new Purchase(this.kayttajadao.findOne(kayttajaId), this.tuotedao.findOne(tuoteId), aika);
+        Purchase o = new Purchase(this.userDao.findOne(userId), this.productDao.findOne(productId), aika);
 
         rs.close();
         stmt.close();
@@ -57,7 +57,7 @@ public class PurchaseDao implements Dao<Purchase, Integer> {
             Integer tuoteId = rs.getInt("tuote_id");
             Long aika = rs.getLong("date");
 
-            ostokset.add(new Purchase(this.kayttajadao.findOne(kayttajaId), this.tuotedao.findOne(tuoteId), aika));
+            ostokset.add(new Purchase(this.userDao.findOne(kayttajaId), this.productDao.findOne(tuoteId), aika));
         }
 
         rs.close();

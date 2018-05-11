@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package DomainTests;
 
 import database.Database;
@@ -14,43 +10,34 @@ import domain.Logic;
 import domain.Purchase;
 import domain.Product;
 import java.sql.SQLException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author kallmark
- */
+
 public class LogicTest {
     
     Database database;
-    UserDao kayttajadao;
-    ProductDao tuotedao;
-    PurchaseDao ostosdao;
+    UserDao userDao;
+    ProductDao productDao;
+    PurchaseDao purchaseDao;
     Logic logic;
     
 
     public LogicTest() throws ClassNotFoundException {
         this.database = new Database("jdbc:sqlite:src/test/dbTest/testi.db");
-        this.kayttajadao = new UserDao(this.database);
-        this.tuotedao = new ProductDao(database);
-        this.ostosdao = new PurchaseDao(database);
-        this.logic = new Logic(kayttajadao, tuotedao, ostosdao);
+        this.userDao = new UserDao(this.database);
+        this.productDao = new ProductDao(database);
+        this.purchaseDao = new PurchaseDao(database);
+        this.logic = new Logic(userDao, productDao, purchaseDao);
     }
-    
     
     @Before
     public void setUp() {
         this.database.init();
     }
     
-    
     @Test 
-    
     public void findOneUserWorks() throws SQLException {
         assertEquals("Kalle, id: 1, saldo: 10.0", logic.findUser(1).toString());
     }
@@ -101,7 +88,6 @@ public class LogicTest {
         Product tuote2 = new Product(2, "Tuote2", 20.0, 10, "Tuote");
         logic.saveOrUpdateProduct("2", "Tuote", "10.0", "10", "Tuote");
         logic.saveOrUpdateProduct("2", "Tuote2", "20.0", "10", "Tuote");
-        
         assertEquals(tuote2.toString(), logic.findProduct(2).toString());
     }
     
@@ -109,7 +95,7 @@ public class LogicTest {
     public void findAllProductsWorks() throws SQLException {
         Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
         logic.saveOrUpdateProduct("2", "Tuote", "10.0", "10", "Tuote");
-        assertEquals(2, tuotedao.findAll().size());
+        assertEquals(2, productDao.findAll().size());
     }
     
     @Test
@@ -160,6 +146,35 @@ public class LogicTest {
     public void deleteProductsWorks() {
         logic.deleteProduct(1);
         assertEquals(0, logic.findAllProducts().size());
+    }
+    
+    @Test
+    public void averageBalanceIsCorrect() {
+        logic.saveOrUpdateUser("2", "Jaakko", "20.0");
+        assertEquals(15.0, logic.calculateAverageBalance(), 0.0);
+    }
+    
+    @Test
+    public void overAllBalanceIsCorrect() {
+        assertEquals(10.0, logic.calculateOverallBalance(), 0.0);
+    }
+    
+    @Test
+    public void findAllPurchasesWorks() {
+        assertEquals(1, logic.findAllPurchases().size());
+    }
+    
+    @Test
+    public void findUserPurchaseHistoryWorks() {
+        assertEquals(1, logic.findUsersPurchaseHistory(1).size());
+    }
+    @Test
+    public void catchesErrorWhenSavingUser() {
+        assertEquals(false, logic.saveOrUpdateUser("2", "Jaakko", "error"));
+    }
+    @Test
+    public void catchesErrorWhenSavingProduct() {
+        assertEquals(false, logic.saveOrUpdateProduct("2", "Tuote", "10.0", "error", "Tuote"));
     }
     
 
