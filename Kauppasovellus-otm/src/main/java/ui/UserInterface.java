@@ -298,8 +298,8 @@ public class UserInterface extends Application {
         TextField balanceField = new TextField();
         Label saveOrUpdateUserWasSuccesful = new Label();
 
-        Button lisaaNappi = new Button("Lisää henkilö!");
-        lisaaNappi.setOnAction((event) -> {
+        Button addNewUserButton = new Button("Add new user!");
+        addNewUserButton.setOnAction((event) -> {
             logic.saveUser("-1", nameField.getText(), balanceField.getText());
             if (logic.saveUser("-1", nameField.getText(), balanceField.getText()) == true) {
                 saveOrUpdateUserWasSuccesful.setText("User was succesfully created or updated!");
@@ -316,7 +316,7 @@ public class UserInterface extends Application {
         addUsersGrid.add(nameField, 0, 1);
         addUsersGrid.add(balanceLabel, 1, 0);
         addUsersGrid.add(balanceField, 1, 1);
-        addUsersGrid.add(lisaaNappi, 2, 1);
+        addUsersGrid.add(addNewUserButton, 2, 1);
         addUsersGrid.add(showUsersLabel, 3, 0);
         addUsersGrid.add(listOfUsers, 3, 1);
         addUsersGrid.add(returnToStartFromAddUsers, 0, 3);
