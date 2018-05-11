@@ -29,14 +29,17 @@ public class Logic {
     
     /**
      * Save a new user or update an existing user in the database. 
+     * @param id
+     * @param name
+     * @param balance
      * @param kayttaja
      * @return true if successfull and false id not succesfull
      */
-    public boolean saveOrUpdateUser(User kayttaja) {
-
+    public boolean saveOrUpdateUser(String id, String name, String balance) {
         try {
-            this.kayttajaDao.saveOrUpdate(kayttaja);
-        } catch (SQLException e) {
+            User user = new User(Integer.parseInt(id), name, Double.parseDouble(balance));
+            this.kayttajaDao.saveOrUpdate(user);
+        } catch (Exception e) {
             return false;
         }
         return true;
@@ -91,15 +94,19 @@ public class Logic {
         }
     }
     /**
-     * Save a new product or update an existinng one in the database
-     * @param tuote
-     * @return true if successfull, false if not successfull
+     * 
+     * @param id
+     * @param name
+     * @param price
+     * @param amount
+     * @param info
+     * @return 
      */
-    public boolean saveOrUpdateProduct(Product tuote) {
-
+    public boolean saveOrUpdateProduct(String id, String name, String price, String amount, String info) {
         try {
-            this.tuotedao.saveOrUpdate(tuote);
-        } catch (SQLException e) {
+            Product product = new Product(Integer.parseInt(id), name, Double.parseDouble(price), Integer.parseInt(amount), info);
+            this.tuotedao.saveOrUpdate(product);
+        } catch (Exception e) {
             return false;
         }
         return true;
