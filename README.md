@@ -12,6 +12,8 @@ Sovelluksen tarkoituksena on toimia kirjanpitovälineenä kaupalle, jolla varast
 
 [Käyttöohje](https://github.com/Kallmark/otm-harjoitustyo/blob/master/dokumentointi/kaytto-ohje.md)
 
+[Testausdokumentti](https://github.com/Kallmark/otm-harjoitustyo/blob/master/dokumentointi/testaus.md)
+
 <h2>Komentorivitoiminnot<h2>
 
 ### Testaus
