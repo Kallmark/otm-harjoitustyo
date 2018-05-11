@@ -31,7 +31,7 @@ public class PurchaseDaoTest {
         Product tuote = new Product(1, "Tuote", 10.0, 10, "Tuote");
         User kayttaja = new User(1, "Kalle", 10.0);
         Purchase ostos = new Purchase(kayttaja, tuote, 100);
-        purchaseDao.saveOrUpdate(ostos);
+        purchaseDao.save(ostos);
         purchaseDao.deleteAll();
         assertEquals(0, purchaseDao.findAll().size());
     }
@@ -41,7 +41,7 @@ public class PurchaseDaoTest {
         Product tuote = new Product(1, "Tuote", 10.0, 10, "Tuote");
         User kayttaja = new User(1, "Kalle", 10.0);
         Purchase ostos = new Purchase(kayttaja, tuote, 100);
-        purchaseDao.saveOrUpdate(ostos);
+        purchaseDao.save(ostos);
         assertEquals(1, purchaseDao.findAll().size());
     }
 }

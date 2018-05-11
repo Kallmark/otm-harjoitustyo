@@ -38,7 +38,7 @@ public class ProductDaoTest {
     @Test
     public void saveWorks() throws SQLException {
         Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
-        productDao.saveOrUpdate(tuote);
+        productDao.save(tuote);
         assertEquals(tuote.toString(), productDao.findOne(2).toString());
     }
 
@@ -46,15 +46,15 @@ public class ProductDaoTest {
     public void UpdateWorks() throws SQLException {
         Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
         Product tuote2 = new Product(2, "Tuote2", 10.0, 10, "Tuote");
-        productDao.saveOrUpdate(tuote);
-        productDao.saveOrUpdate(tuote2);
+        productDao.save(tuote);
+        productDao.save(tuote2);
         assertEquals(tuote2.toString(), productDao.findOne(2).toString());
     }
 
     @Test
     public void findAllWorks() throws SQLException {
         Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
-        productDao.saveOrUpdate(tuote);
+        productDao.save(tuote);
         assertEquals(2, productDao.findAll().size());
     }
 

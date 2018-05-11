@@ -64,7 +64,6 @@ public class Database {
         commands.add("INSERT INTO Kayttaja (kayttaja_id, nimi, saldo) VALUES (1, \"Kalle\", 10.0);");
         commands.add("INSERT INTO Tuote (tuote_id, nimi, hinta, maara, info) VALUES (1, \"Pulla\", 1.0, 1, \"pullaa\");");
         commands.add("INSERT INTO Ostos (kayttaja_id, tuote_id, date) VALUES (1, 1, 1000);");
-
         return commands;
     }
 }

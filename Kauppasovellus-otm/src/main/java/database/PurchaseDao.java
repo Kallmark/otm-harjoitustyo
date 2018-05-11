@@ -67,7 +67,7 @@ public class PurchaseDao implements Dao<Purchase, Integer> {
     }
 
     @Override
-    public Purchase saveOrUpdate(Purchase object) throws SQLException {
+    public Purchase save(Purchase object) throws SQLException {
 
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO Ostos (kayttaja_id, tuote_id, date) VALUES (?, ?, ?)");
@@ -85,8 +85,7 @@ public class PurchaseDao implements Dao<Purchase, Integer> {
         // ei toteutettu
     }
 
-    
-    public void deleteAll() throws SQLException{
+    public void deleteAll() throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("DELETE FROM Ostos");
         stmt.executeUpdate();
@@ -94,8 +93,15 @@ public class PurchaseDao implements Dao<Purchase, Integer> {
         connection.close();
     }
 
+    //This method is not needed: it is irrelevant to get a specific puchase from the database.
     @Override
     public Purchase findOne(Integer key) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    //This method is not needed: purchases are meant to be permanent, they are ought not to be changed. 
+    @Override
+    public Purchase update(Purchase object) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

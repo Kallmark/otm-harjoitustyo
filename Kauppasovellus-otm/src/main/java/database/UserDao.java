@@ -13,7 +13,7 @@ public class UserDao implements Dao<User, Integer> {
     private Database database;
 
     /**
-     * Creates a UserDao object. 
+     * Creates a UserDao object.
      *
      * @param database
      */
@@ -22,41 +22,36 @@ public class UserDao implements Dao<User, Integer> {
     }
 
     /**
-     * Finds a specific user from the database. 
+     * Finds a specific user from the database.
      *
-     * @param key primary key of the user. 
-     * @return user or null if not found. 
+     * @param key primary key of the user.
+     * @return user or null if not found.
      * @throws SQLException
      */
     @Override
     public User findOne(Integer key) throws SQLException {
-
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Kayttaja WHERE kayttaja_id = ?");
         stmt.setObject(1, key);
-
         ResultSet rs = stmt.executeQuery();
         boolean hasOne = rs.next();
         if (!hasOne) {
             return null;
         }
-
         Integer id = rs.getInt("kayttaja_id");
         String nimi = rs.getString("nimi");
         Double saldo = rs.getDouble("saldo");
-
         User o = new User(id, nimi, saldo);
-
         rs.close();
         stmt.close();
         connection.close();
-
         return o;
     }
 
     /**
-     * Finds all the users from the database. 
-     * @return List<User> of all users. 
+     * Finds all the users from the database.
+     *
+     * @return List<User> of all users.
      * @throws SQLException
      */
     @Override
@@ -83,8 +78,9 @@ public class UserDao implements Dao<User, Integer> {
      * Finds all the purchases a user has made in a given time frame.
      *
      * @param sekunnitNyt Current time as unix seconds counting from 1.1.1970.
-     * @param sekunnitEnnen Unix seconds at the start of the time frame. 
-     * @return LinkedMap<User, Integer> where user is key and value is integer amount of purchases made during the time frame.
+     * @param sekunnitEnnen Unix seconds at the start of the time frame.
+     * @return LinkedMap<User, Integer> where user is key and value is integer
+     * amount of purchases made during the time frame.
      * @throws SQLException
      */
     public Map<User, Integer> findAllTime(long sekunnitNyt, long sekunnitEnnen) throws SQLException {
@@ -97,10 +93,7 @@ public class UserDao implements Dao<User, Integer> {
         while (rs.next()) {
             Integer id = rs.getInt("kayttaja_id");
             if (this.findOne(id) != null) {
-                String nimi = this.findOne(id).getName();
-                Double saldo = this.findOne(id).getBalance();
-                Integer kayttajaMaara = rs.getInt("maara");
-                kayttajat.put(new User(id, nimi, saldo), kayttajaMaara);
+                kayttajat.put(new User(id, this.findOne(id).getName(), this.findOne(id).getBalance()), rs.getInt("maara"));
             }
         }
         rs.close();
@@ -110,38 +103,53 @@ public class UserDao implements Dao<User, Integer> {
     }
 
     /**
-     * Saves a new user or updates an existing one in the database. 
-     * @param object user as a object. 
+     * Saves a new user to the database.
+     *
+     * @param user user as a object.
      * @return user.
      * @throws SQLException
      */
     @Override
-    public User saveOrUpdate(User object) throws SQLException {
-        User findOne = findOne(object.getId());
+    public User save(User user) throws SQLException {
+        User findOne = findOne(user.getId());
         if (findOne == null) {
             try (Connection conn = database.getConnection()) {
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO Kayttaja (nimi, saldo) VALUES (?, ?)");
-                stmt.setString(1, object.getName());
-                stmt.setDouble(2, object.getBalance());
+                stmt.setString(1, user.getName());
+                stmt.setDouble(2, user.getBalance());
                 stmt.executeUpdate();
             }
-            return object;
+            return user;
         } else {
-            try (Connection conn = database.getConnection()) {
-                PreparedStatement stmt = conn.prepareStatement("UPDATE Kayttaja SET nimi = ?, saldo = ? WHERE kayttaja_id = ?");
-                stmt.setString(1, object.getName());
-                stmt.setDouble(2, object.getBalance());
-                stmt.setInt(3, object.getId());
-                stmt.executeUpdate();
-            }
-            return object;
+            return this.update(user);
         }
     }
-    
+
+    /**
+     * Updates a user in the database.
+     *
+     * @param user updated user.
+     * @return user.
+     * @throws SQLException
+     */
+    @Override
+    public User update(User user) throws SQLException {
+        User findOne = findOne(user.getId());
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("UPDATE Kayttaja SET nimi = ?, saldo = ? WHERE kayttaja_id = ?");
+            stmt.setString(1, user.getName());
+            stmt.setDouble(2, user.getBalance());
+            stmt.setInt(3, user.getId());
+            stmt.executeUpdate();
+        }
+        return user;
+    }
+
     /**
      * Deletes a given user from the database.
+     *
      * @param key id of the User
-     * @throws SQLException 
+     * @throws SQLException
      */
     @Override
     public void delete(Integer key) throws SQLException {
@@ -150,11 +158,12 @@ public class UserDao implements Dao<User, Integer> {
         stmt.setObject(1, key);
         stmt.executeUpdate();
         stmt.close();
-        connection.close();    
+        connection.close();
     }
 
     /**
-     * Deletes all users from the database. 
+     * Deletes all users from the database.
+     *
      * @throws SQLException
      */
     public void deleteAll() throws SQLException {
@@ -164,6 +173,5 @@ public class UserDao implements Dao<User, Integer> {
         stmt.close();
         connection.close();
     }
-
 
 }

@@ -63,7 +63,6 @@ public class UserInterface extends Application {
         properties.load(new FileInputStream("config.properties"));
 
         String databaseFile = properties.getProperty("database");
-        System.out.println(databaseFile);
         this.time = Long.parseLong(properties.getProperty("time"));
 
         Database database = new Database(databaseFile);
@@ -92,7 +91,6 @@ public class UserInterface extends Application {
     }
 
     @Override
-
     public void start(Stage window) throws ClassNotFoundException, SQLException {
 
         //Creates scenes and other graphic objects.
@@ -253,8 +251,8 @@ public class UserInterface extends Application {
 
         Button updateUserButton = new Button("Update!");
         updateUserButton.setOnAction((event) -> {
-            logic.saveOrUpdateUser(kayttajanIdMuokkaa.getText(), kayttajanNimiMuokkaa.getText(), kayttajanSaldoMuokkaa.getText());
-            if (logic.saveOrUpdateUser(kayttajanIdMuokkaa.getText(), kayttajanNimiMuokkaa.getText(), kayttajanSaldoMuokkaa.getText()) == true) {
+            logic.saveUser(kayttajanIdMuokkaa.getText(), kayttajanNimiMuokkaa.getText(), kayttajanSaldoMuokkaa.getText());
+            if (logic.saveUser(kayttajanIdMuokkaa.getText(), kayttajanNimiMuokkaa.getText(), kayttajanSaldoMuokkaa.getText()) == true) {
                 succesfullUpdate.setText("Update succesfull!");
             } else {
                 succesfullUpdate.setText("Update not succesfull!");
@@ -293,7 +291,7 @@ public class UserInterface extends Application {
         Button returnToStartFromAddUsers = new Button("Return to start!");
         this.changeScene(returnToStartFromAddUsers, window, start);
 
-        Label nameLabel=  new Label("Name: ");
+        Label nameLabel = new Label("Name: ");
         TextField nameField = new TextField();
         Label balanceLabel = new Label("Balance: ");
         Label showUsersLabel = new Label("Show users:");
@@ -302,8 +300,8 @@ public class UserInterface extends Application {
 
         Button lisaaNappi = new Button("Lisää henkilö!");
         lisaaNappi.setOnAction((event) -> {
-            logic.saveOrUpdateUser("-1", nameField.getText(), balanceField.getText());
-            if (logic.saveOrUpdateUser("-1", nameField.getText(), balanceField.getText()) == true) {
+            logic.saveUser("-1", nameField.getText(), balanceField.getText());
+            if (logic.saveUser("-1", nameField.getText(), balanceField.getText()) == true) {
                 saveOrUpdateUserWasSuccesful.setText("User was succesfully created or updated!");
             } else {
                 saveOrUpdateUserWasSuccesful.setText("User was not succesfully created or updated!");
@@ -357,8 +355,8 @@ public class UserInterface extends Application {
 
         Button addOrUpdateProductButton = new Button("Add a product!");
         addOrUpdateProductButton.setOnAction((event) -> {
-            logic.saveOrUpdateProduct("-1", productNameField.getText(), productPriceField.getText(), productAmountField.getText(), productInfoField.getText());
-            if (logic.saveOrUpdateProduct("-1", productNameField.getText(), productPriceField.getText(), productAmountField.getText(), productInfoField.getText()) == true) {
+            logic.saveProduct("-1", productNameField.getText(), productPriceField.getText(), productAmountField.getText(), productInfoField.getText());
+            if (logic.saveProduct("-1", productNameField.getText(), productPriceField.getText(), productAmountField.getText(), productInfoField.getText()) == true) {
                 saveOrUpdateProductWasSuccesful.setText("Product was succesfully created or updated");
             } else {
                 saveOrUpdateProductWasSuccesful.setText("Product was not succesfully created or updated");

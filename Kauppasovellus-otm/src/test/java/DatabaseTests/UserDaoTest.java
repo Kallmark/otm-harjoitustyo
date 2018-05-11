@@ -53,7 +53,7 @@ public class UserDaoTest {
     @Test
     public void saveWorks() throws SQLException {
         User kayttaja = new User(2, "Kalle", 10.0);
-        userDao.saveOrUpdate(kayttaja);
+        userDao.save(kayttaja);
         assertEquals(kayttaja.toString(), userDao.findOne(2).toString());
     }
     
@@ -61,15 +61,15 @@ public class UserDaoTest {
     public void updateWorks() throws SQLException {
         User kayttaja = new User(2, "Kalle", 10.0);
         User kayttaja2 = new User(2, "Jaakko", 20.0);
-        userDao.saveOrUpdate(kayttaja);
-        userDao.saveOrUpdate(kayttaja2);
+        userDao.save(kayttaja);
+        userDao.save(kayttaja2);
         assertEquals(kayttaja2.toString(), userDao.findOne(2).toString());
     }
     
     @Test
     public void findAllWorks() throws SQLException{
         User kayttaja = new User(2, "Jaakko", 20.0);
-        userDao.saveOrUpdate(kayttaja);
+        userDao.save(kayttaja);
         assertEquals(2, userDao.findAll().size());
     }
     

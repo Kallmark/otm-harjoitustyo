@@ -45,7 +45,7 @@ public class LogicTest {
     @Test
     public void saveUserWorks() throws SQLException {
         User kayttaja = new User(2, "Kalle", 10.0);
-        logic.saveOrUpdateUser("2", "Kalle", "10.0");
+        logic.saveUser("2", "Kalle", "10.0");
         assertEquals(kayttaja.toString(), logic.findUser(2).toString());
     }
     
@@ -53,15 +53,15 @@ public class LogicTest {
     public void UpdateUserWorks() throws SQLException {
         User kayttaja = new User(2, "Kalle", 10.0);
         User kayttaja2 = new User(2, "Jaakko", 20.0);
-        logic.saveOrUpdateUser("2", "Kalle", "10.0");
-        logic.saveOrUpdateUser("2", "Jaakko", "20.0");
+        logic.saveUser("2", "Kalle", "10.0");
+        logic.saveUser("2", "Jaakko", "20.0");
         assertEquals(kayttaja2.toString(), logic.findUser(2).toString());
     }
     
     @Test
     public void findAllUsersWorks() throws SQLException{
         User kayttaja = new User(2, "Jaakko", 20.0);
-        logic.saveOrUpdateUser("2", "Jaakko", "20.0");
+        logic.saveUser("2", "Jaakko", "20.0");
         assertEquals(2, logic.findAllUsers().size());
     }
     
@@ -73,7 +73,7 @@ public class LogicTest {
     @Test
     public void saveUsersWorks() throws SQLException {
         Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
-        logic.saveOrUpdateProduct("2", "Tuote", "10.0", "10", "Tuote");
+        logic.saveProduct("2", "Tuote", "10.0", "10", "Tuote");
         assertEquals(tuote.toString(), logic.findProduct(2).toString());
     }
     
@@ -86,15 +86,15 @@ public class LogicTest {
     public void updateProductWorks() throws SQLException {
         Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
         Product tuote2 = new Product(2, "Tuote2", 20.0, 10, "Tuote");
-        logic.saveOrUpdateProduct("2", "Tuote", "10.0", "10", "Tuote");
-        logic.saveOrUpdateProduct("2", "Tuote2", "20.0", "10", "Tuote");
+        logic.saveProduct("2", "Tuote", "10.0", "10", "Tuote");
+        logic.saveProduct("2", "Tuote2", "20.0", "10", "Tuote");
         assertEquals(tuote2.toString(), logic.findProduct(2).toString());
     }
     
     @Test
     public void findAllProductsWorks() throws SQLException {
         Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
-        logic.saveOrUpdateProduct("2", "Tuote", "10.0", "10", "Tuote");
+        logic.saveProduct("2", "Tuote", "10.0", "10", "Tuote");
         assertEquals(2, productDao.findAll().size());
     }
     
@@ -103,8 +103,8 @@ public class LogicTest {
         User kayttaja = new User(2, "Jaakko", 20.0);
         Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
         Purchase ostos = new Purchase(kayttaja, tuote, 1000);
-        logic.saveOrUpdateProduct("2", "Tuote", "10.0", "10", "Tuote");
-        logic.saveOrUpdateUser("2", "Jaakko", "20.0");
+        logic.saveProduct("2", "Tuote", "10.0", "10", "Tuote");
+        logic.saveUser("2", "Jaakko", "20.0");
         logic.saveOrUpdatePurchase(ostos);
         assertEquals("Käyttäjä: Jaakko, tuote: Tuote, aika: 1000", logic.findPurchase(2, 2).toString());
     }
@@ -119,8 +119,8 @@ public class LogicTest {
         User kayttaja = new User(2, "Jaakko", 20.0);
         Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
         Purchase ostos = new Purchase(kayttaja, tuote, 1000);
-        logic.saveOrUpdateProduct("2", "Tuote", "10.0", "10", "Tuote");
-        logic.saveOrUpdateUser("2", "Jaakko", "20.0");
+        logic.saveProduct("2", "Tuote", "10.0", "10", "Tuote");
+        logic.saveUser("2", "Jaakko", "20.0");
         logic.saveOrUpdatePurchase(ostos);
         assertEquals(10.0, logic.findUser(2).getBalance(), 0.0);
     }
@@ -129,8 +129,8 @@ public class LogicTest {
     public void purchaseAffectsNumberOfProduct() {
         User kayttaja = new User(2, "Jaakko", 20.0);
         Product tuote = new Product(2, "Tuote", 10.0, 10, "Tuote");
-        logic.saveOrUpdateProduct("2", "Tuote", "10.0", "10", "Tuote");
-        logic.saveOrUpdateUser("2", "Jaakko", "20.0");
+        logic.saveProduct("2", "Tuote", "10.0", "10", "Tuote");
+        logic.saveUser("2", "Jaakko", "20.0");
         Purchase ostos = new Purchase(kayttaja, tuote, 1000);
         logic.saveOrUpdatePurchase(ostos);
         assertEquals(9, logic.findProduct(2).getAmount());
@@ -150,7 +150,7 @@ public class LogicTest {
     
     @Test
     public void averageBalanceIsCorrect() {
-        logic.saveOrUpdateUser("2", "Jaakko", "20.0");
+        logic.saveUser("2", "Jaakko", "20.0");
         assertEquals(15.0, logic.calculateAverageBalance(), 0.0);
     }
     
@@ -170,11 +170,11 @@ public class LogicTest {
     }
     @Test
     public void catchesErrorWhenSavingUser() {
-        assertEquals(false, logic.saveOrUpdateUser("2", "Jaakko", "error"));
+        assertEquals(false, logic.saveUser("2", "Jaakko", "error"));
     }
     @Test
     public void catchesErrorWhenSavingProduct() {
-        assertEquals(false, logic.saveOrUpdateProduct("2", "Tuote", "10.0", "error", "Tuote"));
+        assertEquals(false, logic.saveProduct("2", "Tuote", "10.0", "error", "Tuote"));
     }
     
 
