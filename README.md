@@ -1,6 +1,6 @@
 # <h1>Kauppasovellus<h1>
 
-Sovelluksen tarkoituksena on toimia kirjanpitovälineenä kaupalle, jolla varastossa tavaroita ja asiakkaita. Sovelluksen avulla käyttäjä saa tietoa mm. asiakkaiden saldoista ja varastossa olevista tavaroista. 
+Sovelluksen tarkoituksena on toimia kirjanpitovälineenä kaupalle, jolla on varastossa tavaroita ja asiakkaita. Sovelluksen avulla käyttäjä saa tietoa mm. asiakkaiden saldoista ja varastossa olevista tavaroista. 
 
 <h2>Dokumentaatio<h2>
 
