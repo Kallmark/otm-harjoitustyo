@@ -55,18 +55,19 @@ public class UserInterface extends Application {
     private UserDao kayttajat;
     private ProductDao tuotteet;
     private PurchaseDao ostokset;
-    private String aika;
+    private Long time;
     private Logic logic;
 
     @Override
     public void init() throws ClassNotFoundException, FileNotFoundException, IOException {
         Properties properties = new Properties();
-        //properties.load(new FileInputStream("config.properties"));
+        properties.load(new FileInputStream("config.properties"));
 
         String databaseFile = properties.getProperty("database");
-        this.aika = properties.getProperty("aika");
+        System.out.println(databaseFile);
+        this.time = Long.parseLong(properties.getProperty("time"));
 
-        Database database = new Database("jdbc:sqlite:db/kauppasovellus.db");
+        Database database = new Database(databaseFile);
         this.kayttajat = new UserDao(database);
         this.tuotteet = new ProductDao(database);
         this.ostokset = new PurchaseDao(database);
@@ -203,6 +204,7 @@ public class UserInterface extends Application {
         Label kayttajanNimi = new Label("Nimi: ");
         Label kayttajanSaldo = new Label("Saldo: ");
         Label kayttajanId = new Label("Id :");
+        Label succesfullupdate = new Label();
 
         Label listaKayttajista = new Label("Tarkastele asiakkaita");
         ComboBox<Object> listakayttajista = new ComboBox<>();
@@ -450,7 +452,7 @@ public class UserInterface extends Application {
                 }
                 edellinen = nykyhetki;
                 long sekunnitNyt = Instant.now().getEpochSecond();
-                long sekunnitEnnen = sekunnitNyt - 3600;
+                long sekunnitEnnen = sekunnitNyt - time;
                 int i = 0;
                 Map<User, Integer> ostosData = logic.findTopUsers(sekunnitNyt, sekunnitEnnen);
                 ObservableList<Map.Entry<User, Integer>> items = FXCollections.observableArrayList(ostosData.entrySet());
