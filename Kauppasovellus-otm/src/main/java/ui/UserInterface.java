@@ -143,7 +143,7 @@ public class UserInterface extends Application {
         Button addPurchaseButton = new Button("Make a purchase!");
         this.changeScene(addPurchaseButton, window, addPurchase);
 
-        Button topUsersButton = new Button("View user information!");
+        Button topUsersButton = new Button("View top users information!");
         this.changeScene(topUsersButton, window, topUserInformation);
 
         Button statsButton = new Button("View statistics!");
