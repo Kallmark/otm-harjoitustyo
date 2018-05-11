@@ -20,4 +20,7 @@
 |4.5| 1 | Testien tekemistä|
 |5.5| 2 | Eriytettiin lisää sovelluslogiikkaa käyttöliittymästä |
 |5.5| 3 | Paranneltiin testejä, testikattavuus n.90% |
-|Yht| 59 | |
+|6.5| 4 | Käyttäjän tietonäkymän tekemistä |
+|10.5| 6 | Käyttöliittymän ja konfiguraation työstämistä|
+|11.5| 12 | Sovelluksen loppuviimeistelyä, tilastonäkymän tekeminen|
+|Yht| 81 | |
