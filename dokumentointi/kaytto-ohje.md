@@ -11,7 +11,7 @@ java -jar Kauppasovellus-otm.jar
 
 ## Konfigurointi
 
-Sovelluksen käyttäjä voi halutessaan konfiguroida sovellusta käyttämään eri tietokantaa, mutta oletuksena on että käyttäjä käyttäisi vain sovelluksen mukana tulevaa tietokantaa. Tällöin käyttäjän tulee itse luoda oma tietokantansa ja siihen kuluvat taulut. Taulujen luomisessa käytetyt sqlite-komennot löytyvät arkkitehtuurikuvauksesta. 
+Sovelluksen käyttäjä voi halutessaan konfiguroida sovellusta käyttämään eri tietokantaa, mutta oletuksena on että käyttäjä käyttäisi vain sovelluksen mukana tulevaa tietokantaa. Muutoin käyttäjän tulee itse luoda oma tietokantansa ja siihen kuluvat taulut. Taulujen luomisessa käytetyt sqlite-komennot löytyvät arkkitehtuurikuvauksesta. 
 
 Konfiguroinnissa on myös mahdollista vaihtaa Top kayttajien tietojen tarkastelun aikaskaalaa. Tämä onnistuu vaihtamalla konfiguraatiotiodoston "time" kohtaa vastaamaan toivottua sekunttimäärää. Oletuksena määrä on 30 minuuttia eli 3600 sekuntia. 
 
