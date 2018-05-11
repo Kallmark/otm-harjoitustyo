@@ -32,6 +32,10 @@ Kolme luokkaa ([User](https://github.com/Kallmark/otm-harjoitustyo/blob/master/K
 
 Sovelluksen toiminnallisuuksista vastaa pääosin luokan [Logic](https://github.com/Kallmark/otm-harjoitustyo/blob/master/Kauppasovellus-otm/src/main/java/domain/Logic.java) ainoa olio. Logic-luokka on integroituna Dao-suunnittelumallin ja sitä toteuttavien luokkien avulla SQLlite-tietokantaan. Itse tietokanta on konfiguroitu siten, että käyttäjä voi halutessaan vaihtaa sovelluksen käyttämää tietokantaa. Se myös hyödyntää erillistä [Statistics](https://github.com/Kallmark/otm-harjoitustyo/blob/master/Kauppasovellus-otm/src/main/java/domain/Statistics.java) luokkaa, joka perustuu uloisen kirjaston tarjoamiin toiminnallisuuksiin. Statistics -luokan oliolla Logic -luokan ainoa olio saa tilastollista dataa tietokannasta. 
 
+Logic-luokan ja ohjelman muiden toiminnallisuuksien välistä suhdetta kuvaa seuraava kaavio:
+
+<img src= "https://raw.githubusercontent.com/Kallmark/otm-harjoitustyo/master/misc/kuvat/havainnekuva4.jpg" height= "400" widht="400">
+
 Logic -luokan tarjoamia metodeita ovat esimerkiksi: 
 
 - public boolean saveUser(String id, String name, String balance)
@@ -91,5 +95,5 @@ Tilastojen saaminen muodostaa samaa logiikkaa kuin Top käyttäjien tietojen saa
 
 ## Ohjelman rakenteeseen jääneet heikkoudet
 
-Graafinen käyttöliittymä on rakennettu varsin vaikeasti luettavasti siten, että lähes koko graafinen osio toteutetaan luokan UserInterface start-metodissa. Jatkoa ajaetllen voisi olla järkevä erotella kunkin näkymän rakentava koodi omaksi metodikseen.
+Graafinen käyttöliittymä on rakennettu varsin vaikeasti luettavasti siten, että lähes koko graafinen osio toteutetaan luokan UserInterface start-metodissa. Jatkoa ajatellen voisi olla järkevä erotella kunkin näkymän rakentava koodi omaksi metodikseen.
 
