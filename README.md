@@ -14,6 +14,10 @@ Sovelluksen tarkoituksena on toimia kirjanpitovälineenä kaupalle, jolla varast
 
 [Testausdokumentti](https://github.com/Kallmark/otm-harjoitustyo/blob/master/dokumentointi/testaus.md)
 
+<h2>Releaset<h2>
+
+[Loppupalautus](https://github.com/Kallmark/otm-harjoitustyo/releases/tag/Loppupalautus)
+
 <h2>Komentorivitoiminnot<h2>
 
 ### Testaus
